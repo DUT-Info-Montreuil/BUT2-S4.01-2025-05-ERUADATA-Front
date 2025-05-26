@@ -6,6 +6,7 @@ import {
 import {ArtisteFormComponent} from "./components/artiste-form/artiste-form-component";
 import {OeuvreFormComponent} from "./components/oeuvre-form/oeuvre-form-component";
 import {OeuvreDetailComponent} from "./components/oeuvre-detail/oeuvre-detail-component";
+import {EditionComponent} from "./components/edition/editioncomponent";
 
 export const routes: Routes = [
     {path: 'oeuvreDetail' , component: OeuvreDetailComponent},
@@ -15,4 +16,5 @@ export const routes: Routes = [
     {path: 'accueil', component: AccueilComponent},
     {path:'', redirectTo: 'accueil'},
     {path: '404', component: AccueilComponent},
+    {path:'edition', component: EditionComponent},
 ];

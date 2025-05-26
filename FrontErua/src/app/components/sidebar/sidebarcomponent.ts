@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './sidebarcomponent.scss'
 })
 export class Sidebarcomponent {
+  activeItem: string = 'accueil';
 
+  setActive(item: string): void {
+    this.activeItem = item;
+  }
 }
