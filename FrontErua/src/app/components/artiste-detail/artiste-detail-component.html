@@ -1,1 +1,32 @@
-<p>artiste-detail-component works!</p>
+<div id="artiste-detail">
+    <div class="artiste-info">
+    <div class="photo-container">
+        <img  alt="Artiste Photo" class="artiste-photo">
+        <div class="nom-prenom">
+            <h2 class="artiste-nom">{{ artiste?.nomArtiste }}{{ artiste?.prenomArtiste }}</h2>
+        </div>
+    </div>
+        <div class="artiste-description">
+            <h3>Biographie</h3>
+            <p class="artiste-description">{{ artiste?.descriptionArtiste }}</p>
+            <p class="artiste-date-naissance">Date de naissance: {{ artiste?.anneeNaissanceArtiste }}</p>
+            <p class="artiste-nationalite">Nationalité: {{ artiste?.nationaliteArtiste }}</p>
+        </div>
+    </div>
+    <div class="oeuvre-mouvement">
+        <div class="mouvement-container">
+            <h3>Mouvements</h3>
+
+        </div>
+        <div class="oeuvres-container">
+            <h3>Oeuvres</h3>
+            <ul class="oeuvre-list">
+
+            </ul>
+        </div>
+    </div>
+        <div class="bouton-redirection">
+            <button class="btn btn-primary" (click)="redirectToGenalogie()">Voir la généalogie</button>
+            <button class="btn btn-secondary" (click)="redirectToEditerRelation()">Editer les relations</button>
+        </div>
+</div>

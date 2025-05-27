@@ -1,0 +1,42 @@
+.photo-container {
+  border: 1px solid #ccc;
+  width: 565px;
+  height: 406px;
+  margin-right: 27px;
+  img {
+    position: relative;
+    top: 181px;
+    left: 233px;
+  }
+  .nom-prenom{
+    position: relative;
+    top: 187px;
+    left: 177px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+.artiste-info {
+  display: flex;
+}
+
+.oeuvre-mouvement{
+  display: flex;
+  justify-content: space-around;
+}
+
+.artiste-description {
+  border: 1px solid #ccc;
+}
+
+
+.mouvement-container{
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.oeuvres-container{
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
