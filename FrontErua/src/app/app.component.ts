@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
+import { HeaderComponent } from './components/header/header.component';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Sidebarcomponent } from './components/sidebar/sidebarcomponent';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,Sidebarcomponent],
+  imports: [CommonModule, Sidebarcomponent, HeaderComponent, RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'FrontErua';
+  sidebarVisible = false;
+
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+  }
 }

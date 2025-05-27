@@ -1,21 +1,35 @@
-<aside class="sidebar">
+<!--<aside class="sidebar" [class.visible]="visible">
   <div class="logo">
-    <img src="assets/logo3.png" alt="ERUA Logo" />
-    <small>Art Relations</small>
+    <img src="assets/logo3.png" alt="ERUA logo" />
+    <div class="text">
+      <small>Art Relations</small>
+    </div>
   </div>
 
   <nav class="menu">
     <ul>
-      <li routerLink="/accueil" routerLinkActive="active">
-        <i class="icon-home"></i> Accueil
-      </li>
-      <li routerLink="/edition" routerLinkActive="active">
-        <i class="icon-edit"></i> Édition
-      </li>
-      <li routerLink="/genealogie" routerLinkActive="active">
-        <i class="icon-graph"></i> Généalogie
-      </li>
+        @for (item of menuItems; track item.path) {
+            <li>{{ item.label }}</li>
+        }
+    </ul>
+  </nav>
+</aside> -->
+
+<aside class="sidebar" [class.visible]="visible" (click)="onLinkClick()" >
+  <div class="logo">
+    <img src="assets/logo3.png" alt="ERUA logo" />
+    <div class="text">
+      <small>Art Relations</small>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <ul>
+      @for (item of menuItems; track item.path) {
+        <li>
+          <a [routerLink]="item.path" (click)="onLinkClick()">{{ item.label }}</a>
+        </li>
+      }
     </ul>
   </nav>
 </aside>
-

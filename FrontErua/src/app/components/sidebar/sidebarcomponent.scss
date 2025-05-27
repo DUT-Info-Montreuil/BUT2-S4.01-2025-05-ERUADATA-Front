@@ -3,9 +3,17 @@
   height: 100vh;
   background-color: #0e061d;
   color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+
+  &.visible {
+    transform: translateX(0);
+  }
 
   .logo {
     text-align: center;
@@ -16,43 +24,38 @@
       margin-bottom: 0.5rem;
     }
 
-    span {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
+    .text {
+      span {
+        font-weight: bold;
+        font-size: 1.2rem;
+        display: block;
+      }
 
-    small {
-      display: block;
-      font-size: 0.8rem;
-      color: #aaa;
+      small {
+        font-size: 0.8rem;
+        color: #aaa;
+      }
     }
   }
 
-  .menu {
-    ul {
-      list-style: none;
-      padding: 0;
+  .menu ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
 
-      li {
-        display: flex;
-        align-items: center;
-        padding: 0.75rem 1rem;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 0.2s;
+    li {
+      margin-bottom: 1rem;
 
-        i {
-          margin-right: 0.75rem;
-        }
+      a {
+        text-decoration: none;
+        color: white;
+        transition: color 0.2s;
 
         &:hover {
-          background-color: #2e1065;
-        }
-
-        &.active {
-          background-color: #a855f7;
+          color: #a855f7;
         }
       }
     }
   }
 }
+

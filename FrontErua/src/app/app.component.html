@@ -1,8 +1,8 @@
-<main class="main">
-  <div class="content">
-    
-    <app-sidebar></app-sidebar>
-  </div>
+<app-header (toggleSidebar)="toggleSidebar()"></app-header>
+<app-sidebar [visible]="sidebarVisible" (closeSidebar)="sidebarVisible = false"></app-sidebar>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
 </main>
 
-<router-outlet />
+
