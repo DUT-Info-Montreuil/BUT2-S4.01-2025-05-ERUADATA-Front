@@ -18,7 +18,9 @@
     "@angular/platform-browser": "^17.2.0",
     "@angular/platform-browser-dynamic": "^17.2.0",
     "@angular/router": "^17.2.0",
+    "graphology": "^0.26.0",
     "rxjs": "~7.8.0",
+    "sigma": "^3.0.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
