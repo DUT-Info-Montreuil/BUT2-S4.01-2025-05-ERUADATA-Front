@@ -18,7 +18,7 @@ export class GenelogieComponent {
     graph.addNode('a', { label: 'Artiste 1', x: 0, y: 0, size: 10, color: '#8b5cf6' });
     graph.addNode('b', { label: 'Artiste 2', x: 1, y: 1, size: 10, color: '#a78bfa' });
     graph.addNode('c', { label: 'Artiste 3', x: 2, y: 0, size: 10, color: '#c4b5fd' });
-    graph.addEdge('a', 'b');
+    graph.addEdge('a', 'c');
     graph.addEdge('b', 'c');
 
     new Sigma(graph, this.containerRef.nativeElement);
