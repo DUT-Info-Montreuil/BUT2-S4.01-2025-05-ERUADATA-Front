@@ -32,11 +32,21 @@ export class GenelogieComponent implements OnInit {
   }
 
   async loadGraphFromBackend() {
-    const artistes = await this.graphService.getArtistes();
-    const oeuvres = await this.graphService.getOeuvres();
+    const responseArtistes = await this.graphService.getArtistes();
+    const responseOeuvres = await this.graphService.getOeuvres();
+
+    // Extraire le tableau data de la réponse
+    
+    const artistes = responseArtistes.data || [];
+
+    const oeuvres = responseOeuvres.data || [];
+
+
+    console.log('Artistes:', artistes);
+    console.log('Oeuvres:', oeuvres);
 
     for (const a of artistes) {
-      const id = a.nom || a.Nom || a.id || a;
+      const id = a.nom || a.id || a;
       if (!this.graph.hasNode(id)) {
         this.graph.addNode(id, {
           label: id,
@@ -49,10 +59,10 @@ export class GenelogieComponent implements OnInit {
     }
 
     for (const o of oeuvres) {
-      const id = o.titre || o.Titre || o.id || o;
+      const id =  o.id;
       if (!this.graph.hasNode(id)) {
         this.graph.addNode(id, {
-          label: id,
+          label: `${o.nom} - ${o.date_creation}`,
           x: Math.random(),
           y: Math.random(),
           size: 10,
@@ -60,7 +70,10 @@ export class GenelogieComponent implements OnInit {
         });
       }
 
-      const relations = await this.graphService.getRelations(id);
+      const responseRelations = await this.graphService.getRelations(id);
+      //@ts-ignore
+      const relations = responseRelations.data || [];
+      
       for (const rel of relations) {
         const from = rel.source || rel.from || rel.a;
         const to = rel.target || rel.to || rel.b;
@@ -76,7 +89,7 @@ export class GenelogieComponent implements OnInit {
     }
 
     this.renderer.refresh();
-  }
+}
 
   setupInteractions() {
     this.renderer.on('downNode', ({ node }) => {
