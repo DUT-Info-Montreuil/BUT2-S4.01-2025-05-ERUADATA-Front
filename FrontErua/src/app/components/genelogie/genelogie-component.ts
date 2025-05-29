@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { GraphDataService } from '../../services/graph-data.service';
 import Graph from 'graphology';
 import Sigma from 'sigma';
 
@@ -17,44 +18,70 @@ export class GenelogieComponent implements OnInit {
   private selectedNode: string | null = null;
   private draggingNode: string | null = null;
 
-  ngOnInit() {
-    this.setupGraph();
+  constructor(private graphService: GraphDataService) {}
+
+  async ngOnInit() {
+    await this.setupGraph();
   }
 
-  setupGraph() {
+  async setupGraph() {
     this.graph = new Graph();
-
-    this.graph.addNode('a', {
-      label: 'Artiste 1',
-      x: Math.random(),
-      y: Math.random(),
-      size: 10,
-      color: '#8b5cf6'
-    });
-    this.graph.addNode('b', {
-      label: 'Artiste 2',
-      x: Math.random(),
-      y: Math.random(),
-      size: 10,
-      color: '#8b5cf6'
-    });
-    this.graph.addNode('c', {
-      label: 'Artiste 3',
-      x: Math.random(),
-      y: Math.random(),
-      size: 10,
-      color: '#8b5cf6'
-    });
-
-    this.graph.addEdgeWithKey('a-c', 'a', 'c', { color: '#aaa', size: 2, label: 'a-c' });
-    this.graph.addEdgeWithKey('b-c', 'b', 'c', { color: '#aaa', size: 2, label: 'b-c' });
-
     this.renderer = new Sigma(this.graph, this.containerRef.nativeElement);
+    await this.loadGraphFromBackend();
+    this.setupInteractions();
+  }
 
-    // === GLISSER/DÉPLACER LES NOEUDS ===
+  async loadGraphFromBackend() {
+    const artistes = await this.graphService.getArtistes();
+    const oeuvres = await this.graphService.getOeuvres();
+
+    for (const a of artistes) {
+      const id = a.nom || a.Nom || a.id || a;
+      if (!this.graph.hasNode(id)) {
+        this.graph.addNode(id, {
+          label: id,
+          x: Math.random(),
+          y: Math.random(),
+          size: 10,
+          color: '#60a5fa'
+        });
+      }
+    }
+
+    for (const o of oeuvres) {
+      const id = o.titre || o.Titre || o.id || o;
+      if (!this.graph.hasNode(id)) {
+        this.graph.addNode(id, {
+          label: id,
+          x: Math.random(),
+          y: Math.random(),
+          size: 10,
+          color: '#8b5cf6'
+        });
+      }
+
+      const relations = await this.graphService.getRelations(id);
+      for (const rel of relations) {
+        const from = rel.source || rel.from || rel.a;
+        const to = rel.target || rel.to || rel.b;
+        const key = `${from}-${to}`;
+        if (!this.graph.hasEdge(key)) {
+          this.graph.addEdgeWithKey(key, from, to, {
+            color: '#aaa',
+            size: 2,
+            label: key
+          });
+        }
+      }
+    }
+
+    this.renderer.refresh();
+  }
+
+  setupInteractions() {
     this.renderer.on('downNode', ({ node }) => {
       this.draggingNode = node;
-      this.renderer.getCamera().disable(); // désactiver le déplacement de la vue
+      this.renderer.getCamera().disable();
     });
 
     this.renderer.getMouseCaptor().on('mousemove', (e) => {
@@ -66,10 +93,9 @@ export class GenelogieComponent implements OnInit {
 
     this.renderer.getMouseCaptor().on('mouseup', () => {
       this.draggingNode = null;
-      this.renderer.getCamera().enable(); // réactiver le déplacement de la vue
+      this.renderer.getCamera().enable();
     });
 
-    // === CLIQUER SUR LES NOEUDS POUR CRÉER / SUPPRIMER DES LIENS ===
     this.renderer.on('clickNode', ({ node }) => {
       if (!this.selectedNode) {
         this.selectedNode = node;
@@ -96,12 +122,42 @@ export class GenelogieComponent implements OnInit {
       }
     });
 
-    // === CLIC SUR LE FOND POUR DÉSELECTIONNER ===
     this.renderer.on('clickStage', () => {
       if (this.selectedNode) {
         this.graph.setNodeAttribute(this.selectedNode, 'color', '#8b5cf6');
         this.selectedNode = null;
       }
     });
+  }
+
+  exportGraph() {
+    const json = this.graph.export();
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(json, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = 'graphe.json';
+    a.click();
+  }
+
+  importGraph(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const json = JSON.parse(reader.result as string);
+        this.graph.clear();
+        this.graph.import(json);
+        this.renderer.refresh();
+      } catch (e) {
+        alert('Fichier invalide ou erreur d’importation.');
+        console.error(e);
+      }
+    };
+
+    reader.readAsText(file);
   }
 }
