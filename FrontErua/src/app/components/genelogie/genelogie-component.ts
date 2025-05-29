@@ -70,26 +70,35 @@ export class GenelogieComponent implements OnInit {
         });
       }
 
-      const responseRelations = await this.graphService.getRelations(id);
-      //@ts-ignore
-      const relations = responseRelations.data || [];
-      
-      for (const rel of relations) {
-        const from = rel.source || rel.from || rel.a;
-        const to = rel.target || rel.to || rel.b;
-        const key = `${from}-${to}`;
-        if (!this.graph.hasEdge(key)) {
-          this.graph.addEdgeWithKey(key, from, to, {
-            color: '#aaa',
-            size: 2,
-            label: key
-          });
+      const relations = await this.graphService.getRelations(o.id);
+      for (const relation of relations) {
+        // Assert the type of relation
+        const rel = relation as { artiste_id: string; oeuvre_id: string };
+        const artisteId = rel.artiste_id;
+        const oeuvreId = rel.oeuvre_id;
+        if (this.graph.hasNode(artisteId) && this.graph.hasNode(oeuvreId)) {
+          const edgeKey = `${artisteId}-${oeuvreId}`;
+          if (!this.graph.hasEdge(edgeKey)) {
+            this.graph.addEdgeWithKey(edgeKey, artisteId, oeuvreId, {
+              color: '#aaa',
+              size: 2,
+              label: `Influence: ${artisteId} -> ${oeuvreId}`
+            });
+          }
+        } else {
+          console.warn(`No node found for relation: ${artisteId} -> ${oeuvreId}`);
         }
       }
     }
-
     this.renderer.refresh();
-}
+    this.renderer.getCamera().setState({
+      x: 0,
+      y: 0,
+      ratio: 1,
+      angle: 0
+    });
+    this.renderer.getCamera().enable();
+  }
 
   setupInteractions() {
     this.renderer.on('downNode', ({ node }) => {
