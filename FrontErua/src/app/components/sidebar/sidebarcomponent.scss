@@ -41,7 +41,6 @@
   .menu ul {
     list-style: none;
     padding: 0;
-    text-align: center;
 
     li {
       margin-bottom: 1rem;
@@ -52,10 +51,14 @@
         transition: color 0.2s;
 
         &:hover {
-          color: #8b5cf6;
+          background: #7c3aed;
+          color: #fff;
+          border: 2px solid #a78bfa;
+          border-radius: 0.5rem;
+          box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+          padding: 0.2rem 3rem;
         }
       }
     }
   }
 }
-
