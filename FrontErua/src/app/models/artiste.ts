@@ -1,12 +1,11 @@
-export class Artiste {
-
-    constructor(
-        public nomArtiste: string,
-        public prenomArtiste: string,
-        public nationaliteArtiste: string,
-        public anneeNaissanceArtiste: string,
-        public descriptionArtiste?: string,
-    ) {
-
-    }
+export interface Artiste {
+    idArtiste: number,
+    nationalite: string,
+    nom: string,
+    prenom: string,
+    /*
+    idArtiste: number,
+    anneeNaissanceArtiste?: string,
+    descriptionArtiste?: string,
+    */
 }

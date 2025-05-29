@@ -1,0 +1,15 @@
+<div class="artiste-list">
+    <h2>Liste des artiste</h2>
+    <div class="grid">
+        @for (artiste of artistes; track artiste.idArtiste){
+            <div class="artiste-card">
+                <a [routerLink]="['/artiste', artiste.idArtiste]">
+                    <div class="artiste-info">
+                        <h3>{{ artiste.nom }}</h3>
+                        <p>{{ artiste.prenom }}</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

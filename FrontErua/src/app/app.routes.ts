@@ -4,13 +4,16 @@ import {ArtisteDetailComponent} from "./components/artiste-detail/artiste-detail
 import {ArtisteFormComponent} from "./components/artiste-form/artiste-form-component";
 import {OeuvreFormComponent} from "./components/oeuvre-form/oeuvre-form-component";
 import {OeuvreDetailComponent} from "./components/oeuvre-detail/oeuvre-detail-component";
+import {ArtisteListComponent} from "./components/artiste-list/artiste-list.component";
+import {Page404Component} from "./components/404/Page404.component";
 
 export const routes: Routes = [
+    {path: '', component: AccueilComponent},
     {path: 'oeuvreDetail' , component: OeuvreDetailComponent},
     {path: 'oeuvreForm', component: OeuvreFormComponent},
     {path: 'artisteForm', component: ArtisteFormComponent},
-    {path: 'artisteDetail', component: ArtisteDetailComponent },
-    {path: 'accueil', component: AccueilComponent},
-    {path:'', redirectTo: 'accueil'},
-    {path: '404', component: AccueilComponent},
+    {path:'artisteList', component: ArtisteListComponent},
+    {path: 'artisteList/:id', component: ArtisteDetailComponent },
+    {path: '404', component: Page404Component},
+
 ];

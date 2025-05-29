@@ -1,16 +1,16 @@
 <div id="artiste-detail">
     <div class="artiste-info">
-    <div class="photo-container">
-        <img  alt="Artiste Photo" class="artiste-photo">
-        <div class="nom-prenom">
-            <h2 class="artiste-nom">{{ artiste?.nomArtiste }}{{ artiste?.prenomArtiste }}</h2>
+        <div class="photo-container">
+            <img alt="Artiste Photo" class="artiste-photo">
+            <div class="nom-prenom">
+                <h2 class="artiste-nom">{{ (artiste$|async)?.nom }}{{ (artiste$|async)?.prenom }}</h2>
+            </div>
         </div>
-    </div>
         <div class="artiste-description">
             <h3>Biographie</h3>
-            <p class="artiste-description">{{ artiste?.descriptionArtiste }}</p>
-            <p class="artiste-date-naissance">Date de naissance: {{ artiste?.anneeNaissanceArtiste }}</p>
-            <p class="artiste-nationalite">Nationalité: {{ artiste?.nationaliteArtiste }}</p>
+            <p class="artiste-bio"></p>
+            <p class="artiste-date-naissance">Date de naissance: </p>
+            <p class="artiste-nationalite">Nationalité: {{ (artiste$|async)?.nationalite }}</p>
         </div>
     </div>
     <div class="oeuvre-mouvement">
@@ -25,8 +25,8 @@
             </ul>
         </div>
     </div>
-        <div class="bouton-redirection">
-            <button class="btn btn-primary" (click)="redirectToGenalogie()">Voir la généalogie</button>
-            <button class="btn btn-secondary" (click)="redirectToEditerRelation()">Editer les relations</button>
-        </div>
+    <div class="bouton-redirection">
+        <button (click)="redirectToGenalogie()" class="btn btn-primary">Voir la généalogie</button>
+        <button (click)="redirectToEditerRelation()" class="btn btn-secondary">Editer les relations</button>
+    </div>
 </div>
