@@ -31,6 +31,13 @@ interface Oeuvres {
   mouvement: string;
 }
 
+interface RelationInfluenceRaw {
+  direction: string;
+  path: (any | { id: string })[]; // on peut typer plus finement plus tard
+}
+
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -51,4 +58,14 @@ export class GraphDataService {
   async getRelations(id: number): Promise<unknown[]> {
     return firstValueFrom(this.http.get<unknown[]>(`${this.apiUrl}/oeuvres/${encodeURIComponent(id)}/influences/`));
   }
+  async getRelationsById(id: number): Promise<RelationInfluenceRaw[]> {
+    const response = await firstValueFrom(
+      this.http.get<{ success: boolean; data: RelationInfluenceRaw[] }>(
+        `${this.apiUrl}/oeuvres/${encodeURIComponent(id)}/influences`
+      )
+    );
+    return response.data;
+  }
+
+
 }

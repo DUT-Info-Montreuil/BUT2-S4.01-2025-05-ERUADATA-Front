@@ -42,7 +42,7 @@ export class GenelogieComponent implements OnInit {
 
     console.log('Artistes:', artistes);
     console.log('Oeuvres:', oeuvres);
-    console.log(encodeURIComponent("Fragments d’un radeau repétes")); // Angular
+    console.log('Relations:', await this.graphService.getRelationsById(58));
 
     for (const a of artistes) {
       const id = a.nom || a.id;
@@ -72,7 +72,55 @@ export class GenelogieComponent implements OnInit {
           color: '#8b5cf6'
         });
       }
+
+      // 🔗 Récupération et affichage des relations pour chaque oeuvre
+      /*const relations = await this.graphService.getRelationsById(o.id);
+      for (const { source, cible } of relations) {
+        const edgeKey = `${source}->${cible}`;
+        console.log('Essai ajout edge entre', source, 'et', cible, {
+          sourceExist: this.graph.hasNode(source),
+          cibleExist: this.graph.hasNode(cible)
+        });
+        if (this.graph.hasNode(source) && this.graph.hasNode(cible) && !this.graph.hasEdge(edgeKey)) {
+          this.graph.addEdgeWithKey(edgeKey, source, cible, {
+            color: '#f87171',
+            size: 2,
+            label: 'influence'
+          });
+        }
+      }*/
+
+      const rawRelations = await this.graphService.getRelationsById(o.id);
+      const relations = rawRelations
+        .filter(r => Array.isArray(r.path) && r.path.length >= 3)
+        .map(r => {
+          const path = r.path;
+          const sourceNode = path[0];
+          const targetNode = path[path.length - 1];
+
+          return {
+            source: sourceNode.nom,
+            cible: targetNode.nom
+          };
+        });
+
+        for (const { source, cible } of relations) {
+        console.log('Ajout arête :', source, '->', cible);
+
+        if (this.graph.hasNode(source) && this.graph.hasNode(cible)) {
+          const edgeKey = `${source}->${cible}`;
+          if (!this.graph.hasEdge(edgeKey)) {
+            this.graph.addEdgeWithKey(edgeKey, source, cible, {
+              color: '#f87171',
+              size: 2,
+              type: 'arrow',
+              label: 'influence'
+            });
+          }
+        }
+      }
     }
+
 
     this.renderer.refresh();
     this.renderer.getCamera().setState({ x: 0, y: 0, ratio: 1, angle: 0 });
