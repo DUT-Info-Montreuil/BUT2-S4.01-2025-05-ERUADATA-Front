@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { GraphDataService } from '../../services/graph-data.service';
 import Graph from 'graphology';
 import Sigma from 'sigma';
@@ -11,6 +11,8 @@ import Sigma from 'sigma';
   styleUrl: './genelogie-component.scss'
 })
 export class GenelogieComponent implements OnInit {
+  @Input() filtres: any = {}; // gestion des filtres
+  @Input() recherche: string = ''; // gestion de la recherche
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
 
   private graph!: Graph;

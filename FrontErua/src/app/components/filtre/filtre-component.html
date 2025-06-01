@@ -1,1 +1,39 @@
-<p>filtre-component works!</p>
+<div class="filtres-container">
+  <div class="filtres-grid">
+    <div>
+      <label>Période</label>
+      <select [(ngModel)]="filtre.periode" (change)="emitFiltre()">
+        <option value="">Toutes les périodes</option>
+        <option value="moderne">Moderne</option>
+        <option value="contemporain">Contemporain</option>
+      </select>
+    </div>
+    <div>
+      <label>Mouvement</label>
+      <select [(ngModel)]="filtre.mouvement" (change)="emitFiltre()">
+        <option value="">Tous les mouvements</option>
+        <option value="expressionnisme">Expressionnisme</option>
+        <option value="conceptuel">Conceptuel</option>
+      </select>
+    </div>
+    <div>
+      <label>Type d’Entité</label>
+      <select [(ngModel)]="filtre.type" (change)="emitFiltre()">
+        <option value="">Artistes et œuvres</option>
+        <option value="artistes">Artistes seulement</option>
+        <option value="oeuvres">Œuvres seulement</option>
+      </select>
+    </div>
+    <div>
+      <label>Recherche</label>
+      <input type="text" placeholder="Rechercher un artiste ou une œuvre…" [(ngModel)]="filtre.recherche" (input)="emitFiltre()" />
+    </div>
+  </div>
+
+  <div class="legendes">
+    <span class="tag blue">Influence directe</span>
+    <span class="tag green">Inspiration stylistique</span>
+    <span class="tag purple">Mouvement artistique</span>
+    <span class="tag orange">Période géographique</span>
+  </div>
+</div>

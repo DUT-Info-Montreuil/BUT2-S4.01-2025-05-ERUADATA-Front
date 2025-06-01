@@ -7,7 +7,8 @@ import {ArtisteFormComponent} from "./components/artiste-form/artiste-form-compo
 import {OeuvreFormComponent} from "./components/oeuvre-form/oeuvre-form-component";
 import {OeuvreDetailComponent} from "./components/oeuvre-detail/oeuvre-detail-component";
 import {EditionComponent} from "./components/edition/editioncomponent";
-import { GenelogieComponent } from './components/genelogie/genelogie-component';
+import {GenelogieComponent } from './components/genelogie/genelogie-component';
+import {GenealogiePageComponent} from './components/genealogie-page/genealogie-page.component';
 
 export const routes: Routes = [
     {path: 'oeuvreDetail' , component: OeuvreDetailComponent},
@@ -18,5 +19,5 @@ export const routes: Routes = [
     {path:'', redirectTo: 'accueil', pathMatch: 'full'},
     {path: '404', component: AccueilComponent},
     {path:'edition', component: EditionComponent},
-    {path: 'genealogie', component: GenelogieComponent},
+    {path: 'genealogie', component: GenealogiePageComponent},
 ];
