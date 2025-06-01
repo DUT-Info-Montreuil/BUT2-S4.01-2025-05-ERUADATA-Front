@@ -35,18 +35,15 @@ export class GenelogieComponent implements OnInit {
     const responseArtistes = await this.graphService.getArtistes();
     const responseOeuvres = await this.graphService.getOeuvres();
 
-    // Extraire le tableau data de la réponse
-    
     const artistes = responseArtistes.data || [];
-
     const oeuvres = responseOeuvres.data || [];
-
 
     console.log('Artistes:', artistes);
     console.log('Oeuvres:', oeuvres);
+    console.log(encodeURIComponent("Fragments d’un radeau repétes")); // Angular
 
     for (const a of artistes) {
-      const id = a.nom || a.id || a;
+      const id = a.nom || a.id;
       if (!this.graph.hasNode(id)) {
         this.graph.addNode(id, {
           label: id,
@@ -58,45 +55,25 @@ export class GenelogieComponent implements OnInit {
       }
     }
 
+
+
     for (const o of oeuvres) {
-      const id =  o.id;
-      if (!this.graph.hasNode(id)) {
-        this.graph.addNode(id, {
-          label: `${o.nom} - ${o.date_creation}`,
+      const oeuvreId = o.id;
+      const oeuvreLabel = `${o.nom} - ${o.date_creation}`;
+
+      if (!this.graph.hasNode(oeuvreId)) {
+        this.graph.addNode(oeuvreId, {
+          label: oeuvreLabel,
           x: Math.random(),
           y: Math.random(),
           size: 10,
           color: '#8b5cf6'
         });
       }
-
-      const relations = await this.graphService.getRelations(o.id);
-      for (const relation of relations) {
-        // Assert the type of relation
-        const rel = relation as { artiste_id: string; oeuvre_id: string };
-        const artisteId = rel.artiste_id;
-        const oeuvreId = rel.oeuvre_id;
-        if (this.graph.hasNode(artisteId) && this.graph.hasNode(oeuvreId)) {
-          const edgeKey = `${artisteId}-${oeuvreId}`;
-          if (!this.graph.hasEdge(edgeKey)) {
-            this.graph.addEdgeWithKey(edgeKey, artisteId, oeuvreId, {
-              color: '#aaa',
-              size: 2,
-              label: `Influence: ${artisteId} -> ${oeuvreId}`
-            });
-          }
-        } else {
-          console.warn(`No node found for relation: ${artisteId} -> ${oeuvreId}`);
-        }
-      }
     }
+
     this.renderer.refresh();
-    this.renderer.getCamera().setState({
-      x: 0,
-      y: 0,
-      ratio: 1,
-      angle: 0
-    });
+    this.renderer.getCamera().setState({ x: 0, y: 0, ratio: 1, angle: 0 });
     this.renderer.getCamera().enable();
   }
 
