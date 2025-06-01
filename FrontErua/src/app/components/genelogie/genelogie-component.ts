@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { GraphDataService } from '../../services/graph-data.service';
 import Graph from 'graphology';
 import Sigma from 'sigma';
@@ -10,7 +10,7 @@ import Sigma from 'sigma';
   templateUrl: './genelogie-component.html',
   styleUrl: './genelogie-component.scss'
 })
-export class GenelogieComponent implements OnInit {
+export class GenelogieComponent implements OnInit, OnChanges {
   @Input() filtres: any = {}; // gestion des filtres
   @Input() recherche: string = ''; // gestion de la recherche
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
@@ -26,14 +26,27 @@ export class GenelogieComponent implements OnInit {
     await this.setupGraph();
   }
 
+  async ngOnChanges(changes: SimpleChanges) {
+  if (changes['filtres'] && !changes['filtres'].firstChange) {
+    await this.loadGraphFromBackend(); // recharge avec les nouveaux filtres
+  }
+}
+
+
   async setupGraph() {
     this.graph = new Graph();
-    this.renderer = new Sigma(this.graph, this.containerRef.nativeElement);
+    this.renderer = new Sigma(this.graph, this.containerRef.nativeElement, {
+      renderEdgeLabels: true, // ✅ important pour voir les labels
+      labelRenderedSizeThreshold: 8,
+      edgeLabelSize: 12,
+      defaultEdgeType: 'line',
+    });
     await this.loadGraphFromBackend();
     this.setupInteractions();
   }
 
   async loadGraphFromBackend() {
+    this.graph.clear();
     const responseArtistes = await this.graphService.getArtistes();
     const responseOeuvres = await this.graphService.getOeuvres();
 
@@ -44,7 +57,7 @@ export class GenelogieComponent implements OnInit {
     console.log('Oeuvres:', oeuvres);
     console.log('Relations:', await this.graphService.getRelationsById(58));
 
-    for (const a of artistes) {
+    /*for (const a of artistes) {
       const id = a.nom || a.id;
       if (!this.graph.hasNode(id)) {
         this.graph.addNode(id, {
@@ -71,25 +84,47 @@ export class GenelogieComponent implements OnInit {
           size: 10,
           color: '#8b5cf6'
         });
+      }*/
+     // Appliquer les filtres
+      const { type, mouvement, periode, recherche } = this.filtres;
+
+      // Artistes
+      for (const a of artistes) {
+        if (type === 'oeuvres') continue;
+        const nom = a.nom || a.id;
+
+        if (recherche && !nom.toLowerCase().includes(recherche.toLowerCase())) continue;
+
+        this.graph.addNode(nom, {
+          label: nom,
+          x: Math.random(),
+          y: Math.random(),
+          size: 10,
+          color: '#60a5fa'
+        });
       }
 
-      // 🔗 Récupération et affichage des relations pour chaque oeuvre
-      /*const relations = await this.graphService.getRelationsById(o.id);
-      for (const { source, cible } of relations) {
-        const edgeKey = `${source}->${cible}`;
-        console.log('Essai ajout edge entre', source, 'et', cible, {
-          sourceExist: this.graph.hasNode(source),
-          cibleExist: this.graph.hasNode(cible)
-        });
-        if (this.graph.hasNode(source) && this.graph.hasNode(cible) && !this.graph.hasEdge(edgeKey)) {
-          this.graph.addEdgeWithKey(edgeKey, source, cible, {
-            color: '#f87171',
-            size: 2,
-            label: 'influence'
-          });
-        }
-      }*/
+      // Œuvres
+      for (const o of oeuvres) {
+        if (type === 'artistes') continue;
 
+        if (recherche && !o.nom.toLowerCase().includes(recherche.toLowerCase())) continue;
+        if (mouvement && o.mouvement !== mouvement) continue;
+        if (periode && o.date_creation !== periode) continue;
+
+        const oeuvreId = o.id;
+        const oeuvreLabel = `${o.nom} - ${o.date_creation}`;
+
+        this.graph.addNode(oeuvreId, {
+          label: oeuvreLabel,
+          x: Math.random(),
+          y: Math.random(),
+          size: 10,
+          color: '#8b5cf6'
+        });
+
+
+      // 🔗 Récupération et affichage des relations pour chaque oeuvre
       const rawRelations = await this.graphService.getRelationsById(o.id);
       const relations = rawRelations
         .filter(r => Array.isArray(r.path) && r.path.length >= 3)
@@ -112,15 +147,14 @@ export class GenelogieComponent implements OnInit {
           if (!this.graph.hasEdge(edgeKey)) {
             this.graph.addEdgeWithKey(edgeKey, source, cible, {
               color: '#f87171',
-              size: 2,
-              type: 'arrow',
+              size: 5,
+              type: 'line',
               label: 'influence'
             });
           }
         }
       }
-    }
-
+      }
 
     this.renderer.refresh();
     this.renderer.getCamera().setState({ x: 0, y: 0, ratio: 1, angle: 0 });
