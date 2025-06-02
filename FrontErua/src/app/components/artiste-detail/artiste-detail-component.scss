@@ -1,47 +1,48 @@
 .photo-container {
-  border: 1px solid #ccc;
-  width: 771px;
-  height: 406px;
-  margin-right: 27px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  .nom-prenom{
-    font-size: 20px;
-    font-weight: bold;
-  }
+    border: 1px solid #ccc;
+    width: 771px;
+    height: 406px;
+    margin-right: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .nom-prenom {
+        font-size: 20px;
+        font-weight: bold;
+    }
 }
 
-.artiste-detail{
-  width: 100%;
-  height: 100%;
+.artiste-detail {
+    width: 100%;
+    height: 100%;
 }
 
 .artiste-info {
-  display: flex;
-  width: auto;
-  height: auto;
+    display: flex;
+    width: auto;
+    height: auto;
 }
 
-.oeuvre-mouvement{
-  display: flex;
-  justify-content: space-around;
+.oeuvre-mouvement {
+    display: flex;
+    justify-content: space-around;
 }
 
 .artiste-description {
-  border: 1px solid #ccc;
-  width: 100%;
-  height: 406px;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 406px;
 }
 
 
-.mouvement-container{
+.mouvement-container {
     border: 1px solid #ccc;
     margin-top: 10px;
 }
 
-.oeuvres-container{
+.oeuvres-container {
     border: 1px solid #ccc;
     margin-top: 10px;
 }

@@ -6,19 +6,22 @@
     min-height: 60vh;
     background: #f8f9fa;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     padding: 40px 20px;
 }
+
 .not-found-container h1 {
     font-size: 6rem;
     color: #dc3545;
     margin-bottom: 0.5em;
 }
+
 .not-found-container p {
     font-size: 1.3rem;
     margin-bottom: 1.5em;
     color: #333;
 }
+
 .not-found-container .btn {
     padding: 0.7em 2em;
     font-size: 1.1rem;
@@ -29,6 +32,7 @@
     border: none;
     transition: background 0.2s;
 }
+
 .not-found-container .btn:hover {
     background: #0056b3;
 }

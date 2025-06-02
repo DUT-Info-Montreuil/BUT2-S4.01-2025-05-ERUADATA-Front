@@ -3,37 +3,54 @@ import {ArtisteService} from "../../services/artiste-service";
 import {Subscription} from "rxjs";
 import {Artiste} from "../../models/artiste";
 import {RouterLink} from "@angular/router";
+import {ArtisteListCardComponent} from "./artiste-list-card/artiste-list-card.component";
+import {FormsModule} from "@angular/forms";
 
 @Component({
-  selector: 'app-artiste-list',
-  standalone: true,
-  imports: [
-    RouterLink
-  ],
-  templateUrl: './artiste-list.component.html',
-  styleUrl: './artiste-list.component.scss'
+    selector: 'app-artiste-list',
+    standalone: true,
+    imports: [
+        RouterLink,
+        ArtisteListCardComponent,
+        FormsModule
+    ],
+    templateUrl: './artiste-list.component.html',
+    styleUrl: './artiste-list.component.scss'
 })
 export class ArtisteListComponent implements OnInit, OnDestroy {
-  private readonly artisteService = inject(ArtisteService);
-  private subscription = new Subscription();
-  artistes: Artiste[] = [];
+    artistes: Artiste[] = [];
+    searchText: string = '';
+    private readonly artisteService = inject(ArtisteService);
+    private subscription = new Subscription();
 
-  ngOnInit() {
-    this.subscription = this.artisteService.getAllArtistes().subscribe((data) => {
-      console.log("Données reçues :", data); // ✅ Meilleure inspection
+    async ngOnInit() {
+        this.subscription.add(
+            await this.artisteService.getArtistes().then((data) => {
+                if (data.success) {
+                    this.artistes = data.data;
+                } else {
+                    console.error('Failed to fetch artistes');
+                }
+            }).catch(error => {
+                console.error('Error fetching artistes:', error);
+            })
+        );
+    }
 
-      // Protection si l'API retourne un objet ou undefined
-      if (Array.isArray(data)) {
-        this.artistes = data;
-      } else {
-        console.warn('⚠️ Données invalides reçues (pas un tableau)', data);
-        this.artistes = []; // valeur de secours
-      }
-    });
-  }
 
-  ngOnDestroy() {
-      this.subscription.unsubscribe();
-  }
+    search() {
+        this.artisteService.getArtistes().then((data) => {
+            if (data.success) {
+                this.artistes = data.data.filter(artiste =>
+                    artiste.nom.toLowerCase().includes(this.searchText.toLowerCase())
+                );
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
 
 }

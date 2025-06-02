@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {AccueilComponent} from "./components/accueil/accueil-component";
 import {ArtisteDetailComponent} from "./components/artiste-detail/artiste-detail-component";
 import {ArtisteFormComponent} from "./components/artiste-form/artiste-form-component";
@@ -9,11 +9,11 @@ import {Page404Component} from "./components/404/Page404.component";
 
 export const routes: Routes = [
     {path: '', component: AccueilComponent},
-    {path: 'oeuvreDetail' , component: OeuvreDetailComponent},
+    {path: 'oeuvreDetail', component: OeuvreDetailComponent},
     {path: 'oeuvreForm', component: OeuvreFormComponent},
     {path: 'artisteForm', component: ArtisteFormComponent},
-    {path:'artisteList', component: ArtisteListComponent},
-    {path: 'artisteList/:id', component: ArtisteDetailComponent },
+    {path: 'artisteList', component: ArtisteListComponent},
+    {path: 'artisteList/:id', component: ArtisteDetailComponent},
     {path: '404', component: Page404Component},
 
 ];

@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'app-edition',
-  standalone: true,
-  imports: [],
-  templateUrl: './editioncomponent.html',
-  styleUrl: './editioncomponent.scss'
+    selector: 'app-edition',
+    standalone: true,
+    imports: [],
+    templateUrl: './editioncomponent.html',
+    styleUrl: './editioncomponent.scss'
 })
 export class Editioncomponent {
 

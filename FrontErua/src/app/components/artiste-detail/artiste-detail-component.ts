@@ -1,7 +1,7 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Artiste} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
-import {Observable, Subscription} from "rxjs";
+import {Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {AsyncPipe} from "@angular/common";
 
@@ -16,14 +16,20 @@ import {AsyncPipe} from "@angular/common";
 })
 export class ArtisteDetailComponent implements OnInit {
     artiste$?: Observable<Artiste>;
+
     constructor(
         private readonly artisteService: ArtisteService,
-        private readonly route: ActivatedRoute){}
+        private readonly route: ActivatedRoute) {
+    }
 
 
     ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        this.artiste$ = this.artisteService.getArtisteById(id);
+        if (id) {
+            this.artiste$ = this.artisteService.getArtisteById(id);
+        } else {
+            console.error('Invalid artiste ID');
+        }
     }
 
 

@@ -1,15 +1,19 @@
-<div class="artiste-list">
+<div class=".artiste-list-container">
     <h2>Liste des artiste</h2>
-    <div class="grid">
-        @for (artiste of artistes; track artiste.idArtiste){
-            <div class="artiste-card">
-                <a [routerLink]="['/artiste', artiste.idArtiste]">
-                    <div class="artiste-info">
-                        <h3>{{ artiste.nom }}</h3>
-                        <p>{{ artiste.prenom }}</p>
-                    </div>
+    <input (ngModelChange)="search()" [(ngModel)]="searchText" class="search-bar" placeholder="Rechercher un artiste..."
+           type="text">
+    <div class="artiste-list">
+        <div class="artiste-list-cards">
+            <!-- Loop through artistes and display each one -->
+            @for (artiste of artistes; track artiste.idArtiste) {
+                <a [routerLink]="['/artisteList', artiste.idArtiste]" class="artiste-link">
+                    <app-artiste-list-card [artiste]="artiste"></app-artiste-list-card>
                 </a>
-            </div>
-        }
+            }
+            @if (artistes.length === 0) {
+                <p class="no-artistes">Aucun artiste trouvé.</p>
+                <button class="btn btn-primary" [routerLink]="['/artisteForm']">Ajouter un artiste</button>
+            }
+        </div>
     </div>
 </div>

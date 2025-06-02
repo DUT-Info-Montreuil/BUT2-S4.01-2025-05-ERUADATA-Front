@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { Editioncomponent } from './editioncomponent';
+import {Editioncomponent} from './editioncomponent';
 
 describe('Editioncomponent', () => {
-  let component: Editioncomponent;
-  let fixture: ComponentFixture<Editioncomponent>;
+    let component: Editioncomponent;
+    let fixture: ComponentFixture<Editioncomponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Editioncomponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(Editioncomponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [Editioncomponent]
+        })
+            .compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(Editioncomponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
