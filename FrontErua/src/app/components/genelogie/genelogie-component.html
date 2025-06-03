@@ -1,46 +1,13 @@
-<!--<div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>-->
-
-<!-- Conteneur du graphe 
-<div #container class="graph-container" style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
-
-<div class="legend">
-  <p><strong>Légende :</strong></p>
-  <ul>
-    <li><span class="circle violet"></span> Nœud non sélectionné</li>
-    <li><span class="circle orange"></span> Nœud sélectionné</li>
-    <li><span class="line normal"></span> Lien normal</li>
-  </ul>
-</div>
-
-<div class="toolbar">
-  <button (click)="exportGraph()">Exporter le graphe</button>
-  <input type="file" accept=".json" (change)="importGraph($event)" />
-</div>
-
-
--->
-
 <div class="graph-container">
-  <!-- Conteneur pour Sigma -->
+  <!-- Conteneur pour Sigma  -->
   <div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
 
   <!-- Actions -->
   <div class="controls" style="margin-top: 1rem;">
-    <button (click)="exportGraph()">📤 Exporter le graphe</button>
+    <button (click)="exportGraph()">📤 Exporter</button>
     <label style="margin-left: 1rem;">
-      📥 Importer un graphe :
+      📥 Importer :
       <input type="file" (change)="importGraph($event)" accept=".json" />
     </label>
-  </div>
-
-  <!-- Légende -->
-  <div class="legend" style="margin-top: 1rem; font-size: 0.9rem;">
-    <strong>Légende :</strong>
-    <ul>
-      <li><span style="display:inline-block;width:12px;height:12px;background:#60a5fa;border-radius:50%;margin-right:6px;"></span> Artiste</li>
-      <li><span style="display:inline-block;width:12px;height:12px;background:#8b5cf6;border-radius:50%;margin-right:6px;"></span> Œuvre</li>
-      <li><span style="display:inline-block;width:20px;height:3px;background:#22c55e;margin-right:6px;"></span> a créé</li>
-      <li><span style="display:inline-block;width:20px;height:3px;background:#f87171;margin-right:6px;"></span> influence</li>
-    </ul>
   </div>
 </div>

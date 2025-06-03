@@ -13,6 +13,8 @@ interface Artiste {
   nom: string;
   prenom?: string;
   nationalite?: string;
+  description?: string;
+  genre?: string;
 }
 
 
@@ -31,13 +33,19 @@ interface Oeuvres {
   mouvement: string;
 }
 
+interface RelationInfluenceRaw {
+  direction: string;
+  path: (any | { id: string })[]; // on peut typer plus finement plus tard
+}
+
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphDataService {
-  private apiUrl = 'http://127.0.0.1:5000'; // adapte l’URL si ton back est déployé
-
+  private apiUrl = 'http://127.0.0.1:5000'; 
   constructor(private http: HttpClient) {}
 
   async getArtistes(): Promise<Artistes> {
@@ -51,4 +59,14 @@ export class GraphDataService {
   async getRelations(id: number): Promise<unknown[]> {
     return firstValueFrom(this.http.get<unknown[]>(`${this.apiUrl}/oeuvres/${encodeURIComponent(id)}/influences/`));
   }
+  async getRelationsById(id: number): Promise<RelationInfluenceRaw[]> {
+    const response = await firstValueFrom(
+      this.http.get<{ success: boolean; data: RelationInfluenceRaw[] }>(
+        `${this.apiUrl}/oeuvres/${encodeURIComponent(id)}/influences`
+      )
+    );
+    return response.data;
+  }
+
+
 }

@@ -1,0 +1,22 @@
+<div class="genealogie-wrapper">
+  <header>
+    <h1>Généalogie Artistique</h1>
+    <p>Explorez les relations et influences entre artistes et œuvres à travers un graphique interactif</p>
+  </header>
+
+  <app-filtre (filtreChange)="onFiltreChange($event)"></app-filtre>
+
+  <section class="graph-container">
+    <h2> Visualisation Interactive </h2>
+    <p>Graphique interactif des relations d’influence artistique</p>
+
+    <div class="graph-placeholder">
+      <app-genelogie [filtres]="filtres"></app-genelogie>
+    </div>
+
+    <div class="actions">
+      <button class="btn-outline">Centrer le Graphique</button>
+      <button class="btn-filled" (click)="reinitialiserFiltres()" >Réinitialiser Filtres</button>
+    </div>
+  </section>
+</div>

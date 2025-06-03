@@ -7,7 +7,8 @@ import {OeuvreDetailComponent} from "./components/oeuvre-detail/oeuvre-detail-co
 import {ArtisteListComponent} from "./components/artiste-list/artiste-list.component";
 import {Page404Component} from "./components/404/Page404.component";
 import {EditionComponent} from "./components/edition/editioncomponent";
-import { GenelogieComponent } from './components/genelogie/genelogie-component';
+import {GenelogieComponent } from './components/genelogie/genelogie-component';
+import {GenealogiePageComponent} from './components/genealogie-page/genealogie-page.component';
 
 export const routes: Routes = [
     {path: '', component: AccueilComponent},
@@ -19,7 +20,6 @@ export const routes: Routes = [
     {path: 'artisteList/:id', component: ArtisteDetailComponent},
     {path: '404', component: Page404Component},
     {path:'edition', component: EditionComponent},
-    {path: 'genealogie', component: GenelogieComponent},
-    {path: '**', redirectTo: '/404'}
-
+    {path: '**', redirectTo: '/404'},
+    {path: 'genealogie', component: GenealogiePageComponent},
 ];
