@@ -20,6 +20,7 @@ export class FiltreComponent {
   };
 
   emitFiltre() {
-    this.filtreChange.emit(this.filtre);
+    //this.filtreChange.emit(this.filtre);
+    this.filtreChange.emit({ ...this.filtre });
   }
 }

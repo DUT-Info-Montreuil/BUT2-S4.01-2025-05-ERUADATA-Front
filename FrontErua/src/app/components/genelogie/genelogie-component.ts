@@ -27,7 +27,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-  if (changes['filtres'] && !changes['filtres'].firstChange) {
+  if (changes['filtres']) {
     await this.loadGraphFromBackend(); // recharge avec les nouveaux filtres
   }
 }
@@ -57,34 +57,6 @@ export class GenelogieComponent implements OnInit, OnChanges {
     console.log('Oeuvres:', oeuvres);
     console.log('Relations:', await this.graphService.getRelationsById(58));
 
-    /*for (const a of artistes) {
-      const id = a.nom || a.id;
-      if (!this.graph.hasNode(id)) {
-        this.graph.addNode(id, {
-          label: id,
-          x: Math.random(),
-          y: Math.random(),
-          size: 10,
-          color: '#60a5fa'
-        });
-      }
-    }
-
-
-
-    for (const o of oeuvres) {
-      const oeuvreId = o.id;
-      const oeuvreLabel = `${o.nom} - ${o.date_creation}`;
-
-      if (!this.graph.hasNode(oeuvreId)) {
-        this.graph.addNode(oeuvreId, {
-          label: oeuvreLabel,
-          x: Math.random(),
-          y: Math.random(),
-          size: 10,
-          color: '#8b5cf6'
-        });
-      }*/
      // Appliquer les filtres
       const { type, mouvement, periode, recherche } = this.filtres;
 
