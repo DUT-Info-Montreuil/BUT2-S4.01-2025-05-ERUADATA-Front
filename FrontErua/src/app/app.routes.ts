@@ -11,6 +11,7 @@ import { GenelogieComponent } from './components/genelogie/genelogie-component';
 
 export const routes: Routes = [
     {path: '', component: AccueilComponent},
+    {path: 'accueil', component: AccueilComponent},
     {path: 'oeuvreDetail', component: OeuvreDetailComponent},
     {path: 'oeuvreForm', component: OeuvreFormComponent},
     {path: 'artisteForm', component: ArtisteFormComponent},
@@ -19,5 +20,6 @@ export const routes: Routes = [
     {path: '404', component: Page404Component},
     {path:'edition', component: EditionComponent},
     {path: 'genealogie', component: GenelogieComponent},
+    {path: '**', redirectTo: '/404'}
 
 ];
