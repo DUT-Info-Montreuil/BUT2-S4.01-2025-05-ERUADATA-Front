@@ -16,11 +16,12 @@ export class FiltreComponent {
     periode: '',
     mouvement: '',
     type: '',
-    recherche: ''
+    recherche: '',
+    nationalite: '',
+    genre: ''
   };
 
   emitFiltre() {
-    //this.filtreChange.emit(this.filtre);
     this.filtreChange.emit({ ...this.filtre });
   }
 }

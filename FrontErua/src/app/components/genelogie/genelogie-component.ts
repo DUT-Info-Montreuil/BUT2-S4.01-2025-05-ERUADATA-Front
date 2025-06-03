@@ -58,7 +58,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
     console.log('Relations:', await this.graphService.getRelationsById(58));
 
      // Appliquer les filtres
-      const { type, mouvement, periode, recherche } = this.filtres;
+      const { type, mouvement, periode, nationalite, Genre, recherche } = this.filtres;
 
       // Artistes
       for (const a of artistes) {
@@ -66,7 +66,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
         const nom = a.nom || a.id;
 
         if (recherche && !nom.toLowerCase().includes(recherche.toLowerCase())) continue;
-
+        if (nationalite && (!a.nationalite || a.nationalite.toLowerCase() !== nationalite.toLowerCase())) continue;
         this.graph.addNode(nom, {
           label: nom,
           x: Math.random(),
@@ -82,8 +82,14 @@ export class GenelogieComponent implements OnInit, OnChanges {
 
         if (recherche && !o.nom.toLowerCase().includes(recherche.toLowerCase())) continue;
         if (mouvement && o.mouvement !== mouvement) continue;
-        if (periode && o.date_creation !== periode) continue;
-
+        if (periode) {
+          const year = o.date_creation;
+        if (
+          (periode === '1800&1900' && (year < 1800 || year > 1900)) ||
+          (periode === '1900&2000' && (year < 1900 || year > 2000)) ||
+          (periode === 'Apres2000' && year <= 2000)
+        ) continue;
+        }
         const oeuvreId = o.id;
         const oeuvreLabel = `${o.nom} - ${o.date_creation}`;
 
