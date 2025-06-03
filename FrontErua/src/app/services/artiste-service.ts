@@ -1,33 +1,16 @@
 import {Injectable} from '@angular/core';
-import {Artiste} from "../models/artiste";
+import {Artiste,Artistes,ArtisteSing} from "../models/artiste";
 import {HttpClient} from "@angular/common/http";
 import {firstValueFrom, Observable} from "rxjs";
-/**
- * Interface représentant la réponse d'une requête pour un seul artiste.
- * - data: l'objet Artiste retourné.
- * - success: indique si la requête a réussi.
- */
-interface ArtisteSing {
-    data: Artiste;
-    success: boolean;
 
-}
-
-/**
- * Interface représentant la réponse d'une requête pour plusieurs artistes.
- * - data: un tableau d'objets Artiste.
- * - success: indique si la requête a réussi.
- */
-interface Artistes {
-    data: Artiste[];
-    success: boolean;
-}
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class ArtisteService {
+
+
 
     private apiUrl = 'http://127.0.0.1:5000/artistes/'
 
