@@ -1,32 +1,37 @@
 import {Component, OnInit} from '@angular/core';
 import {Artiste} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
-import {Observable} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {AsyncPipe} from "@angular/common";
 
 @Component({
     selector: 'app-artiste-detail',
     standalone: true,
     imports: [
-        AsyncPipe
     ],
     templateUrl: './artiste-detail-component.html',
     styleUrl: './artiste-detail-component.scss'
 })
 export class ArtisteDetailComponent implements OnInit {
-    artiste$?: Observable<Artiste>;
+    artiste!: Artiste;
 
     constructor(
         private readonly artisteService: ArtisteService,
         private readonly route: ActivatedRoute) {
     }
 
-
-    ngOnInit(): void {
+    /**
+     * Initialise le composant ArtisteDetailComponent.
+     */
+    async ngOnInit(): Promise<void> {
         const id = Number(this.route.snapshot.paramMap.get('id'));
+        console.log('Artiste ID from route:', id);
         if (id) {
-            this.artiste$ = this.artisteService.getArtisteById(id);
+            await this.artisteService.getArtisteById(id).then((response) => {
+                this.artiste = response.data
+                console.log('Artiste details:', this.artiste);
+
+            })
+
         } else {
             console.error('Invalid artiste ID');
         }

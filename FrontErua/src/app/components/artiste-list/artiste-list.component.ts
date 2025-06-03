@@ -23,13 +23,16 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
     private readonly artisteService = inject(ArtisteService);
     private subscription = new Subscription();
 
+    /**
+     * Initialize les composants nécessaires pour la liste des artistes.
+     */
     async ngOnInit() {
         this.subscription.add(
             await this.artisteService.getArtistes().then((data) => {
                 if (data.success) {
                     this.artistes = data.data;
                 } else {
-                    console.error('Failed to fetch artistes');
+                    console.error('Failed to fetch artistes', this.artistes);
                 }
             }).catch(error => {
                 console.error('Error fetching artistes:', error);
@@ -37,7 +40,9 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
         );
     }
 
-
+    /**
+     * Filtre les artistes en fonction du texte de recherche.
+     */
     search() {
         this.artisteService.getArtistes().then((data) => {
             if (data.success) {
@@ -48,6 +53,9 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Nettoie les ressources utilisées par le composant.
+     */
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }

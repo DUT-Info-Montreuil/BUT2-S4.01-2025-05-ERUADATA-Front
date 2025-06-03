@@ -1,11 +1,13 @@
 export interface Artiste {
-    idArtiste: string,
+    id: number,
     nationalite: string,
     nom: string,
     prenom: string,
+    description?: string,
+    anneeNaissance?: string,
     /*
     idArtiste: number,
-    anneeNaissanceArtiste?: string,
-    descriptionArtiste?: string,
+
+
     */
 }

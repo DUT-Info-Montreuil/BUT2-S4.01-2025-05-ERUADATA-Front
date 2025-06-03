@@ -3,14 +3,17 @@
         <div class="photo-container">
             <img alt="Artiste Photo" class="artiste-photo">
             <div class="nom-prenom">
-                <h2 class="artiste-nom">{{ (artiste$|async)?.nom }}{{ (artiste$|async)?.prenom }}</h2>
+                <h2 class="artiste-nom">{{ artiste.nom }}</h2>
+                <h3 class="artiste-prenom">{{ artiste.prenom }}</h3>
             </div>
         </div>
         <div class="artiste-description">
             <h3>Biographie</h3>
-            <p class="artiste-bio"></p>
-            <p class="artiste-date-naissance">Date de naissance: </p>
-            <p class="artiste-nationalite">Nationalité: {{ (artiste$|async)?.nationalite }}</p>
+            <p class="artiste-bio">
+                {{artiste.description ? artiste.description : 'Aucune biographie disponible.'}}
+            </p>
+            <p class="artiste-date-naissance">Année de naissance: {{artiste.anneeNaissance}}</p>
+            <p class="artiste-nationalite">Nationalité: {{ artiste.nationalite }}</p>
         </div>
     </div>
     <div class="oeuvre-mouvement">

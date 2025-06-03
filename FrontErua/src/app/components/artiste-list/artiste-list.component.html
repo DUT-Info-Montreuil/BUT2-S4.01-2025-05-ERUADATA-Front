@@ -1,12 +1,15 @@
 <div class=".artiste-list-container">
-    <h2>Liste des artiste</h2>
+    <div class="artiste-list-header">
+        <h1>Liste des Artistes</h1>
+    </div>
+
     <input (ngModelChange)="search()" [(ngModel)]="searchText" class="search-bar" placeholder="Rechercher un artiste..."
            type="text">
     <div class="artiste-list">
         <div class="artiste-list-cards">
             <!-- Loop through artistes and display each one -->
-            @for (artiste of artistes; track artiste.idArtiste) {
-                <a [routerLink]="['/artisteList', artiste.idArtiste]" class="artiste-link">
+            @for (artiste of artistes; track artiste.id) {
+                <a [routerLink]="['/artisteList', artiste.id]" class="artiste-link">
                     <app-artiste-list-card [artiste]="artiste"></app-artiste-list-card>
                 </a>
             }
