@@ -7,6 +7,6 @@ import {Component} from '@angular/core';
     templateUrl: './editioncomponent.html',
     styleUrl: './editioncomponent.scss'
 })
-export class Editioncomponent {
+export class EditionComponent {
 
 }

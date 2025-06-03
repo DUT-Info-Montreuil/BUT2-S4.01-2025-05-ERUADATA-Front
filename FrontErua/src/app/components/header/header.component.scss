@@ -1,0 +1,21 @@
+.header {
+  height: 60px;
+  background-color: #f8f6fd;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  z-index: 999;
+  border-bottom: solid 1px #cdcdcd;
+
+  .menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}

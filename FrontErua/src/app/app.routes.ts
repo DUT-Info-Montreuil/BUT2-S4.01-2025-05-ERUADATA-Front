@@ -6,6 +6,8 @@ import {OeuvreFormComponent} from "./components/oeuvre-form/oeuvre-form-componen
 import {OeuvreDetailComponent} from "./components/oeuvre-detail/oeuvre-detail-component";
 import {ArtisteListComponent} from "./components/artiste-list/artiste-list.component";
 import {Page404Component} from "./components/404/Page404.component";
+import {EditionComponent} from "./components/edition/editioncomponent";
+import { GenelogieComponent } from './components/genelogie/genelogie-component';
 
 export const routes: Routes = [
     {path: '', component: AccueilComponent},
@@ -15,5 +17,7 @@ export const routes: Routes = [
     {path: 'artisteList', component: ArtisteListComponent},
     {path: 'artisteList/:id', component: ArtisteDetailComponent},
     {path: '404', component: Page404Component},
+    {path:'edition', component: EditionComponent},
+    {path: 'genealogie', component: GenelogieComponent},
 
 ];

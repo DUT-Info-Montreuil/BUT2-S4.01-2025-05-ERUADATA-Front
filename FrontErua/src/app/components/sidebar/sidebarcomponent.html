@@ -1,1 +1,37 @@
-<p>sidebarcomponent works!</p>
+<!--<aside class="sidebar" [class.visible]="visible">
+  <div class="logo">
+    <img src="assets/logo3.png" alt="ERUA logo" />
+    <div class="text">
+      <small>Art Relations</small>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <ul>
+        @for (item of menuItems; track item.path) {
+            <li>{{ item.label }}</li>
+        }
+    </ul>
+  </nav>
+</aside> -->
+
+<aside class="sidebar" [class.visible]="visible" (click)="onLinkClick()" >
+  <div class="logo">
+    <img src="assets/logo3.png" alt="ERUA logo" />
+    <div class="text">
+      <small>Art Relations</small>
+    </div>
+  </div>
+  <hr>
+
+
+  <nav class="menu">
+    <ul>
+      @for (item of menuItems; track item.path) {
+        <li>
+          <a [routerLink]="item.path" (click)="onLinkClick()">{{ item.label }}</a>
+        </li>
+      }
+    </ul>
+  </nav>
+</aside>

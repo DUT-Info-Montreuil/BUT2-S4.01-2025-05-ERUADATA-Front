@@ -1,7 +1,7 @@
-<header>
-    <app-header></app-header>
-</header>
-<body>
-<router-outlet></router-outlet>
-<app-sidebar></app-sidebar>
-</body>
+<app-header (toggleSidebar)="toggleSidebar()"></app-header>
+<app-sidebar [visible]="sidebarVisible" (closeSidebar)="sidebarVisible = false"></app-sidebar>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
