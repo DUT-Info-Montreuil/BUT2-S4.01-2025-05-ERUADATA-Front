@@ -22,6 +22,7 @@ interface Artistes {
     data: Artiste[];
     success: boolean;
 }
+
 @Injectable({
     providedIn: 'root'
 })
