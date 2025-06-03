@@ -15,4 +15,8 @@ export class GenealogiePageComponent {
   onFiltreChange(filtre: any) {
     this.filtres = filtre;
   }
-}
+
+  reinitialiserFiltres(): void {
+    this.filtres = {}; 
+  }
+} 
