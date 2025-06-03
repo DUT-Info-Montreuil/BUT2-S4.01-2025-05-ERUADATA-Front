@@ -11,8 +11,8 @@ import Sigma from 'sigma';
   styleUrl: './genelogie-component.scss'
 })
 export class GenelogieComponent implements OnInit, OnChanges {
-  @Input() filtres: any = {}; // gestion des filtres
-  @Input() recherche: string = ''; // gestion de la recherche
+  @Input() filtres: any = {};
+  @Input() recherche: string = '';
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
 
   private graph!: Graph;
@@ -27,112 +27,108 @@ export class GenelogieComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-  if (changes['filtres']) {
-    await this.loadGraphFromBackend(); // recharge avec les nouveaux filtres
+    if (changes['filtres'] && this.graph) {
+      await this.loadGraphFromBackend();
+    }
   }
-}
-
 
   async setupGraph() {
     this.graph = new Graph();
     this.renderer = new Sigma(this.graph, this.containerRef.nativeElement, {
-      renderEdgeLabels: true, // ✅ important pour voir les labels
+      renderEdgeLabels: true,
       labelRenderedSizeThreshold: 8,
       edgeLabelSize: 12,
-      defaultEdgeType: 'line',
+      defaultEdgeType: 'arrow',
     });
     await this.loadGraphFromBackend();
     this.setupInteractions();
   }
 
   async loadGraphFromBackend() {
+    if (!this.graph) return;
     this.graph.clear();
+
+    const relations = await this.graphService.getRelationsById(1); // utiliser un ID statique ou dynamiquement en fonction du contexte
     const responseArtistes = await this.graphService.getArtistes();
     const responseOeuvres = await this.graphService.getOeuvres();
 
     const artistes = responseArtistes.data || [];
     const oeuvres = responseOeuvres.data || [];
 
-    console.log('Artistes:', artistes);
-    console.log('Oeuvres:', oeuvres);
-    console.log('Relations:', await this.graphService.getRelationsById(58));
+    const { type, mouvement, periode, nationalite, Genre, recherche } = this.filtres;
 
-     // Appliquer les filtres
-      const { type, mouvement, periode, nationalite, Genre, recherche } = this.filtres;
+    // Affichage des artistes
+    for (const a of artistes) {
+      if (type === 'oeuvres') continue;
+      const nom = a.nom || a.id;
 
-      // Artistes
-      for (const a of artistes) {
-        if (type === 'oeuvres') continue;
-        const nom = a.nom || a.id;
+      if (recherche && !nom.toLowerCase().includes(recherche.toLowerCase())) continue;
+      if (nationalite && (!a.nationalite || a.nationalite.toLowerCase() !== nationalite.toLowerCase())) continue;
 
-        if (recherche && !nom.toLowerCase().includes(recherche.toLowerCase())) continue;
-        if (nationalite && (!a.nationalite || a.nationalite.toLowerCase() !== nationalite.toLowerCase())) continue;
-        this.graph.addNode(nom, {
-          label: nom,
-          x: Math.random(),
-          y: Math.random(),
-          size: 10,
-          color: '#60a5fa'
-        });
-      }
+      this.graph.addNode(nom, {
+        label: nom,
+        x: Math.random() * 100 - 150, // Position horizontale aléatoire pour éviter les chevauchements
+        y: Math.random() * 100 + 100, // Position aléatoire pour éviter les chevauchements
+        size: 10,
+        color: '#60a5fa'
+      });
+    }
+    let levelMap: Map<number, number> = new Map();
+    let yStep = 80;
+    let xStep = 150;
 
-      // Œuvres
-      for (const o of oeuvres) {
+    for (const relation of relations) {
+      const path = relation.path;
+      const direction = relation.direction;
+
+      for (let i = 0; i < path.length; i++) {
+        const oeuvre = path[i];
+        const nodeId = oeuvre.id;
+        const level = i;
+
         if (type === 'artistes') continue;
-
-        if (recherche && !o.nom.toLowerCase().includes(recherche.toLowerCase())) continue;
-        if (mouvement && o.mouvement !== mouvement) continue;
+        if (recherche && !oeuvre.nom.toLowerCase().includes(recherche.toLowerCase())) continue;
+        if (mouvement && oeuvre.mouvement !== mouvement) continue;
         if (periode) {
-          const year = o.date_creation;
-        if (
-          (periode === '1800&1900' && (year < 1800 || year > 1900)) ||
-          (periode === '1900&2000' && (year < 1900 || year > 2000)) ||
-          (periode === 'Apres2000' && year <= 2000)
-        ) continue;
+          const year = oeuvre.date_creation;
+          if (
+            (periode === '1800&1900' && (year < 1800 || year > 1900)) ||
+            (periode === '1900&2000' && (year < 1900 || year > 2000)) ||
+            (periode === 'Apres2000' && year <= 2000)
+          ) continue;
         }
-        const oeuvreId = o.id;
-        const oeuvreLabel = `${o.nom} - ${o.date_creation}`;
-
-        this.graph.addNode(oeuvreId, {
-          label: oeuvreLabel,
-          x: Math.random(),
-          y: Math.random(),
-          size: 10,
-          color: '#8b5cf6'
-        });
 
 
-      // 🔗 Récupération et affichage des relations pour chaque oeuvre
-      const rawRelations = await this.graphService.getRelationsById(o.id);
-      const relations = rawRelations
-        .filter(r => Array.isArray(r.path) && r.path.length >= 3)
-        .map(r => {
-          const path = r.path;
-          const sourceNode = path[0];
-          const targetNode = path[path.length - 1];
+        if (!this.graph.hasNode(nodeId)) {
+          const y = level * yStep;
+          const x = (levelMap.get(level) || 0) * xStep;
+          levelMap.set(level, (levelMap.get(level) || 0) + 1);
 
-          return {
-            source: sourceNode.nom,
-            cible: targetNode.nom
-          };
-        });
+          this.graph.addNode(nodeId, {
+            label: `${oeuvre.nom} - ${oeuvre.date_creation}`,
+            x,
+            y,
+            size: 10,
+            color: '#8b5cf6'
+          });
+        }
 
-        for (const { source, cible } of relations) {
-        console.log('Ajout arête :', source, '->', cible);
+        if (i > 0) {
+          const sourceId = path[i - 1].id;
+          const targetId = oeuvre.id;
+          const edgeKey = `${sourceId}->${targetId}`;
 
-        if (this.graph.hasNode(source) && this.graph.hasNode(cible)) {
-          const edgeKey = `${source}->${cible}`;
           if (!this.graph.hasEdge(edgeKey)) {
-            this.graph.addEdgeWithKey(edgeKey, source, cible, {
-              color: '#f87171',
-              size: 5,
-              type: 'line',
-              label: 'influence'
+            this.graph.addEdgeWithKey(edgeKey, sourceId, targetId, {
+              color: '#ef4444',
+              size: 3,
+              label: direction,
+              type: 'arrow'
             });
           }
         }
       }
-      }
+    }
 
     this.renderer.refresh();
     this.renderer.getCamera().setState({ x: 0, y: 0, ratio: 1, angle: 0 });

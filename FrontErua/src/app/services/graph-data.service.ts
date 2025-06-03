@@ -13,6 +13,8 @@ interface Artiste {
   nom: string;
   prenom?: string;
   nationalite?: string;
+  description?: string;
+  genre?: string;
 }
 
 
@@ -43,8 +45,7 @@ interface RelationInfluenceRaw {
   providedIn: 'root'
 })
 export class GraphDataService {
-  private apiUrl = 'http://127.0.0.1:5000'; // adapte l’URL si ton back est déployé
-
+  private apiUrl = 'http://127.0.0.1:5000'; 
   constructor(private http: HttpClient) {}
 
   async getArtistes(): Promise<Artistes> {
