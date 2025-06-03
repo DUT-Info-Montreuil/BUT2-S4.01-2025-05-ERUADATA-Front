@@ -1,0 +1,26 @@
+<div *ngIf="oeuvre" class="container">
+  <h1>{{ oeuvre.nom }}</h1>
+
+  <div class="text-content">
+    <p><strong>Créée par :</strong> {{ oeuvre.artiste }}</p>
+    <p><strong>Année :</strong> {{ oeuvre.date_creation }}</p>
+    <p><strong>Type :</strong> {{ oeuvre.type }}</p>
+    <p><strong>Mouvement :</strong> {{ oeuvre.mouvement }}</p>
+    <p><strong>Dimensions :</strong> {{ oeuvre.dimensions }}</p>
+    <p><strong>Description :</strong> {{ oeuvre.description }}</p>
+  </div>
+
+  <div *ngIf="oeuvre.influencePar?.length">
+    <h3>Inspirée par :</h3>
+    <ul>
+      <li *ngFor="let source of oeuvre.influencePar">{{ source }}</li>
+    </ul>
+  </div>
+
+  <div *ngIf="oeuvre.influenceSur?.length">
+    <h3>Œuvres influencées :</h3>
+    <ul>
+      <li *ngFor="let cible of oeuvre.influenceSur">{{ cible }}</li>
+    </ul>
+  </div>
+</div>
