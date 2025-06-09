@@ -1,0 +1,39 @@
+<mat-form-field appearance="fill" class="form-field">
+  <mat-label>Rechercher un artiste</mat-label>
+  <input type="text" matInput [formControl]="artisteSearchCtrl" [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onArtisteSelected($event.option.value)">
+          @for (artiste of filteredArtistes; track artiste.id) {
+              <mat-option>{{ artiste.nom }} {{ artiste.prenom }}</mat-option>
+          }
+  </mat-autocomplete>
+</mat-form-field>
+
+<form [formGroup]="editForm" class="edit-artiste-form">
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="nom" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="prenom" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Date de naissance</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateNaissance" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Genre</mat-label>
+        <mat-select formControlName="genre">
+            <mat-option value="Homme">Homme</mat-option>
+            <mat-option value="Femme">Femme</mat-option>
+            <mat-option value="Autre">Autre</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="onSave()">Enregistrer</button>
+</form>

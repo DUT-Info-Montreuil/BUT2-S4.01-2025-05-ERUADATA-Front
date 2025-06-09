@@ -5,6 +5,7 @@ export interface Artiste {
     prenom: string,
     description?: string,
     anneeNaissance?: string,
+    genre?: string,
     /*
     idArtiste: number,
     */
