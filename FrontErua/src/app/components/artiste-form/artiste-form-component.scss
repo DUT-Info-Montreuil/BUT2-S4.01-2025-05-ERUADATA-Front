@@ -1,0 +1,16 @@
+.artiste-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+
+    mat-form-field {
+        margin-bottom: 15px;
+    }
+
+    button {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+}

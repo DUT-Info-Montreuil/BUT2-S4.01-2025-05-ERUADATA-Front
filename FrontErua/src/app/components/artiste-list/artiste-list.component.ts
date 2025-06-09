@@ -4,7 +4,14 @@ import {Subscription} from "rxjs";
 import {Artiste} from "../../models/artiste";
 import {RouterLink} from "@angular/router";
 import {ArtisteListCardComponent} from "./artiste-list-card/artiste-list-card.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { MatFormFieldModule} from "@angular/material/form-field";
+import {
+    MatDatepickerModule,
+} from "@angular/material/datepicker";
+import {MatButton, MatButtonModule} from "@angular/material/button";
+import {MatInputModule} from "@angular/material/input";
+
 
 @Component({
     selector: 'app-artiste-list',
@@ -12,7 +19,12 @@ import {FormsModule} from "@angular/forms";
     imports: [
         RouterLink,
         ArtisteListCardComponent,
-        FormsModule
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatButtonModule,
     ],
     templateUrl: './artiste-list.component.html',
     styleUrl: './artiste-list.component.scss'

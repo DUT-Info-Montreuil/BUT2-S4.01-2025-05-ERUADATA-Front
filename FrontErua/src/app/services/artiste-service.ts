@@ -25,6 +25,10 @@ export class ArtisteService {
         return firstValueFrom(this.http.get<ArtisteSing>(this.apiUrl + id));
     }
 
+    async addArtiste(artiste: Artiste): Promise<Artiste> {
+            return firstValueFrom(this.http.post<Artiste>(this.apiUrl, artiste));
+    }
+
     getArtisteByName(nom: string): Observable<Artiste> {
         const formattedNom = nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
         return this.http.get<Artiste>(this.apiUrl + '?nom=' + formattedNom);

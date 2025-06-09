@@ -1,1 +1,74 @@
-<p>artiste-form-component works!</p>
+
+
+<form [formGroup]="artisteForm" class="artiste-form" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill">
+    <mat-label>Nom</mat-label>
+    <input matInput formControlName="nom" required>
+      @if (artisteForm.get('nom')?.hasError('required')) {
+          <mat-error>
+              Le nom est obligatoire
+          </mat-error>
+      }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Prénom</mat-label>
+    <input matInput formControlName="prenom" required>
+      @if (artisteForm.get('prenom')?.hasError('required')) {
+          <mat-error>
+              Le prénom est obligatoire
+          </mat-error>
+      }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Date de naissance</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="naissance">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Genre</mat-label>
+        <mat-select formControlName="genre">
+            <mat-option value="Homme">Homme</mat-option>
+            <mat-option value="Femme">Femme</mat-option>
+            <mat-option value="Autre">Autre</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Nationalité</mat-label>
+    <input matInput formControlName="nationalite" required>
+      @if (artisteForm.get('nationalite')?.hasError('required')) {
+          <mat-error >
+              La nationalité est obligatoire
+          </mat-error>
+      }
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="button" (click)="openUploadDialog()">
+    Upload Fichier
+  </button>
+
+  <button mat-raised-button color="accent" type="submit" [disabled]="artisteForm.invalid">
+    Ajouter l'artiste
+  </button>
+</form>
+
+<ng-template #uploadDialog>
+  <h2 mat-dialog-title>Déposer un fichier</h2>
+  <mat-dialog-content>
+    <p>Veuillez déposer votre fichier ici :</p>
+    <input type="file" (change)="onFileSelected($event)">
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-raised-button color="primary" (click)="uploadFile()">Télécharger</button>
+  </mat-dialog-actions>
+</ng-template>
