@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild, OnChanges, SimpleChang
 import { GraphDataService } from '../../services/graph-data.service';
 import Graph from 'graphology';
 import Sigma from 'sigma';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-genelogie',
@@ -25,7 +26,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
   public selectedElementType: 'oeuvre' | 'artiste' | 'relation' | null = null;
   public showCrudPanel = false;
 
-  constructor(private graphService: GraphDataService) {}
+  constructor(private graphService: GraphDataService, private router: Router) {}
 
   async ngOnInit() {
     await this.setupGraph();
@@ -424,10 +425,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
     console.log(`Graphe généré avec ${this.graph.order} nœuds et ${this.graph.size} arêtes`);
     this.renderer.refresh();
     
-    // Centrer automatiquement le graphe
-    setTimeout(() => {
-      this.centrerGraphique();
-    }, 100);
+    
   }
 
   // Détermine le type de relation à partir du label/direction
@@ -536,43 +534,8 @@ export class GenelogieComponent implements OnInit, OnChanges {
     a.click();
   }
 
-
-
-  centrerGraphique() {
-    if (this.renderer && this.graph.order > 0) {
-      // Calculer les limites du graphe
-      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-      
-      this.graph.forEachNode((node, attributes) => {
-        minX = Math.min(minX, attributes['x']);
-        maxX = Math.max(maxX, attributes['x']);
-        minY = Math.min(minY, attributes['y']);
-        maxY = Math.max(maxY, attributes['y']);
-      });
-
-      // Calculer le centre et le zoom optimal
-      const centerX = (minX + maxX) / 2;
-      const centerY = (minY + maxY) / 2;
-      const width = maxX - minX;
-      const height = maxY - minY;
-      const maxDimension = Math.max(width, height);
-      
-      // Ajouter une marge
-      const margin = 100;
-      const ratio = Math.min(
-        (this.containerRef.nativeElement.clientWidth - margin) / maxDimension,
-        (this.containerRef.nativeElement.clientHeight - margin) / maxDimension
-      );
-
-      this.renderer.getCamera().animate({
-        x: -centerX,
-        y: -centerY,
-        ratio: Math.max(0.1, Math.min(2, ratio)),
-        angle: 0
-      }, {
-        duration: 800,
-        easing: 'easeInOutCubic'
-      });
-    }
+  editGraph() {
+    this.router.navigate(['/edition']);
   }
+
 }
