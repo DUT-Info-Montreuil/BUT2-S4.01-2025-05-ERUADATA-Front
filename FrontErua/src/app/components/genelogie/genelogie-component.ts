@@ -27,7 +27,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes['filtres'] && this.graph) {
+    if ((changes['filtres'] || changes['recherche']) && this.graph) {
       await this.loadGraphFromBackend();
     }
   }
@@ -48,91 +48,229 @@ export class GenelogieComponent implements OnInit, OnChanges {
     if (!this.graph) return;
     this.graph.clear();
 
-    const relations = await this.graphService.getRelationsById(1); // utiliser un ID statique ou dynamiquement en fonction du contexte
+    const relations = await this.graphService.getRelationsById(1);
     const responseArtistes = await this.graphService.getArtistes();
     const responseOeuvres = await this.graphService.getOeuvres();
 
     const artistes = responseArtistes.data || [];
     const oeuvres = responseOeuvres.data || [];
 
-    const { type, mouvement, periode, nationalite, Genre, recherche } = this.filtres;
+    // S'assurer que les filtres existent
+    const filtres = this.filtres || {};
+    const { type, mouvement, periode, nationalite, genre, recherche } = filtres;
+    
+    // Utiliser la recherche du composant si elle n'est pas dans les filtres
+    const searchTerm = recherche || this.recherche;
 
-    // Affichage des artistes
-    for (const a of artistes) {
-      if (type === 'oeuvres') continue;
-      const nom = a.nom || a.id;
+    console.log('Filtres appliqués:', { type, mouvement, periode, nationalite, genre, searchTerm });
 
-      if (recherche && !nom.toLowerCase().includes(recherche.toLowerCase())) continue;
-      if (nationalite && (!a.nationalite || a.nationalite.toLowerCase() !== nationalite.toLowerCase())) continue;
-
-      this.graph.addNode(nom, {
-        label: nom,
-        x: Math.random() * 100 - 150, // Position horizontale aléatoire pour éviter les chevauchements
-        y: Math.random() * 100 + 100, // Position aléatoire pour éviter les chevauchements
-        size: 10,
-        color: '#60a5fa'
-      });
-    }
-    let levelMap: Map<number, number> = new Map();
-    let yStep = 80;
-    let xStep = 150;
-
-    for (const relation of relations) {
-      const path = relation.path;
-      const direction = relation.direction;
-
-      for (let i = 0; i < path.length; i++) {
-        const oeuvre = path[i];
-        const nodeId = oeuvre.id;
-        const level = i;
-
-        if (type === 'artistes') continue;
-        if (recherche && !oeuvre.nom.toLowerCase().includes(recherche.toLowerCase())) continue;
-        if (mouvement && oeuvre.mouvement !== mouvement) continue;
-        if (periode) {
-          const year = oeuvre.date_creation;
-          if (
-            (periode === '1800&1900' && (year < 1800 || year > 1900)) ||
-            (periode === '1900&2000' && (year < 1900 || year > 2000)) ||
-            (periode === 'Apres2000' && year <= 2000)
-          ) continue;
+    // Fonction helper pour vérifier si une œuvre passe les filtres
+    const oeuvrePassesFilters = (oeuvre: any): boolean => {
+      // Si aucun filtre n'est appliqué, afficher toutes les œuvres
+      const hasActiveFilters = (searchTerm && searchTerm.trim() !== '') ||
+                              (mouvement && mouvement.trim() !== '') ||
+                              (genre && genre.trim() !== '') ||
+                              (periode && periode.trim() !== '');
+      
+      if (!hasActiveFilters) {
+        return true;
+      }
+      
+      // Filtre de recherche
+      if (searchTerm && searchTerm.trim() !== '' && !oeuvre.nom.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+      // Filtre de mouvement
+      if (mouvement && mouvement.trim() !== '' && oeuvre.mouvement !== mouvement) {
+        return false;
+      }
+      // Filtre de genre
+      if (genre && genre.trim() !== '' && oeuvre.genre !== genre) {
+        return false;
+      }
+      // Filtre de période
+      if (periode && periode.trim() !== '') {
+        const year = oeuvre.date_creation;
+        if (
+          (periode === '1800&1900' && (year < 1800 || year > 1900)) ||
+          (periode === '1900&2000' && (year < 1900 || year > 2000)) ||
+          (periode === 'Apres2000' && year <= 2000)
+        ) {
+          return false;
         }
+      }
+      return true;
+    };
 
+    // Fonction helper pour vérifier si un artiste passe les filtres
+    const artistePassesFilters = (artiste: any): boolean => {
+      const nom = artiste.nom || artiste.id;
+      // Filtre de recherche
+      if (searchTerm && searchTerm.trim() !== '' && !nom.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+      // Filtre de nationalité
+      if (nationalite && nationalite.trim() !== '' && (!artiste.nationalite || artiste.nationalite.toLowerCase() !== nationalite.toLowerCase())) {
+        return false;
+      }
+      return true;
+    };
 
-        if (!this.graph.hasNode(nodeId)) {
-          const y = level * yStep;
-          const x = (levelMap.get(level) || 0) * xStep;
-          levelMap.set(level, (levelMap.get(level) || 0) + 1);
+    // Si le type est "oeuvres", afficher seulement les œuvres sans relations
+    if (type === 'oeuvres') {
+      let xPos = 0;
+      let yPos = 0;
+      const xStep = 200;
+      const yStep = 150;
+      const maxPerRow = 4;
+      let oeuvresCount = 0;
 
-          this.graph.addNode(nodeId, {
-            label: `${oeuvre.nom} - ${oeuvre.date_creation}`,
-            x,
-            y,
-            size: 10,
-            color: '#8b5cf6'
-          });
+      // Collecter toutes les œuvres disponibles (depuis la liste directe et les relations)
+      const toutesOeuvres = new Map();
+      
+      // Ajouter les œuvres de la liste directe
+      for (const oeuvre of oeuvres) {
+        toutesOeuvres.set(oeuvre.id, oeuvre);
+      }
+      
+      // Ajouter les œuvres des relations
+      for (const relation of relations) {
+        for (const oeuvre of relation.path) {
+          toutesOeuvres.set(oeuvre.id, oeuvre);
         }
+      }
+      
+      const oeuvresDisponibles = Array.from(toutesOeuvres.values());
+      
+      console.log(`Mode œuvres seulement: ${oeuvresDisponibles.length} œuvres disponibles (${oeuvres.length} directes + ${relations.length} relations)`);
+      
+      for (const oeuvre of oeuvresDisponibles) {
+        console.log(`Vérification de l'œuvre: ${oeuvre.nom}`, {
+          passeFiltres: oeuvrePassesFilters(oeuvre),
+          oeuvre: oeuvre
+        });
+        
+        if (!oeuvrePassesFilters(oeuvre)) continue;
 
-        if (i > 0) {
-          const sourceId = path[i - 1].id;
-          const targetId = oeuvre.id;
-          const edgeKey = `${sourceId}->${targetId}`;
+        this.graph.addNode(oeuvre.id, {
+          label: `${oeuvre.nom} - ${oeuvre.date_creation}`,
+          x: xPos,
+          y: yPos,
+          size: 12,
+          color: '#8b5cf6'
+        });
 
-          if (!this.graph.hasEdge(edgeKey)) {
-            this.graph.addEdgeWithKey(edgeKey, sourceId, targetId, {
-              color: '#ef4444',
-              size: 3,
-              label: direction,
-              type: 'arrow'
+        oeuvresCount++;
+        xPos += xStep;
+        if (xPos >= maxPerRow * xStep) {
+          xPos = 0;
+          yPos += yStep;
+        }
+      }
+      
+      console.log(`Mode œuvres seulement: ${oeuvresCount} œuvres affichées sur ${oeuvresDisponibles.length} total`);
+    } else if (type === 'artistes') {
+      // Affichage des artistes seulement
+      let xPos = 0;
+      let yPos = 0;
+      const xStep = 200;
+      const yStep = 150;
+      const maxPerRow = 4;
+      let artistesCount = 0;
+
+      for (const a of artistes) {
+        if (!artistePassesFilters(a)) continue;
+
+        const nom = a.nom || a.id;
+        this.graph.addNode(nom, {
+          label: nom,
+          x: xPos,
+          y: yPos,
+          size: 12,
+          color: '#60a5fa'
+        });
+
+        artistesCount++;
+        xPos += xStep;
+        if (xPos >= maxPerRow * xStep) {
+          xPos = 0;
+          yPos += yStep;
+        }
+      }
+      
+      console.log(`Mode artistes seulement: ${artistesCount} artistes affichés sur ${artistes.length} total`);
+    } else {
+      // Affichage des artistes ET des œuvres avec relations
+      for (const a of artistes) {
+        if (!artistePassesFilters(a)) continue;
+
+        const nom = a.nom || a.id;
+        this.graph.addNode(nom, {
+          label: nom,
+          x: Math.random() * 100 - 150,
+          y: Math.random() * 100 + 100,
+          size: 10,
+          color: '#60a5fa'
+        });
+      }
+
+      // Traiter les relations
+      let levelMap: Map<number, number> = new Map();
+      let yStep = 80;
+      let xStep = 150;
+
+      for (const relation of relations) {
+        const path = relation.path;
+        const direction = relation.direction;
+
+        for (let i = 0; i < path.length; i++) {
+          const oeuvre = path[i];
+          const nodeId = oeuvre.id;
+          const level = i;
+
+          if (!oeuvrePassesFilters(oeuvre)) continue;
+
+          if (!this.graph.hasNode(nodeId)) {
+            const y = level * yStep;
+            const x = (levelMap.get(level) || 0) * xStep;
+            levelMap.set(level, (levelMap.get(level) || 0) + 1);
+
+            this.graph.addNode(nodeId, {
+              label: `${oeuvre.nom} - ${oeuvre.date_creation}`,
+              x,
+              y,
+              size: 10,
+              color: '#8b5cf6'
             });
+          }
+
+          // Ajouter les arêtes seulement si les deux nœuds existent
+          if (i > 0) {
+            const sourceId = path[i - 1].id;
+            const targetId = oeuvre.id;
+            const edgeKey = `${sourceId}->${targetId}`;
+
+            // Vérifier que les deux nœuds existent dans le graphe
+            if (this.graph.hasNode(sourceId) && this.graph.hasNode(targetId) && !this.graph.hasEdge(edgeKey)) {
+              this.graph.addEdgeWithKey(edgeKey, sourceId, targetId, {
+                color: '#ef4444',
+                size: 3,
+                label: direction,
+                type: 'arrow'
+              });
+            }
           }
         }
       }
     }
 
+    console.log(`Graphe généré avec ${this.graph.order} nœuds et ${this.graph.size} arêtes`);
     this.renderer.refresh();
-    this.renderer.getCamera().setState({ x: 0, y: 0, ratio: 1, angle: 0 });
-    this.renderer.getCamera().enable();
+    
+    // Centrer automatiquement le graphe
+    setTimeout(() => {
+      this.centrerGraphique();
+    }, 100);
   }
 
   setupInteractions() {
@@ -210,11 +348,49 @@ export class GenelogieComponent implements OnInit, OnChanges {
         this.graph.import(json);
         this.renderer.refresh();
       } catch (e) {
-        alert('Fichier invalide ou erreur d’importation.');
+        alert('Fichier invalide ou erreur d\'importation.');
         console.error(e);
       }
     };
 
     reader.readAsText(file);
+  }
+
+  centrerGraphique() {
+    if (this.renderer && this.graph.order > 0) {
+      // Calculer les limites du graphe
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      
+      this.graph.forEachNode((node, attributes) => {
+        minX = Math.min(minX, attributes['x']);
+        maxX = Math.max(maxX, attributes['x']);
+        minY = Math.min(minY, attributes['y']);
+        maxY = Math.max(maxY, attributes['y']);
+      });
+
+      // Calculer le centre et le zoom optimal
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      const width = maxX - minX;
+      const height = maxY - minY;
+      const maxDimension = Math.max(width, height);
+      
+      // Ajouter une marge
+      const margin = 100;
+      const ratio = Math.min(
+        (this.containerRef.nativeElement.clientWidth - margin) / maxDimension,
+        (this.containerRef.nativeElement.clientHeight - margin) / maxDimension
+      );
+
+      this.renderer.getCamera().animate({
+        x: -centerX,
+        y: -centerY,
+        ratio: Math.max(0.1, Math.min(2, ratio)),
+        angle: 0
+      }, {
+        duration: 800,
+        easing: 'easeInOutCubic'
+      });
+    }
   }
 }

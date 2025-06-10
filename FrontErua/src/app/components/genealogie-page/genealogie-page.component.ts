@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FiltreComponent } from '../filtre/filtre-component';
 import { GenelogieComponent } from '../genelogie/genelogie-component';
 
@@ -10,6 +10,8 @@ import { GenelogieComponent } from '../genelogie/genelogie-component';
   styleUrls: ['./genealogie-page.component.scss']
 })
 export class GenealogiePageComponent {
+  @ViewChild(FiltreComponent) filtreComponent!: FiltreComponent;
+  
   filtres = {};
 
   onFiltreChange(filtre: any) {
@@ -17,6 +19,17 @@ export class GenealogiePageComponent {
   }
 
   reinitialiserFiltres(): void {
-    this.filtres = {}; 
+    this.filtres = {};
+    // Réinitialiser aussi le composant de filtres
+    if (this.filtreComponent) {
+      this.filtreComponent.filtre = {
+        periode: '',
+        mouvement: '',
+        type: '',
+        recherche: '',
+        nationalite: '',
+        genre: ''
+      };
+    }
   }
 } 
