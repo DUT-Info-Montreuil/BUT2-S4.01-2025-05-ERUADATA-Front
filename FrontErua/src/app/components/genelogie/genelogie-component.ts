@@ -57,7 +57,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
 
     // S'assurer que les filtres existent
     const filtres = this.filtres || {};
-    const { type, mouvement, periode, nationalite, genre, recherche } = filtres;
+    const { type, mouvement, periode, nationalite, genre, recherche, showInfluence, showRelations } = filtres;
     
     // Utiliser la recherche du composant si elle n'est pas dans les filtres
     const searchTerm = recherche || this.recherche;
@@ -139,6 +139,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
           toutesOeuvres.set(oeuvre.id, oeuvre);
         }
       }
+      
       
       const oeuvresDisponibles = Array.from(toutesOeuvres.values());
       
@@ -244,7 +245,8 @@ export class GenelogieComponent implements OnInit, OnChanges {
             });
           }
 
-          // Ajouter les arêtes seulement si les deux nœuds existent
+
+          // Ajouter les arêtes seulement si les deux nœuds existent ET si les filtres de relations le permettent
           if (i > 0) {
             const sourceId = path[i - 1].id;
             const targetId = oeuvre.id;
@@ -252,12 +254,29 @@ export class GenelogieComponent implements OnInit, OnChanges {
 
             // Vérifier que les deux nœuds existent dans le graphe
             if (this.graph.hasNode(sourceId) && this.graph.hasNode(targetId) && !this.graph.hasEdge(edgeKey)) {
-              this.graph.addEdgeWithKey(edgeKey, sourceId, targetId, {
-                color: '#ef4444',
-                size: 3,
-                label: direction,
-                type: 'arrow'
-              });
+              // Déterminer le type de relation
+              const relationType = this.getRelationType(direction);
+              
+              // Vérifier si cette relation doit être affichée selon les filtres
+              let shouldShow = true;
+              
+              if (relationType === 'influence' && showInfluence === false) {
+                shouldShow = false;
+              }
+              
+              if (relationType === 'relation' && showRelations === false) {
+                shouldShow = false;
+              }
+              
+              if (shouldShow) {
+                this.graph.addEdgeWithKey(edgeKey, sourceId, targetId, {
+                  color: '#ef4444',
+                  size: 3,
+                  label: direction,
+                  type: 'arrow',
+                  relationType: relationType
+                });
+              }
             }
           }
         }
@@ -271,6 +290,14 @@ export class GenelogieComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.centrerGraphique();
     }, 100);
+  }
+
+  // Détermine le type de relation à partir du label/direction
+  getRelationType(direction: string): string {
+    if (!direction) return 'relation';
+    const dir = direction.toLowerCase();
+    if (dir.includes('influence') || dir.includes('descendance')) return 'influence';
+    return 'relation';
   }
 
   setupInteractions() {

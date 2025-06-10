@@ -28,7 +28,9 @@ export class GenealogiePageComponent {
         type: '',
         recherche: '',
         nationalite: '',
-        genre: ''
+        genre: '',
+        showInfluence: true,  // Par défaut sélectionné
+        showRelations: true   // Par défaut sélectionné
       };
     }
   }

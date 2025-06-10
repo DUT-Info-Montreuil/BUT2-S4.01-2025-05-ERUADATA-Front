@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-filtre',
   standalone: true,
@@ -18,10 +17,22 @@ export class FiltreComponent {
     type: '',
     recherche: '',
     nationalite: '',
-    genre: ''
+    genre: '',
+    showInfluence: true, // Par défaut sélectionné
+    showRelations: true  // Par défaut sélectionné
   };
 
   emitFiltre() {
     this.filtreChange.emit({ ...this.filtre });
+  }
+
+  toggleInfluence() {
+    this.filtre.showInfluence = !this.filtre.showInfluence;
+    this.emitFiltre();
+  }
+
+  toggleRelations() {
+    this.filtre.showRelations = !this.filtre.showRelations;
+    this.emitFiltre();
   }
 }

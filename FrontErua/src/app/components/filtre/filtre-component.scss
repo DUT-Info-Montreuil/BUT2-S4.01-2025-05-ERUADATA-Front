@@ -43,9 +43,37 @@
   font-weight: 500;
   background: #eee;
   color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
 }
 
-.tag.blue { background: #dbeafe; color: #1d4ed8; }
-.tag.green { background: #d1fae5; color: #047857; }
-.tag.purple { background: #ede9fe; color: #6b21a8; }
-.tag.orange { background: #fef3c7; color: #92400e; }
+.tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tag.active {
+  border-color: #333;
+  font-weight: 600;
+}
+
+.tag.blue { 
+  background: #dbeafe; 
+  color: #1d4ed8; 
+}
+
+.tag.blue.active {
+  background: #bfdbfe;
+  border-color: #1d4ed8;
+}
+
+.tag.purple { 
+  background: #ede9fe; 
+  color: #6b21a8; 
+}
+
+.tag.purple.active {
+  background: #ddd6fe;
+  border-color: #6b21a8;
+}

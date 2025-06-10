@@ -1,7 +1,7 @@
 <div class="filtres-container">
   <div class="filtres-grid">
     <div>
-      <label>Type d’Entité</label>
+      <label>Type d'Entité</label>
       <select [(ngModel)]="filtre.type" (change)="emitFiltre()">
         <option value="">Artistes et œuvres</option>
         <option value="artistes">Artistes seulement</option>
@@ -50,9 +50,17 @@
   </div>
 
   <div class="legendes">
-    <span class="tag blue">Influence directe entre oeuvres</span>
-    <span class="tag green">Inspiration stylistique</span>
-    <span class="tag purple">Relation Oeuvres & Artistes</span>
-    <span class="tag orange">Période géographique</span>
+    <span 
+      class="tag blue" 
+      [class.active]="filtre.showInfluence"
+      (click)="toggleInfluence()">
+      Relation Oeuvres & Artistes
+    </span>
+    <span 
+      class="tag purple" 
+      [class.active]="filtre.showRelations"
+      (click)="toggleRelations()">
+      Influence directe entre oeuvres
+    </span>
   </div>
 </div>
