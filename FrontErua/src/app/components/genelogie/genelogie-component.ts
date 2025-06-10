@@ -120,6 +120,10 @@ export class GenelogieComponent implements OnInit, OnChanges {
       if (nationalite && nationalite.trim() !== '' && (!artiste.nationalite || artiste.nationalite.toLowerCase() !== nationalite.toLowerCase())) {
         return false;
       }
+      // Filtre de genre
+      if (genre && genre.trim() !== '' && (!artiste.genre || artiste.genre.toLowerCase() !== genre.toLowerCase())) {
+        return false;
+      }
       return true;
     };
 
