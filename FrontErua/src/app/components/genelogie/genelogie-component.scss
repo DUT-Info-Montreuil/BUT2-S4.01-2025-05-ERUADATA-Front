@@ -1,7 +1,40 @@
 .graph-container {
   width: 100%;
-  border: 1px solid #ccc;
+  height: 100%;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: #f9fafb;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.graph-container > div:first-child {
+  flex: 1;
+  min-height: 400px;
+}
+
+.controls {
+  padding: 1rem;
+  background: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 8px 8px;
+}
+
+.controls button {
+  padding: 0.5rem 1rem;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.controls button:hover {
+  background: #7c3aed;
+}
+
+.controls input[type="file"] {
+  margin-left: 0.5rem;
 }
