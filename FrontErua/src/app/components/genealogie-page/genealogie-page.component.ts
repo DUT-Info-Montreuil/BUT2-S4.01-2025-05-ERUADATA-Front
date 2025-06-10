@@ -30,7 +30,8 @@ export class GenealogiePageComponent {
         nationalite: '',
         genre: '',
         showInfluence: true,  // Par défaut sélectionné
-        showRelations: true   // Par défaut sélectionné
+        showRelations: true,   // Par défaut sélectionné
+        showCreation: true     // Par défaut sélectionné pour les relations A_CREE
       };
     }
   }

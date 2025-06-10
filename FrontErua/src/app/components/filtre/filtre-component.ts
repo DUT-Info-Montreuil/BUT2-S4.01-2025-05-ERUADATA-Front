@@ -19,7 +19,8 @@ export class FiltreComponent {
     nationalite: '',
     genre: '',
     showInfluence: true, // Par défaut sélectionné
-    showRelations: true  // Par défaut sélectionné
+    showRelations: true,  // Par défaut sélectionné
+    showCreation: true    // Par défaut sélectionné pour les relations A_CREE
   };
 
   emitFiltre() {
@@ -33,6 +34,11 @@ export class FiltreComponent {
 
   toggleRelations() {
     this.filtre.showRelations = !this.filtre.showRelations;
+    this.emitFiltre();
+  }
+
+  toggleCreation() {
+    this.filtre.showCreation = !this.filtre.showCreation;
     this.emitFiltre();
   }
 }

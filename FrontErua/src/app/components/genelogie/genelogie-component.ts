@@ -377,7 +377,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
     }
 
     // Ajout des arêtes de création (bleues) dans la même logique que l'influence
-    if ((type !== 'artistes' && type !== 'oeuvres') && (typeof showCreation === 'undefined' || showCreation !== false)) {
+    if ((type !== 'artistes' && type !== 'oeuvres') && showCreation !== false) {
       for (const relation of creationRelations) {
         const artiste = relation.artiste;
         const oeuvre = relation.oeuvre;
