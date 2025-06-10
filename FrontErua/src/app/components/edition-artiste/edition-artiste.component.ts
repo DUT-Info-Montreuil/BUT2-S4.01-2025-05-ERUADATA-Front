@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {MatFormField} from "@angular/material/form-field";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,7 @@ import {Artiste} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
 import {Subscription} from "rxjs";
 import {MatSelect} from "@angular/material/select";
+import {Router} from "@angular/router";
 
 export class AppModule { }
 
@@ -39,16 +40,21 @@ export class AppModule { }
 })
 export class EditionArtisteComponent implements OnInit {
   artisteSearchCtrl: FormControl;
+  idArtiste!: Number;
   editForm: FormGroup = new FormGroup({
-    nom: new FormControl(''),
-    prenom: new FormControl(''),
-    dateNaissance: new FormControl('')
+    nom: new FormControl('', Validators.required),
+    prenom: new FormControl('', Validators.required),
+    naissance: new FormControl('', Validators.required),
+    description: new FormControl(''),
+    genre: new FormControl('', Validators.required),
+    nationalite: new FormControl('', Validators.required),
+
   });
   filteredArtistes: Artiste[] = [];
   private readonly artisteService = inject(ArtisteService);
   private subscription = new Subscription();
 
-    constructor() {
+    constructor(private router: Router) {
         this.artisteSearchCtrl = new FormControl('');
     }
 
@@ -71,10 +77,13 @@ export class EditionArtisteComponent implements OnInit {
       this.editForm.patchValue({
         nom: value.nom,
         prenom: value.prenom,
-        dateNaissance: value.anneeNaissance,
+        naissance: value.anneeNaissance,
         description: value.description,
         genre: value.genre,
+        nationalite: value.nationalite,
       });
+        this.idArtiste = value.id;
+        console.log('Artiste id sélectionné:', this.idArtiste);
     } else {
       this.artisteSearchCtrl.setValue('');
       this.editForm.reset();
@@ -84,5 +93,7 @@ export class EditionArtisteComponent implements OnInit {
   onSave() {
     const updatedArtiste = this.editForm.value;
     // Ajoutez ici la logique pour sauvegarder les modifications (appel service, etc.)
+    this.artisteService.updateArtiste(this.idArtiste, updatedArtiste);
+    this.router.navigate(['/artisteList']);
   }
 }

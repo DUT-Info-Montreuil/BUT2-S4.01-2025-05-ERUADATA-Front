@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
@@ -42,7 +41,6 @@ export class ArtisteFormComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private dialog: MatDialog,
         private artisteService: ArtisteService,
         private router: Router,
     ) {

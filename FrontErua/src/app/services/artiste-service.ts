@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Artiste,Artistes,ArtisteSing} from "../models/artiste";
 import {HttpClient} from "@angular/common/http";
-import {firstValueFrom, Observable} from "rxjs";
+import {firstValueFrom} from "rxjs";
 
 
 @Injectable({
@@ -29,14 +29,9 @@ export class ArtisteService {
             return firstValueFrom(this.http.post<Artiste>(this.apiUrl, artiste));
     }
 
-    getArtisteByName(nom: string): Observable<Artiste> {
-        const formattedNom = nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
-        return this.http.get<Artiste>(this.apiUrl + '?nom=' + formattedNom);
-    }
-
-    getArtistebyNationalite(nationalite: string): Observable<Artiste[]> {
-        const formattedNationalite = nationalite.charAt(0).toUpperCase() + nationalite.slice(1).toLowerCase();
-        return this.http.get<Artiste[]>(this.apiUrl + '?nationalite=' + formattedNationalite);
+    async updateArtiste(id: Number, artiste: Artiste): Promise<Artiste> {
+        console.log("Updating artiste:", artiste);
+        return firstValueFrom(this.http.put<Artiste>(this.apiUrl + id, artiste));
     }
 
 }
