@@ -20,6 +20,11 @@ export class GenelogieComponent implements OnInit, OnChanges {
   private selectedNode: string | null = null;
   private draggingNode: string | null = null;
 
+  // Propriétés pour le panneau d'informations
+  public selectedElement: any = null;
+  public selectedElementType: 'oeuvre' | 'artiste' | 'relation' | null = null;
+  public showCrudPanel = false;
+
   constructor(private graphService: GraphDataService) {}
 
   async ngOnInit() {
@@ -158,7 +163,9 @@ export class GenelogieComponent implements OnInit, OnChanges {
           x: xPos,
           y: yPos,
           size: 12,
-          color: '#8b5cf6'
+          color: '#8b5cf6',
+          nodeType: 'oeuvre',
+          nodeData: oeuvre
         });
 
         oeuvresCount++;
@@ -188,7 +195,9 @@ export class GenelogieComponent implements OnInit, OnChanges {
           x: xPos,
           y: yPos,
           size: 12,
-          color: '#60a5fa'
+          color: '#60a5fa',
+          nodeType: 'artiste',
+          nodeData: a
         });
 
         artistesCount++;
@@ -211,7 +220,9 @@ export class GenelogieComponent implements OnInit, OnChanges {
           x: Math.random() * 100 - 150,
           y: Math.random() * 100 + 100,
           size: 10,
-          color: '#60a5fa'
+          color: '#60a5fa',
+          nodeType: 'artiste',
+          nodeData: a
         });
       }
 
@@ -241,7 +252,9 @@ export class GenelogieComponent implements OnInit, OnChanges {
               x,
               y,
               size: 10,
-              color: '#8b5cf6'
+              color: '#8b5cf6',
+              nodeType: 'oeuvre',
+              nodeData: oeuvre
             });
           }
 
@@ -274,7 +287,9 @@ export class GenelogieComponent implements OnInit, OnChanges {
                   size: 3,
                   label: direction,
                   type: 'arrow',
-                  relationType: relationType
+                  relationType: relationType,
+                  sourceId: sourceId,
+                  targetId: targetId
                 });
               }
             }
@@ -319,37 +334,74 @@ export class GenelogieComponent implements OnInit, OnChanges {
     });
 
     this.renderer.on('clickNode', ({ node }) => {
-      if (!this.selectedNode) {
-        this.selectedNode = node;
-        this.graph.setNodeAttribute(node, 'color', '#f59e42');
-      } else if (this.selectedNode !== node) {
-        const edgeKey1 = `${this.selectedNode}-${node}`;
-        const edgeKey2 = `${node}-${this.selectedNode}`;
-        if (this.graph.hasEdge(edgeKey1)) {
-          this.graph.dropEdge(edgeKey1);
-        } else if (this.graph.hasEdge(edgeKey2)) {
-          this.graph.dropEdge(edgeKey2);
-        } else {
-          this.graph.addEdgeWithKey(edgeKey1, this.selectedNode, node, {
-            color: '#aaa',
-            size: 2,
-            label: edgeKey1,
-          });
-        }
-        this.graph.setNodeAttribute(this.selectedNode, 'color', '#8b5cf6');
-        this.selectedNode = null;
-      } else {
-        this.graph.setNodeAttribute(this.selectedNode, 'color', '#8b5cf6');
-        this.selectedNode = null;
-      }
+      this.handleNodeClick(node);
+    });
+
+    this.renderer.on('clickEdge', ({ edge }) => {
+      this.handleEdgeClick(edge);
     });
 
     this.renderer.on('clickStage', () => {
-      if (this.selectedNode) {
-        this.graph.setNodeAttribute(this.selectedNode, 'color', '#8b5cf6');
-        this.selectedNode = null;
-      }
+      this.clearSelection();
     });
+  }
+
+  private handleNodeClick(node: string) {
+    const nodeAttributes = this.graph.getNodeAttributes(node);
+    const nodeType = nodeAttributes['nodeType'];
+    const nodeData = nodeAttributes['nodeData'];
+
+    this.selectedElement = nodeData;
+    this.selectedElementType = nodeType;
+    this.showCrudPanel = true;
+
+    // Mettre en surbrillance le nœud sélectionné
+    this.graph.setNodeAttribute(node, 'color', '#f59e42');
+  }
+
+  private handleEdgeClick(edge: string) {
+    const edgeAttributes = this.graph.getEdgeAttributes(edge);
+    const sourceId = edgeAttributes['sourceId'];
+    const targetId = edgeAttributes['targetId'];
+
+    this.selectedElement = {
+      sourceId: sourceId,
+      targetId: targetId,
+      edgeKey: edge,
+      type: edgeAttributes['relationType']
+    };
+    this.selectedElementType = 'relation';
+    this.showCrudPanel = true;
+
+    // Mettre en surbrillance l'arête sélectionnée
+    this.graph.setEdgeAttribute(edge, 'color', '#f59e42');
+    this.graph.setEdgeAttribute(edge, 'size', 5);
+  }
+
+  public clearSelection() {
+    if (this.selectedElementType === 'oeuvre' || this.selectedElementType === 'artiste') {
+      // Restaurer la couleur du nœud
+      this.graph.forEachNode((node, attributes) => {
+        if (attributes['nodeData'] === this.selectedElement) {
+          const nodeType = attributes['nodeType'];
+          const color = nodeType === 'artiste' ? '#60a5fa' : '#8b5cf6';
+          this.graph.setNodeAttribute(node, 'color', color);
+        }
+      });
+    } else if (this.selectedElementType === 'relation') {
+      // Restaurer la couleur de l'arête
+      this.graph.forEachEdge((edge, attributes) => {
+        if (attributes['sourceId'] === this.selectedElement?.sourceId && 
+            attributes['targetId'] === this.selectedElement?.targetId) {
+          this.graph.setEdgeAttribute(edge, 'color', '#ef4444');
+          this.graph.setEdgeAttribute(edge, 'size', 3);
+        }
+      });
+    }
+
+    this.selectedElement = null;
+    this.selectedElementType = null;
+    this.showCrudPanel = false;
   }
 
   exportGraph() {
@@ -361,27 +413,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
     a.click();
   }
 
-  importGraph(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
 
-    const file = input.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      try {
-        const json = JSON.parse(reader.result as string);
-        this.graph.clear();
-        this.graph.import(json);
-        this.renderer.refresh();
-      } catch (e) {
-        alert('Fichier invalide ou erreur d\'importation.');
-        console.error(e);
-      }
-    };
-
-    reader.readAsText(file);
-  }
 
   centrerGraphique() {
     if (this.renderer && this.graph.order > 0) {
