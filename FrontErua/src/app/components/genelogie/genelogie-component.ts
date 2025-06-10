@@ -53,7 +53,8 @@ export class GenelogieComponent implements OnInit, OnChanges {
     if (!this.graph) return;
     this.graph.clear();
 
-    const relations = await this.graphService.getRelationsById(1);
+    // Récupérer les influences d'une œuvre spécifique (ici l'œuvre avec l'ID 1)
+    const relations = await this.graphService.getInfluencesByOeuvre(1);
     const responseArtistes = await this.graphService.getArtistes();
     const responseOeuvres = await this.graphService.getOeuvres();
 
@@ -139,10 +140,12 @@ export class GenelogieComponent implements OnInit, OnChanges {
         toutesOeuvres.set(oeuvre.id, oeuvre);
       }
       
-      // Ajouter les œuvres des relations
+      // Ajouter les œuvres des relations d'influence
       for (const relation of relations) {
-        for (const oeuvre of relation.path) {
-          toutesOeuvres.set(oeuvre.id, oeuvre);
+        for (const node of relation.path) {
+          if (node.id) {
+            toutesOeuvres.set(node.id, node);
+          }
         }
       }
       

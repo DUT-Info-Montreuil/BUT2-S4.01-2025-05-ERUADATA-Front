@@ -2,39 +2,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Artiste } from '../models/artiste';
+import { Oeuvre, InfluenceRelation } from '../models/oeuvre';
 
 interface Artistes {
   data: Artiste[];
   success: boolean;
 }
 
-interface Artiste {
-  id: string;
-  nom: string;
-  prenom?: string;
-  nationalite?: string;
-  description?: string;
-  genre?: string;
-}
-
 interface Oeuvres {
   data: Oeuvre[];
   success: boolean;
-}
-
-interface Oeuvre {
-  id: number;
-  nom: string;
-  description: string;
-  date_creation: number;
-  type: string;
-  dimensions: string;
-  mouvement: string;
-}
-
-interface RelationInfluenceRaw {
-  direction: string;
-  path: (any | { id: string })[]; // on peut typer plus finement plus tard
 }
 
 interface Relation {
@@ -53,30 +31,19 @@ interface CreateRelationRequest {
 })
 export class GraphDataService {
   private apiUrl = 'http://127.0.0.1:5000'; 
+  
   constructor(private http: HttpClient) {}
 
+  // === MÉTHODES POUR LES ARTISTES ===
   async getArtistes(): Promise<Artistes> {
     return firstValueFrom(this.http.get<Artistes>(`${this.apiUrl}/artistes/`));
   }
 
-  async getOeuvres(): Promise<Oeuvres> {
-    return firstValueFrom(this.http.get<Oeuvres>(`${this.apiUrl}/oeuvres/`));
-  }
-
-  async getRelations(id: number): Promise<unknown[]> {
-    return firstValueFrom(this.http.get<unknown[]>(`${this.apiUrl}/oeuvres/${encodeURIComponent(id)}/influences/`));
-  }
-  
-  async getRelationsById(id: number): Promise<RelationInfluenceRaw[]> {
-    const response = await firstValueFrom(
-      this.http.get<{ success: boolean; data: RelationInfluenceRaw[] }>(
-        `${this.apiUrl}/oeuvres/${encodeURIComponent(id)}/influences`
-      )
-    );
+  async getArtisteById(id: number): Promise<Artiste> {
+    const response = await firstValueFrom(this.http.get<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`));
     return response.data;
   }
 
-  // Méthodes CRUD pour les artistes
   async createArtiste(artisteData: Partial<Artiste>): Promise<Artiste | null> {
     try {
       const response = await firstValueFrom(
@@ -89,7 +56,7 @@ export class GraphDataService {
     }
   }
 
-  async updateArtiste(id: string, artisteData: Partial<Artiste>): Promise<Artiste | null> {
+  async updateArtiste(id: number, artisteData: Partial<Artiste>): Promise<Artiste | null> {
     try {
       const response = await firstValueFrom(
         this.http.put<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`, artisteData)
@@ -101,9 +68,9 @@ export class GraphDataService {
     }
   }
 
-  async deleteArtiste(id: string): Promise<boolean> {
+  async deleteArtiste(nom: string): Promise<boolean> {
     try {
-      await firstValueFrom(this.http.delete(`${this.apiUrl}/artistes/${id}`));
+      await firstValueFrom(this.http.delete(`${this.apiUrl}/artistes/${nom}`));
       return true;
     } catch (error) {
       console.error('Erreur lors de la suppression de l\'artiste:', error);
@@ -111,7 +78,16 @@ export class GraphDataService {
     }
   }
 
-  // Méthodes CRUD pour les œuvres
+  // === MÉTHODES POUR LES ŒUVRES ===
+  async getOeuvres(): Promise<Oeuvres> {
+    return firstValueFrom(this.http.get<Oeuvres>(`${this.apiUrl}/oeuvres/`));
+  }
+
+  async getOeuvreById(id: number): Promise<Oeuvre> {
+    const response = await firstValueFrom(this.http.get<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/${id}`));
+    return response.data;
+  }
+
   async createOeuvre(oeuvreData: Partial<Oeuvre>): Promise<Oeuvre | null> {
     try {
       const response = await firstValueFrom(
@@ -146,40 +122,79 @@ export class GraphDataService {
     }
   }
 
-  // Méthodes CRUD pour les relations
-  async getAllRelations(): Promise<Relation[]> {
-    try {
-      const response = await firstValueFrom(
-        this.http.get<{ success: boolean; data: Relation[] }>(`${this.apiUrl}/relations/`)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la récupération des relations:', error);
-      return [];
+  // === MÉTHODES POUR LES RELATIONS D'INFLUENCE ===
+  async getInfluencesByOeuvre(id: number, nodeLimit?: number): Promise<InfluenceRelation[]> {
+    let url = `${this.apiUrl}/influence_relation/${id}`;
+    if (nodeLimit) {
+      url += `?node_limit=${nodeLimit}`;
     }
+    const response = await firstValueFrom(
+      this.http.get<{ success: boolean; data: InfluenceRelation[] }>(url)
+    );
+    return response.data;
   }
 
-  async createRelation(sourceId: number, targetId: number): Promise<Relation | null> {
+  async createInfluenceRelation(sourceId: number, cibleId: number): Promise<any> {
     try {
-      const request: CreateRelationRequest = { source_id: sourceId, target_id: targetId };
+      const request: CreateRelationRequest = { source_id: sourceId, target_id: cibleId };
       const response = await firstValueFrom(
-        this.http.post<{ success: boolean; data: Relation }>(`${this.apiUrl}/relations/`, request)
+        this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/influence_relation/`, request)
       );
       return response.data;
     } catch (error) {
-      console.error('Erreur lors de la création de la relation:', error);
+      console.error('Erreur lors de la création de la relation d\'influence:', error);
       return null;
     }
   }
 
-  async deleteRelation(sourceId: number, targetId: number): Promise<boolean> {
+  async deleteInfluenceRelation(sourceId: number, cibleId: number): Promise<boolean> {
     try {
+      const data = { source_id: sourceId, cible_id: cibleId };
       await firstValueFrom(
-        this.http.delete(`${this.apiUrl}/relations/${sourceId}/${targetId}`)
+        this.http.delete(`${this.apiUrl}/influence_relation/`, { body: data })
       );
       return true;
     } catch (error) {
-      console.error('Erreur lors de la suppression de la relation:', error);
+      console.error('Erreur lors de la suppression de la relation d\'influence:', error);
+      return false;
+    }
+  }
+
+  // === MÉTHODES POUR LES RELATIONS DE CRÉATION ===
+  async getOeuvresByArtiste(artisteId: number): Promise<any> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/${artisteId}`)
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des œuvres de l\'artiste:', error);
+      return [];
+    }
+  }
+
+  async createCreationRelation(artisteId: number, oeuvreId: number): Promise<any> {
+    try {
+      const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
+      const response = await firstValueFrom(
+        this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/`, data)
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la création de la relation de création:', error);
+      return null;
+    }
+  }
+
+  async deleteCreationRelation(artisteId: number, oeuvreId: number): Promise<boolean> {
+    try {
+      const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
+      await firstValueFrom(
+        this.http.delete(`${this.apiUrl}/a_cree_relation/`, { body: data })
+      );
+      return true;
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la relation de création:', error);
       return false;
     }
   }
