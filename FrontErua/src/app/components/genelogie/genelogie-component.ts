@@ -57,20 +57,21 @@ export class GenelogieComponent implements OnInit, OnChanges {
     const relations = await this.graphService.getInfluencesByOeuvre(1);
     const responseArtistes = await this.graphService.getArtistes();
     const responseOeuvres = await this.graphService.getOeuvres();
+    const creationRelations = await this.graphService.getAllCreationRelations();
 
     const artistes = responseArtistes.data || [];
     const oeuvres = responseOeuvres.data || [];
 
     // S'assurer que les filtres existent
     const filtres = this.filtres || {};
-    const { type, mouvement, periode, nationalite, genre, recherche, showInfluence, showRelations } = filtres;
+    const { type, mouvement, periode, nationalite, genre, recherche, showInfluence, showRelations, showCreation } = filtres;
     
     // Utiliser la recherche du composant si elle n'est pas dans les filtres
     const searchTerm = recherche || this.recherche;
 
     console.log('Filtres appliqués:', { type, mouvement, periode, nationalite, genre, searchTerm });
 
-    // Fonction helper pour vérifier si une œuvre passe les filtres
+    // Fonction  pour vérifier si une œuvre passe les filtres
     const oeuvrePassesFilters = (oeuvre: any): boolean => {
       // Si aucun filtre n'est appliqué, afficher toutes les œuvres
       const hasActiveFilters = (searchTerm && searchTerm.trim() !== '') ||
@@ -108,7 +109,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
       return true;
     };
 
-    // Fonction helper pour vérifier si un artiste passe les filtres
+    // Fonction pour vérifier si un artiste passe les filtres
     const artistePassesFilters = (artiste: any): boolean => {
       const nom = artiste.nom || artiste.id;
       // Filtre de recherche
@@ -126,8 +127,8 @@ export class GenelogieComponent implements OnInit, OnChanges {
     if (type === 'oeuvres') {
       let xPos = 0;
       let yPos = 0;
-      const xStep = 200;
-      const yStep = 150;
+      let yStep = 80;
+      let xStep = 150;
       const maxPerRow = 4;
       let oeuvresCount = 0;
 
@@ -176,6 +177,75 @@ export class GenelogieComponent implements OnInit, OnChanges {
         if (xPos >= maxPerRow * xStep) {
           xPos = 0;
           yPos += yStep;
+        }
+      }
+
+      // Traiter les relations
+      let levelMap: Map<number, number> = new Map();
+
+      for (const relation of relations) {
+        const path = relation.path;
+        const direction = relation.direction;
+
+        for (let i = 0; i < path.length; i++) {
+          const oeuvre = path[i];
+          const nodeId = oeuvre.id;
+          const level = i;
+
+          if (!oeuvrePassesFilters(oeuvre)) continue;
+
+          if (!this.graph.hasNode(nodeId)) {
+            const y = level * yStep;
+            const x = (levelMap.get(level) || 0) * xStep;
+            levelMap.set(level, (levelMap.get(level) || 0) + 1);
+
+            this.graph.addNode(nodeId, {
+              label: `${oeuvre.nom} - ${oeuvre.date_creation}`,
+              x,
+              y,
+              size: 10,
+              color: '#8b5cf6',
+              nodeType: 'oeuvre',
+              nodeData: oeuvre
+            });
+          }
+
+
+          // Ajouter les arêtes seulement si les deux nœuds existent ET si les filtres de relations le permettent
+          if (i > 0) {
+            const sourceId = path[i - 1].id;
+            const targetId = oeuvre.id;
+            const edgeKey = `${sourceId}->${targetId}`;
+
+            // Vérifier que les deux nœuds existent dans le graphe
+            if (this.graph.hasNode(sourceId) && this.graph.hasNode(targetId) && !this.graph.hasEdge(edgeKey)) {
+              // Déterminer le type de relation
+              const relationType = this.getRelationType(direction);
+              
+              // Vérifier si cette relation doit être affichée selon les filtres
+              let shouldShow = true;
+              
+              if (relationType === 'influence' && showInfluence === false) {
+                shouldShow = false;
+              }
+              
+              if (relationType === 'relation' && showRelations === false) {
+                shouldShow = false;
+              }
+              
+              if (shouldShow) {
+                this.graph.addEdgeWithKey(edgeKey, sourceId, targetId, {
+                  color: '#ef4444',
+                  size: 3,
+                  label: direction,
+                  type: 'arrow',
+                  relationType: relationType,
+                  sourceId: sourceId,
+                  targetId: targetId
+                });
+              }
+            }
+          }
         }
       }
       
@@ -297,6 +367,52 @@ export class GenelogieComponent implements OnInit, OnChanges {
               }
             }
           }
+        }
+      }
+    }
+
+    // Ajout des arêtes de création (bleues) dans la même logique que l'influence
+    if ((type !== 'artistes' && type !== 'oeuvres') && (typeof showCreation === 'undefined' || showCreation !== false)) {
+      for (const relation of creationRelations) {
+        const artiste = relation.artiste;
+        const oeuvre = relation.oeuvre;
+        if (!artistePassesFilters(artiste) || !oeuvrePassesFilters(oeuvre)) continue;
+        const artisteNom = artiste.nom || artiste.id;
+        // Ajout des nœuds si besoin
+        if (!this.graph.hasNode(artisteNom)) {
+          this.graph.addNode(artisteNom, {
+            label: artisteNom,
+            x: 0,
+            y: 0,
+            size: 12,
+            color: '#60a5fa',
+            nodeType: 'artiste',
+            nodeData: artiste
+          });
+        }
+        if (!this.graph.hasNode(oeuvre.id)) {
+          this.graph.addNode(oeuvre.id, {
+            label: `${oeuvre.nom} - ${oeuvre.date_creation}`,
+            x: 0,
+            y: 0,
+            size: 10,
+            color: '#8b5cf6',
+            nodeType: 'oeuvre',
+            nodeData: oeuvre
+          });
+        }
+        // Ajout de l'arête A_CREE
+        const edgeKey = `a_cree_${artisteNom}->${oeuvre.id}`;
+        if (this.graph.hasNode(artisteNom) && this.graph.hasNode(oeuvre.id) && !this.graph.hasEdge(edgeKey)) {
+          this.graph.addEdgeWithKey(edgeKey, artisteNom, oeuvre.id, {
+            color: '#3b82f6',
+            size: 3,
+            label: 'A_CREE',
+            type: 'arrow',
+            relationType: 'a_cree',
+            sourceId: artisteNom,
+            targetId: oeuvre.id
+          });
         }
       }
     }

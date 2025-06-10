@@ -198,4 +198,32 @@ export class GraphDataService {
       return false;
     }
   }
+  async getAllCreationRelations(): Promise<any[]> {
+    try {
+      const artistes = await this.getArtistes();
+      const relations: any[] = [];
+      for (const artiste of artistes.data) {
+        const oeuvres = await this.getOeuvresByArtiste(artiste.id);
+        if (oeuvres && oeuvres.length > 0) {
+          for (const oeuvre of oeuvres) {
+            // Correction : extraire la vraie oeuvre si elle est dans la clé 'o'
+            const realOeuvre = oeuvre.o ? oeuvre.o : oeuvre;
+            if (realOeuvre && realOeuvre.id && realOeuvre.nom && realOeuvre.date_creation) {
+              relations.push({
+                artiste: artiste,
+                oeuvre: realOeuvre,
+                type: 'A_CREE'
+              });
+            }
+          }
+        }
+      }
+      return relations;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des relations de création:', error);
+      return [];
+    }
+  }
+
+  
 }
