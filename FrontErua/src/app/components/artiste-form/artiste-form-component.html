@@ -10,7 +10,6 @@
           </mat-error>
       }
   </mat-form-field>
-
   <mat-form-field appearance="fill">
     <mat-label>Prénom</mat-label>
     <input matInput formControlName="prenom" required>
@@ -51,24 +50,8 @@
           </mat-error>
       }
   </mat-form-field>
-
-  <button mat-raised-button color="primary" type="button" (click)="openUploadDialog()">
-    Upload Fichier
-  </button>
-
   <button mat-raised-button color="accent" type="submit" [disabled]="artisteForm.invalid">
     Ajouter l'artiste
   </button>
 </form>
 
-<ng-template #uploadDialog>
-  <h2 mat-dialog-title>Déposer un fichier</h2>
-  <mat-dialog-content>
-    <p>Veuillez déposer votre fichier ici :</p>
-    <input type="file" (change)="onFileSelected($event)">
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Annuler</button>
-    <button mat-raised-button color="primary" (click)="uploadFile()">Télécharger</button>
-  </mat-dialog-actions>
-</ng-template>

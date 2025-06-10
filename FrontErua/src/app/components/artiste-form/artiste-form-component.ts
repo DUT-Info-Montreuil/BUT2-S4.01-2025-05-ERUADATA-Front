@@ -1,6 +1,6 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
@@ -13,6 +13,7 @@ import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {Artiste} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-artiste-form',
@@ -25,14 +26,10 @@ import {ArtisteService} from "../../services/artiste-service";
         MatDatepickerToggle,
         MatDatepicker,
         MatButton,
-        MatDialogTitle,
-        MatDialogContent,
-        MatDialogActions,
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule,
         MatButtonModule,
-        MatDialogClose,
         MatOption,
         MatSelect
     ],
@@ -42,12 +39,12 @@ import {ArtisteService} from "../../services/artiste-service";
 export class ArtisteFormComponent implements OnInit {
     artiste!: Artiste;
     artisteForm!: FormGroup;
-   @ViewChild('uploadDialog') uploadDialog!: TemplateRef<any>;
 
     constructor(
         private fb: FormBuilder,
         private dialog: MatDialog,
-        private artisteService: ArtisteService
+        private artisteService: ArtisteService,
+        private router: Router,
     ) {
         this.artisteForm = this.fb.group({
             nom: ['', Validators.required],
@@ -57,35 +54,24 @@ export class ArtisteFormComponent implements OnInit {
             nationalite: ['', Validators.required],
             genre: ['', Validators.required],
         });
-
     }
 
     ngOnInit(): void {
+        // Initialisation du formulaire si nécessaire
+        this.artisteForm.reset();
     }
 
-
+    /**
+     * Méthode pour soumettre le formulaire.
+     * Valide le formulaire et envoie les données à l'ArtisteService.
+     */
     onSubmit(): void {
         if (this.artisteForm.valid) {
             console.log('Formulaire soumis :', this.artisteForm.value);
             this.artiste = this.artisteForm.value;
             console.log('Artiste créé :', this.artiste);
-            this.artisteService.addArtiste(this.artiste)
+            this.artisteService.addArtiste(this.artiste);
+            this.router.navigate(['/artisteList']);
         }
-    }
-
-    openUploadDialog(): void {
-        this.dialog.open(this.uploadDialog);
-    }
-
-    onFileSelected(event: any): void {
-        const file = event.target.files[0];
-        if (file) {
-            console.log('Fichier sélectionné:', file);
-            // Ajouter ici la logique pour traiter le fichier
-        }
-    }
-
-    uploadFile() {
-
     }
 }
