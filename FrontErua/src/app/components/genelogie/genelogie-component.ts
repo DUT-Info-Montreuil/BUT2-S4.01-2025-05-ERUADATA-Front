@@ -116,7 +116,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
       return true;
     };
 
-    // Si le type est "oeuvres", afficher seulement les œuvres sans relations
+    // Si le type est "oeuvres", afficher seulement les œuvres avec relations
     if (type === 'oeuvres') {
       let xPos = 0;
       let yPos = 0;
@@ -124,6 +124,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
       const yStep = 150;
       const maxPerRow = 4;
       let oeuvresCount = 0;
+
 
       // Collecter toutes les œuvres disponibles (depuis la liste directe et les relations)
       const toutesOeuvres = new Map();
@@ -143,7 +144,6 @@ export class GenelogieComponent implements OnInit, OnChanges {
       
       const oeuvresDisponibles = Array.from(toutesOeuvres.values());
       
-      console.log(`Mode œuvres seulement: ${oeuvresDisponibles.length} œuvres disponibles (${oeuvres.length} directes + ${relations.length} relations)`);
       
       for (const oeuvre of oeuvresDisponibles) {
         console.log(`Vérification de l'œuvre: ${oeuvre.nom}`, {
