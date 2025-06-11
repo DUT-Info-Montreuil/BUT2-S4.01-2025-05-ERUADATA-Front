@@ -5,6 +5,7 @@ import {ArtisteService} from '../../services/artiste-service';
 import {OeuvreService} from '../../services/oeuvre-service';
 import {Artiste} from '../../models/artiste';
 import {Oeuvre} from '../../models/oeuvre';
+import {GraphDataService} from '../../services/graph-data.service';
 
 @Component({
     selector: 'app-edition',
@@ -17,7 +18,8 @@ export class EditionComponent implements OnInit {
   constructor(
     private relationService: RelationService,
     private artisteService: ArtisteService,
-    private oeuvreService: OeuvreService
+    private oeuvreService: OeuvreService,
+    private graphDataService: GraphDataService
   ) {}
 
   showRelationForm = false;
@@ -41,11 +43,27 @@ export class EditionComponent implements OnInit {
   showModal = false;
   modalAction: 'create' | 'delete' | null = null;
 
+  relationsCreation: { artisteId: number, oeuvreId: number }[] = [];
+  relationsInfluence: { sourceId: number, cibleId: number }[] = [];
+  filteredOeuvresForArtiste: Oeuvre[] = [];
+  filteredArtistesForOeuvre: Artiste[] = [];
+  filteredCibleOeuvres: Oeuvre[] = [];
+
   async ngOnInit() {
     const artistesRes = await this.artisteService.getArtistes();
     if (artistesRes.success) this.artistes = artistesRes.data;
     const oeuvresRes = await this.oeuvreService.getOeuvres();
     if (oeuvresRes.success) this.oeuvres = oeuvresRes.data;
+    // Récupérer toutes les relations existantes
+    this.graphDataService.getAllCreationRelations().subscribe(allRelations => {
+      if (allRelations) {
+        this.relationsCreation = allRelations.flat().map((rel: any) => ({
+          artisteId: rel.artiste.id,
+          oeuvreId: rel.oeuvre.id
+        }));
+      }
+    });
+    // TODO: Récupérer aussi les relations d'influence si besoin
   }
 
   // Créer une relation Oeuvre & Artiste
@@ -140,5 +158,46 @@ export class EditionComponent implements OnInit {
     } catch (e) {
       this.deleteError = true;
     }
+  }
+
+  // Pour la suppression : filtrer les oeuvres selon l'artiste sélectionné
+  async onArtisteDeleteChange() {
+    const artiste = this.artistes.find(a => a.nom === this.artisteNom);
+    if (artiste) {
+      const oeuvres = await this.relationService.getOeuvresByArtiste(artiste.id);
+      this.filteredOeuvresForArtiste = this.oeuvres.filter(o => oeuvres.some((oo: any) => (oo.o ? oo.o.id : oo.id) === o.id));
+    } else {
+      this.filteredOeuvresForArtiste = [];
+    }
+  }
+
+  // Pour la suppression : filtrer les artistes selon l'oeuvre sélectionnée (optionnel)
+  async onOeuvreDeleteChange() {
+    const oeuvre = this.oeuvres.find(o => o.nom === this.oeuvreNom);
+    if (oeuvre) {
+      // À implémenter si besoin : filtrer les artistes ayant créé cette oeuvre
+    }
+  }
+
+  // Pour la suppression d'influence : filtrer les cibles selon la source
+  async onSourceOeuvreDeleteChange() {
+    const source = this.oeuvres.find(o => o.nom === this.sourceOeuvreNom);
+    if (source) {
+      const influences = await this.relationService.getInfluencesByOeuvre(source.id);
+      this.filteredCibleOeuvres = this.oeuvres.filter(o => influences.some((inf: any) => inf.path?.[1]?.id === o.id));
+    } else {
+      this.filteredCibleOeuvres = [];
+    }
+  }
+
+  // Empêcher la création d'une relation déjà existante
+  relationExists(): boolean {
+    if (this.relationType === 'oeuvreArtiste' && this.artisteNom && this.oeuvreNom) {
+      const artiste = this.artistes.find(a => a.nom === this.artisteNom);
+      const oeuvre = this.oeuvres.find(o => o.nom === this.oeuvreNom);
+      return !!this.relationsCreation.find(r => r.artisteId === artiste?.id && r.oeuvreId === oeuvre?.id);
+    }
+    // TODO: Ajouter la vérification pour les influences
+    return false;
   }
 }
