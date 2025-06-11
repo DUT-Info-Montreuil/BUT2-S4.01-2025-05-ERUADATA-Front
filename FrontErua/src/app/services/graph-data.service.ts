@@ -1,7 +1,8 @@
 // src/app/services/graph-data.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Artiste } from '../models/artiste';
 import { Oeuvre, InfluenceRelation } from '../models/oeuvre';
 
@@ -35,195 +36,217 @@ export class GraphDataService {
   constructor(private http: HttpClient) {}
 
   // === MÉTHODES POUR LES ARTISTES ===
-  async getArtistes(): Promise<Artistes> {
-    return firstValueFrom(this.http.get<Artistes>(`${this.apiUrl}/artistes/`));
+  getArtistes(): Observable<Artistes> {
+    return this.http.get<Artistes>(`${this.apiUrl}/artistes/`).pipe(
+      catchError(error => {
+        console.error('Erreur lors de la récupération des artistes:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async getArtisteById(id: number): Promise<Artiste> {
-    const response = await firstValueFrom(this.http.get<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`));
-    return response.data;
+  getArtisteById(id: number): Observable<Artiste> {
+    return this.http.get<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la récupération de l\'artiste:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async createArtiste(artisteData: Partial<Artiste>): Promise<Artiste | null> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/`, artisteData)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la création de l\'artiste:', error);
-      return null;
-    }
+  createArtiste(artisteData: Partial<Artiste>): Observable<Artiste | null> {
+    return this.http.post<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/`, artisteData).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la création de l\'artiste:', error);
+        return of(null);
+      })
+    );
   }
 
-  async updateArtiste(id: number, artisteData: Partial<Artiste>): Promise<Artiste | null> {
-    try {
-      const response = await firstValueFrom(
-        this.http.put<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`, artisteData)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'artiste:', error);
-      return null;
-    }
+  updateArtiste(id: number, artisteData: Partial<Artiste>): Observable<Artiste | null> {
+    return this.http.put<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`, artisteData).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour de l\'artiste:', error);
+        return of(null);
+      })
+    );
   }
 
-  async deleteArtiste(nom: string): Promise<boolean> {
-    try {
-      await firstValueFrom(this.http.delete(`${this.apiUrl}/artistes/${nom}`));
-      return true;
-    } catch (error) {
-      console.error('Erreur lors de la suppression de l\'artiste:', error);
-      return false;
-    }
+  deleteArtiste(nom: string): Observable<boolean> {
+    return this.http.delete(`${this.apiUrl}/artistes/${nom}`).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de l\'artiste:', error);
+        return of(false);
+      })
+    );
   }
 
   // === MÉTHODES POUR LES ŒUVRES ===
-  async getOeuvres(): Promise<Oeuvres> {
-    return firstValueFrom(this.http.get<Oeuvres>(`${this.apiUrl}/oeuvres/`));
+  getOeuvres(): Observable<Oeuvres> {
+    return this.http.get<Oeuvres>(`${this.apiUrl}/oeuvres/`).pipe(
+      catchError(error => {
+        console.error('Erreur lors de la récupération des œuvres:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async getOeuvreById(id: number): Promise<Oeuvre> {
-    const response = await firstValueFrom(this.http.get<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/${id}`));
-    return response.data;
+  getOeuvreById(id: number): Observable<Oeuvre> {
+    return this.http.get<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/${id}`).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la récupération de l\'œuvre:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async createOeuvre(oeuvreData: Partial<Oeuvre>): Promise<Oeuvre | null> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/`, oeuvreData)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la création de l\'œuvre:', error);
-      return null;
-    }
+  createOeuvre(oeuvreData: Partial<Oeuvre>): Observable<Oeuvre | null> {
+    return this.http.post<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/`, oeuvreData).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la création de l\'œuvre:', error);
+        return of(null);
+      })
+    );
   }
 
-  async updateOeuvre(id: number, oeuvreData: Partial<Oeuvre>): Promise<Oeuvre | null> {
-    try {
-      const response = await firstValueFrom(
-        this.http.put<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/${id}`, oeuvreData)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'œuvre:', error);
-      return null;
-    }
+  updateOeuvre(id: number, oeuvreData: Partial<Oeuvre>): Observable<Oeuvre | null> {
+    return this.http.put<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/${id}`, oeuvreData).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour de l\'œuvre:', error);
+        return of(null);
+      })
+    );
   }
 
-  async deleteOeuvre(id: number): Promise<boolean> {
-    try {
-      await firstValueFrom(this.http.delete(`${this.apiUrl}/oeuvres/${id}`));
-      return true;
-    } catch (error) {
-      console.error('Erreur lors de la suppression de l\'œuvre:', error);
-      return false;
-    }
+  deleteOeuvre(id: number): Observable<boolean> {
+    return this.http.delete(`${this.apiUrl}/oeuvres/${id}`).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de l\'œuvre:', error);
+        return of(false);
+      })
+    );
   }
 
   // === MÉTHODES POUR LES RELATIONS D'INFLUENCE ===
-  async getInfluencesByOeuvre(id: number, nodeLimit?: number): Promise<InfluenceRelation[]> {
+  getInfluencesByOeuvre(id: number, nodeLimit?: number): Observable<InfluenceRelation[]> {
     let url = `${this.apiUrl}/influence_relation/${id}`;
     if (nodeLimit) {
       url += `?node_limit=${nodeLimit}`;
     }
-    const response = await firstValueFrom(
-      this.http.get<{ success: boolean; data: InfluenceRelation[] }>(url)
+    return this.http.get<{ success: boolean; data: InfluenceRelation[] }>(url).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des influences:', error);
+        return throwError(() => error);
+      })
     );
-    return response.data;
   }
 
-  async createInfluenceRelation(sourceId: number, cibleId: number): Promise<any> {
-    try {
-      const request: CreateRelationRequest = { source_id: sourceId, target_id: cibleId };
-      const response = await firstValueFrom(
-        this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/influence_relation/`, request)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la création de la relation d\'influence:', error);
-      return null;
-    }
+  createInfluenceRelation(sourceId: number, cibleId: number): Observable<any> {
+    const request: CreateRelationRequest = { source_id: sourceId, target_id: cibleId };
+    return this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/influence_relation/`, request).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la création de la relation d\'influence:', error);
+        return of(null);
+      })
+    );
   }
 
-  async deleteInfluenceRelation(sourceId: number, cibleId: number): Promise<boolean> {
-    try {
-      const data = { source_id: sourceId, cible_id: cibleId };
-      await firstValueFrom(
-        this.http.delete(`${this.apiUrl}/influence_relation/`, { body: data })
-      );
-      return true;
-    } catch (error) {
-      console.error('Erreur lors de la suppression de la relation d\'influence:', error);
-      return false;
-    }
+  deleteInfluenceRelation(sourceId: number, cibleId: number): Observable<boolean> {
+    const data = { source_id: sourceId, cible_id: cibleId };
+    return this.http.delete(`${this.apiUrl}/influence_relation/`, { body: data }).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de la relation d\'influence:', error);
+        return of(false);
+      })
+    );
   }
 
   // === MÉTHODES POUR LES RELATIONS DE CRÉATION ===
-  async getOeuvresByArtiste(artisteId: number): Promise<any> {
-    try {
-      const response = await firstValueFrom(
-        this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/${artisteId}`)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la récupération des œuvres de l\'artiste:', error);
-      return [];
-    }
+  getOeuvresByArtiste(artisteId: number): Observable<any> {
+    return this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/${artisteId}`).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des œuvres de l\'artiste:', error);
+        return of([]);
+      })
+    );
   }
 
-  async createCreationRelation(artisteId: number, oeuvreId: number): Promise<any> {
-    try {
-      const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
-      const response = await firstValueFrom(
-        this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/`, data)
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Erreur lors de la création de la relation de création:', error);
-      return null;
-    }
+  createCreationRelation(artisteId: number, oeuvreId: number): Observable<any> {
+    const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
+    return this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/`, data).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Erreur lors de la création de la relation de création:', error);
+        return of(null);
+      })
+    );
   }
 
-  async deleteCreationRelation(artisteId: number, oeuvreId: number): Promise<boolean> {
-    try {
-      const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
-      await firstValueFrom(
-        this.http.delete(`${this.apiUrl}/a_cree_relation/`, { body: data })
-      );
-      return true;
-    } catch (error) {
-      console.error('Erreur lors de la suppression de la relation de création:', error);
-      return false;
-    }
-  }
-  async getAllCreationRelations(): Promise<any[]> {
-    try {
-      const artistes = await this.getArtistes();
-      const relations: any[] = [];
-      for (const artiste of artistes.data) {
-        const oeuvres = await this.getOeuvresByArtiste(artiste.id);
-        if (oeuvres && oeuvres.length > 0) {
-          for (const oeuvre of oeuvres) {
-            // Correction : extraire la vraie oeuvre si elle est dans la clé 'o'
-            const realOeuvre = oeuvre.o ? oeuvre.o : oeuvre;
-            if (realOeuvre && realOeuvre.id && realOeuvre.nom && realOeuvre.date_creation) {
-              relations.push({
-                artiste: artiste,
-                oeuvre: realOeuvre,
-                type: 'A_CREE'
-              });
-            }
-          }
-        }
-      }
-      return relations;
-    } catch (error) {
-      console.error('Erreur lors de la récupération des relations de création:', error);
-      return [];
-    }
+  deleteCreationRelation(artisteId: number, oeuvreId: number): Observable<boolean> {
+    const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
+    return this.http.delete(`${this.apiUrl}/a_cree_relation/`, { body: data }).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Erreur lors de la suppression de la relation de création:', error);
+        return of(false);
+      })
+    );
   }
 
-  
+  getAllCreationRelations(): Observable<any[]> {
+    return this.getArtistes().pipe(
+      switchMap(artistes => {
+        const artisteObservables = artistes.data.map(artiste => 
+          this.getOeuvresByArtiste(artiste.id).pipe(
+            map(oeuvres => {
+              if (oeuvres && oeuvres.length > 0) {
+                return oeuvres.map((oeuvre: any) => {
+                  // Correction : extraire la vraie oeuvre si elle est dans la clé 'o'
+                  const realOeuvre = oeuvre.o ? oeuvre.o : oeuvre;
+                  if (realOeuvre && realOeuvre.id && realOeuvre.nom && realOeuvre.date_creation) {
+                    return {
+                      artiste: artiste,
+                      oeuvre: realOeuvre,
+                      type: 'A_CREE'
+                    };
+                  }
+                  return null;
+                }).filter((relation: any) => relation !== null);
+              }
+              return [];
+            })
+          )
+        );
+        
+        // Combiner tous les observables d'artistes
+        return artisteObservables.length > 0 
+          ? artisteObservables.reduce((acc, obs) => 
+              acc.pipe(
+                switchMap(accResults => 
+                  obs.pipe(
+                    map(obsResults => [...accResults, ...obsResults])
+                  )
+                )
+              ), of([])
+            )
+          : of([]);
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des relations de création:', error);
+        return of([]);
+      })
+    );
+  }
 }
