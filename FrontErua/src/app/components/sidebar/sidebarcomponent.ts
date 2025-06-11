@@ -15,9 +15,8 @@ export class Sidebarcomponent {
   }
 } */
 
-import { NgFor } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { RouterLink, RouterLinkWithHref} from '@angular/router';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {RouterLink, RouterLinkWithHref} from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,7 +33,8 @@ export class Sidebarcomponent {
   menuItems = [
     { label: 'Accueil', path: '/accueil' },
     { label: 'Édition', path: '/edition' },
-    { label: 'Généalogie', path: '/genealogie' }
+    {label: 'Généalogie', path: '/genealogie'},
+    {label: 'Liste des artistes', path: '/artisteList'},
   ];
 
     onLinkClick() {

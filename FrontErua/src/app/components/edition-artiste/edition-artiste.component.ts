@@ -1,20 +1,22 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {MatFormField} from "@angular/material/form-field";
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle
+} from "@angular/material/datepicker";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatButtonModule } from '@angular/material/button';
+import {MatButton, MatButtonModule} from "@angular/material/button";
+import {MatInputModule} from '@angular/material/input';
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {Artiste} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
 import {Subscription} from "rxjs";
 import {MatSelect} from "@angular/material/select";
 import {Router} from "@angular/router";
+import {MatDialogRef} from "@angular/material/dialog";
 
-export class AppModule { }
 
 @Component({
   selector: 'app-edition-artiste',
@@ -33,7 +35,8 @@ export class AppModule { }
     MatAutocomplete,
     MatOption,
     MatAutocompleteTrigger,
-    MatSelect
+    MatSelect,
+
   ],
   templateUrl: './edition-artiste.component.html',
   styleUrl: './edition-artiste.component.scss'
@@ -54,22 +57,18 @@ export class EditionArtisteComponent implements OnInit {
   private readonly artisteService = inject(ArtisteService);
   private subscription = new Subscription();
 
-    constructor(private router: Router) {
+  constructor(private router: Router, private dialogRef: MatDialogRef<EditionArtisteComponent>) {
         this.artisteSearchCtrl = new FormControl('');
     }
 
-  async ngOnInit() {
-    this.subscription.add(
-        await this.artisteService.getArtistes().then((data) => {
-          if (data.success) {
-            this.filteredArtistes = data.data;
-          } else {
-            console.error('Failed to fetch artistes', this.filteredArtistes);
-          }
-        }).catch(error => {
-          console.error('Error fetching artistes:', error);
-        })
-    );
+  ngOnInit() {
+    this.subscription = this.artisteService.getArtistes().subscribe((data) => {
+      if (data) {
+        this.filteredArtistes = data.data;
+      } else {
+        console.error('Aucun artiste trouvé');
+      }
+    });
   }
   onArtisteSelected(value: Artiste) {
     if (value) {
@@ -77,7 +76,7 @@ export class EditionArtisteComponent implements OnInit {
       this.editForm.patchValue({
         nom: value.nom,
         prenom: value.prenom,
-        naissance: value.anneeNaissance,
+        naissance: value.naissance,
         description: value.description,
         genre: value.genre,
         nationalite: value.nationalite,
@@ -92,8 +91,16 @@ export class EditionArtisteComponent implements OnInit {
 
   onSave() {
     const updatedArtiste = this.editForm.value;
-    // Ajoutez ici la logique pour sauvegarder les modifications (appel service, etc.)
-    this.artisteService.updateArtiste(this.idArtiste, updatedArtiste);
-    this.router.navigate(['/artisteList']);
+    try {
+      this.artisteService.updateArtiste(this.idArtiste, updatedArtiste).subscribe({
+        complete: () => {
+          console.log('Artiste mis à jour avec succès');
+          this.dialogRef.close();
+          this.router.navigate(['/artisteList/' + this.idArtiste]);
+        }
+      });
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de l\'artiste:', error);
+    }
   }
 }

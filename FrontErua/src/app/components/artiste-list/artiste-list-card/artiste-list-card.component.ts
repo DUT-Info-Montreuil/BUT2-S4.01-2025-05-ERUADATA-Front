@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Artiste} from "../../../models/artiste";
 
 @Component({
@@ -10,6 +10,5 @@ import {Artiste} from "../../../models/artiste";
 })
 export class ArtisteListCardComponent {
     @Input() artiste!: Artiste;
-
-
+    @Output() suppArtiste = new EventEmitter<number>();
 }

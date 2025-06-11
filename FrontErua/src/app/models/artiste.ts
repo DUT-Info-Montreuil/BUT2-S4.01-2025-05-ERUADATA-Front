@@ -4,12 +4,11 @@ export interface Artiste {
     nom: string,
     prenom: string,
     description?: string,
-    anneeNaissance?: string,
-    genre?: string,
-    /*
-    idArtiste: number,
-    */
+    naissance: string,
+    genre: string,
+    url_image?: string,
 }
+
 
 /**
  * Interface représentant la réponse d'une requête pour un seul artiste.
@@ -18,7 +17,6 @@ export interface Artiste {
  */
 export interface ArtisteSing {
     data: Artiste;
-    success: boolean;
 
 }
 
@@ -29,5 +27,4 @@ export interface ArtisteSing {
  */
 export interface Artistes {
     data: Artiste[];
-    success: boolean;
 }

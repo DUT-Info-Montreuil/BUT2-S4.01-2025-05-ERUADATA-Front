@@ -10,7 +10,9 @@
             <!-- Loop through artistes and display each one -->
             @for (artiste of artistes; track artiste.id) {
                 <a [routerLink]="['/artisteList', artiste.id]" class="artiste-link">
-                    <app-artiste-list-card [artiste]="artiste"></app-artiste-list-card>
+                    <app-artiste-list-card [artiste]="artiste"
+                                           (suppArtiste)="suppArtiste($event)">
+                    </app-artiste-list-card>
                 </a>
             }
             @if (artistes.length === 0) {
