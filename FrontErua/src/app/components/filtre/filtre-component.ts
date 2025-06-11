@@ -1,6 +1,18 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+export interface FilterConfig {
+  type?: string;
+  mouvement?: string;
+  periode?: string;
+  nationalite?: string;
+  genre?: string;
+  recherche?: string;
+  showInfluence?: boolean;
+  showRelations?: boolean;
+  showCreation?: boolean;
+}
+
 @Component({
   selector: 'app-filtre',
   standalone: true,

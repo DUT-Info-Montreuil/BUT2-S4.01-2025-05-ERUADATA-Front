@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FiltreComponent } from '../filtre/filtre-component';
+import { FiltreComponent, FilterConfig } from '../filtre/filtre-component';
 import { GenelogieComponent } from '../genelogie/genelogie-component';
 
 @Component({
@@ -12,9 +12,9 @@ import { GenelogieComponent } from '../genelogie/genelogie-component';
 export class GenealogiePageComponent {
   @ViewChild(FiltreComponent) filtreComponent!: FiltreComponent;
   
-  filtres = {};
+  filtres: FilterConfig = {};
 
-  onFiltreChange(filtre: any) {
+  onFiltreChange(filtre: FilterConfig) {
     this.filtres = filtre;
   }
 

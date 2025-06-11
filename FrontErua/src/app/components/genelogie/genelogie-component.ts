@@ -4,6 +4,7 @@ import Graph from 'graphology';
 import Sigma from 'sigma';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { FilterConfig } from '../filtre/filtre-component';
 
 // Interfaces pour les modèles de données
 interface Artiste {
@@ -56,18 +57,6 @@ interface EdgeAttributes {
   relationType: 'influence' | 'a_cree' | 'relation';
   sourceId: string;
   targetId: string;
-}
-
-interface FilterConfig {
-  type?: string;
-  mouvement?: string;
-  periode?: string;
-  nationalite?: string;
-  genre?: string;
-  recherche?: string;
-  showInfluence?: boolean;
-  showRelations?: boolean;
-  showCreation?: boolean;
 }
 
 interface GraphData {
