@@ -1,13 +1,118 @@
-<div class="graph-container">
-  <!-- Conteneur pour Sigma  -->
-  <div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
+<div class="main-container">
+  <!-- Conteneur principal avec le graphe -->
+  <div class="graph-container">
+    <!-- Conteneur pour Sigma  -->
+    <div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
 
-  <!-- Actions -->
-  <div class="controls" style="margin-top: 1rem;">
-    <button (click)="exportGraph()">📤 Exporter</button>
-    <label style="margin-left: 1rem;">
-      📥 Importer :
-      <input type="file" (change)="importGraph($event)" accept=".json" />
-    </label>
+    <!-- Actions -->
+    <div class="controls" style="margin-top: 1rem;">
+      <button (click)="exportGraph()">📤 Exporter</button>
+      <button (click)="editGraph()">✏️ Editer</button>
+      
+    </div>
   </div>
+
+  <!-- Panneau d'informations latéral -->
+  @if (showCrudPanel) {
+    <div class="crud-panel">
+      <div class="panel-header">
+        <h3>
+          @if (selectedElementType === 'oeuvre') {
+            Détails de l'œuvre
+          } @else if (selectedElementType === 'artiste') {
+            Détails de l'artiste
+          } @else if (selectedElementType === 'relation') {
+            Détails de la relation
+          }
+        </h3>
+        <button class="close-btn" (click)="clearSelection()">×</button>
+      </div>
+
+      <div class="panel-content">
+        <!-- Affichage des détails de l'élément sélectionné -->
+        @if (selectedElement) {
+          <div class="element-details">
+            @if (selectedElementType === 'oeuvre' && selectedOeuvre) {
+              <div class="detail-item">
+                <strong>Nom:</strong> {{ selectedOeuvre.nom }}
+              </div>
+              <div class="detail-item">
+                <strong>Date de création:</strong> {{ selectedOeuvre.date_creation }}
+              </div>
+              @if (selectedOeuvre.type) {
+                <div class="detail-item">
+                  <strong>Type:</strong> {{ selectedOeuvre.type }}
+                </div>
+              }
+              @if (selectedOeuvre.genre) {
+                <div class="detail-item">
+                  <strong>Genre:</strong> {{ selectedOeuvre.genre }}
+                </div>
+              }
+              @if (selectedOeuvre.mouvement) {
+                <div class="detail-item">
+                  <strong>Mouvement:</strong> {{ selectedOeuvre.mouvement }}
+                </div>
+              }
+              @if (selectedOeuvre.dimensions) {
+                <div class="detail-item">
+                  <strong>Dimensions:</strong> {{ selectedOeuvre.dimensions }}
+                </div>
+              }
+              @if (selectedOeuvre.description) {
+                <div class="detail-item">
+                  <strong>Description:</strong> {{ selectedOeuvre.description }}
+                </div>
+              }
+            }
+
+            @if (selectedElementType === 'artiste' && selectedArtiste) {
+              <div class="detail-item">
+                <strong>Nom:</strong> {{ selectedArtiste.nom }}
+              </div>
+              @if (selectedArtiste.prenom) {
+                <div class="detail-item">
+                  <strong>Prénom:</strong> {{ selectedArtiste.prenom }}
+                </div>
+              }
+              @if (selectedArtiste.nationalite) {
+                <div class="detail-item">
+                  <strong>Nationalité:</strong> {{ selectedArtiste.nationalite }}
+                </div>
+              }
+              @if (selectedArtiste.description) {
+                <div class="detail-item">
+                  <strong>Description:</strong> {{ selectedArtiste.description }}
+                </div>
+              }
+              @if (selectedArtiste.genre) {
+                <div class="detail-item">
+                  <strong>Genre:</strong> {{ selectedArtiste.genre }}
+                </div>
+              }
+            }
+
+            @if (selectedElementType === 'relation' && selectedRelation) {
+              @if (selectedRelation.type) {
+                <div class="detail-item">
+                  <strong>Type:</strong> {{ selectedRelation.type }}
+                </div>
+              }
+              @if (selectedRelation.sourceId) {
+                <div class="detail-item">
+                  <strong>Source ID:</strong> {{ selectedRelation.sourceId }}
+                </div>
+              }
+              @if (selectedRelation.targetId) {
+                <div class="detail-item">
+                  <strong>Target ID:</strong> {{ selectedRelation.targetId }}
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
 </div>
+

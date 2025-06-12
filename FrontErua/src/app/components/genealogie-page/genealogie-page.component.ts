@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FiltreComponent } from '../filtre/filtre-component';
+import { Component, ViewChild } from '@angular/core';
+import { FiltreComponent, FilterConfig } from '../filtre/filtre-component';
 import { GenelogieComponent } from '../genelogie/genelogie-component';
 
 @Component({
@@ -10,13 +10,29 @@ import { GenelogieComponent } from '../genelogie/genelogie-component';
   styleUrls: ['./genealogie-page.component.scss']
 })
 export class GenealogiePageComponent {
-  filtres = {};
+  @ViewChild(FiltreComponent) filtreComponent!: FiltreComponent;
+  
+  filtres: FilterConfig = {};
 
-  onFiltreChange(filtre: any) {
+  onFiltreChange(filtre: FilterConfig) {
     this.filtres = filtre;
   }
 
   reinitialiserFiltres(): void {
-    this.filtres = {}; 
+    this.filtres = {};
+    // Réinitialiser aussi le composant de filtres
+    if (this.filtreComponent) {
+      this.filtreComponent.filtre = {
+        periode: '',
+        mouvement: '',
+        type: '',
+        recherche: '',
+        nationalite: '',
+        genre: '',
+        showInfluence: true,  // Par défaut sélectionné
+        showRelations: true,   // Par défaut sélectionné
+        showCreation: true     // Par défaut sélectionné pour les relations A_CREE
+      };
+    }
   }
 } 
