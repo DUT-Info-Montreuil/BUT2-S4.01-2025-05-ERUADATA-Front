@@ -1,9 +1,13 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {EditionArtisteComponent} from "../edition-artiste/edition-artiste.component";
 import {GraphDataService} from '../../services/graph-data.service';
 import {Artiste} from '../../models/artiste';
 import {Oeuvre} from '../../models/oeuvre';
+import {FormsModule} from "@angular/forms";
+import {RelationService} from "../../services/relation-service";
+import {ArtisteService} from "../../services/artiste-service";
+import {OeuvreService} from "../../services/oeuvre-service";
 
 @Component({
     selector: 'app-edition',
@@ -49,10 +53,11 @@ export class EditionComponent implements OnInit {
   filteredCibleOeuvres: Oeuvre[] = [];
 
   async ngOnInit() {
-    const artistesRes = await this.artisteService.getArtistes();
-    if (artistesRes.success) this.artistes = artistesRes.data;
+    this.artisteService.getArtistes().subscribe(artistesRes => {
+      if (artistesRes) this.artistes = artistesRes.data;
+    });
     const oeuvresRes = await this.oeuvreService.getOeuvres();
-    if (oeuvresRes.success) this.oeuvres = oeuvresRes.data;
+    if (oeuvresRes) this.oeuvres = oeuvresRes.data;
     // Récupérer toutes les relations existantes
     this.graphDataService.getAllCreationRelations().subscribe(allRelations => {
       if (allRelations) {
