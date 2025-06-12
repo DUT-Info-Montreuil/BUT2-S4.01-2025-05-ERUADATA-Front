@@ -1,10 +1,35 @@
 # FrontErua
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.2.
+FrontErua est une application web développée avec [Angular](https://angular.io/) (v17.2.2).
 
+## Prérequis
+
+- [Node.js](https://nodejs.org/) >= 18.x
+- [npm](https://www.npmjs.com/) >= 9.x
+- [Angular CLI](https://angular.io/cli) >= 17.x
+
+## Installation
+
+Clonez le dépôt puis installez les dépendances :
+
+```bash
+git clone <url-du-repo>
+cd FrontErua
+npm install
+
+```
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Lancez `ng serve` pour un serveur de développement. Naviguez jusqu'à `http://localhost:4200/`. L'application sera
+automatiquement rechargée si vous modifiez l'un des fichiers sources.
+
+## Structure du projet
+
+Le projet est structuré de la manière suivante :
+
+- src/app/: Composants, services et module Angular.
+- src/assets/ : Ressources statiques (images, styles, etc.).
+- src/environments/ : Fichiers de configuration pour différents environnements (développement, production).
 
 ## Code scaffolding
 
@@ -12,7 +37,8 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Lancez `ng generate component component-name` pour générer un nouveau composant. Vous pouvez également utiliser
+`ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Running unit tests
 
@@ -25,3 +51,10 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Ressources Utiles
+
+- [Documentation Angular](https://angular.io/docs)
+- [Angular Material](https://material.angular.io/)
+
+<hr> © FrontErua - 2025
