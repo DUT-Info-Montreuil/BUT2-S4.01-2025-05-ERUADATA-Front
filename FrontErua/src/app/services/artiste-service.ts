@@ -20,21 +20,14 @@ export class ArtisteService {
         return this.http.get<Artistes>(this.apiUrlArtiste);
     }
 
-    getArtisteImage(id: number): Observable<Blob> {
-        return this.http.get(this.apiUrlArtiste + id + '/image', {responseType: 'blob'});
+    getArtisteImage(id: number): Observable<File> {
+        return this.http.get<File>(`${this.apiUrlArtiste}${id}/image`);
     }
 
-    addArtisteImage(id: number, event: Event): Observable<string> {
-        const input = event.target as HTMLInputElement;
-        const file = input.files?.[0];
-        if (!file) {
-            throw new Error('Aucun fichier sélectionné');
-        }
-
-        const formData = new FormData();
-        formData.append('image', file, file.name);
-        return this.http.post<string>(this.apiUrlArtiste + id + '/image', formData, {responseType: 'text' as 'json'});
+    updateArtisteImage(id: number, formData: FormData): Observable<any> {
+        return this.http.put(`${this.apiUrlArtiste}${id}`, formData);
     }
+
 
     getArtisteById(id: number): Observable<ArtisteSing> {
         return this.http.get<ArtisteSing>(this.apiUrlArtiste + id);

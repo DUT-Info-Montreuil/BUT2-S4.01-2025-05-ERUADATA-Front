@@ -6,7 +6,7 @@ export interface Artiste {
     description?: string,
     naissance: string,
     genre: string,
-    url_image?: string,
+    image?: string,
 }
 
 

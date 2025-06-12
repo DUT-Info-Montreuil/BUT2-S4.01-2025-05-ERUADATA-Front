@@ -43,6 +43,19 @@ export class ArtisteDetailComponent implements OnInit {
             this.artiste$.subscribe(artiste => {
                 if (artiste.data) {
                     this.artiste = artiste.data;
+                    this.artisteService.getArtisteImage(id).subscribe(blob => {
+                        const image = blob as File;
+                        console.log('Image blob:', image);
+                        if (image) {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                this.artiste.image = reader.result as string;
+                            };
+                            reader.readAsDataURL(image);
+                        } else {
+                            console.error('Image data is undefined');
+                        }
+                    })
                     console.log('Artiste data:', this.artiste);
                 } else {
                     console.error('Artiste data is undefined');

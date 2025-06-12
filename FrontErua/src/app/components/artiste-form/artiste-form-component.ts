@@ -73,7 +73,6 @@ export class ArtisteFormComponent implements OnInit {
         const file = (event.target as HTMLInputElement).files?.[0];
         if (file) {
             this.imageName = file.name;
-
             // Ajouter le fichier au formulaire
             this.artisteForm.patchValue({image: file});
 

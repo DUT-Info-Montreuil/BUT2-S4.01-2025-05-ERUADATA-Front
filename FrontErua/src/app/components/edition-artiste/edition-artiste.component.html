@@ -234,5 +234,26 @@
             <mat-option value="zimbabwéenne">Zimbabwéenne</mat-option>
         </mat-select>
     </mat-form-field>
+    <div class="image-upload-container">
+        <button (click)="fileInput.click()" mat-stroked-button type="button">
+            <mat-icon>cloud_upload</mat-icon>
+            {{ imagePreview ? 'Modifier' : 'Télécharger' }} une image de l'artiste
+        </button>
+        <input #fileInput (change)="onFileSelected($event)" accept="image/*" hidden type="file">
+        @if (imagePreview) {
+            <div class="image-preview-container">
+                <mat-form-field appearance="fill">
+                    <mat-label>Image sélectionnée</mat-label>
+                    <input matInput [value]="imageName" readonly>
+                </mat-form-field>
+                <div class="image-actions">
+                    <img class="image-preview" [src]="imagePreview" alt="Aperçu de l'image">
+                    <button mat-icon-button color="warn" (click)="removeImage()" type="button">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
     <button mat-raised-button color="primary" (click)="onSave()">Enregistrer</button>
 </form>

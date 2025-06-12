@@ -16,6 +16,7 @@ import {Subscription} from "rxjs";
 import {MatSelect} from "@angular/material/select";
 import {Router} from "@angular/router";
 import {MatDialogRef} from "@angular/material/dialog";
+import {MatIcon} from "@angular/material/icon";
 
 
 @Component({
@@ -36,6 +37,7 @@ import {MatDialogRef} from "@angular/material/dialog";
     MatOption,
     MatAutocompleteTrigger,
     MatSelect,
+    MatIcon,
 
   ],
   templateUrl: './edition-artiste.component.html',
@@ -43,7 +45,7 @@ import {MatDialogRef} from "@angular/material/dialog";
 })
 export class EditionArtisteComponent implements OnInit {
   artisteSearchCtrl: FormControl;
-  idArtiste!: Number;
+  idArtiste!: number;
   editForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -51,15 +53,17 @@ export class EditionArtisteComponent implements OnInit {
     description: new FormControl(''),
     genre: new FormControl('', Validators.required),
     nationalite: new FormControl('', Validators.required),
-
+    image: new FormControl('')
   });
   filteredArtistes: Artiste[] = [];
   private readonly artisteService = inject(ArtisteService);
   private subscription = new Subscription();
+  imagePreview: string | ArrayBuffer | null = null;
+  imageName: string = '';
 
   constructor(private router: Router, private dialogRef: MatDialogRef<EditionArtisteComponent>) {
-        this.artisteSearchCtrl = new FormControl('');
-    }
+    this.artisteSearchCtrl = new FormControl('');
+  }
 
   ngOnInit() {
     this.subscription = this.artisteService.getArtistes().subscribe((data) => {
@@ -80,6 +84,7 @@ export class EditionArtisteComponent implements OnInit {
         description: value.description,
         genre: value.genre,
         nationalite: value.nationalite,
+        image: value.image || '',
       });
         this.idArtiste = value.id;
         console.log('Artiste id sélectionné:', this.idArtiste);
@@ -89,18 +94,47 @@ export class EditionArtisteComponent implements OnInit {
     }
   }
 
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.imageName = file.name;
+
+      // Stocker le fichier dans imageForm
+      this.editForm.patchValue({image: file});
+
+      // Créer un aperçu de l'image
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage() {
+    this.imagePreview = null;
+    this.imageName = '';
+    this.editForm.patchValue({image: ''});
+  }
+
   onSave() {
     const updatedArtiste = this.editForm.value;
     try {
+      // D'abord mettre à jour les informations de l'artiste
       this.artisteService.updateArtiste(this.idArtiste, updatedArtiste).subscribe({
-        complete: () => {
+        next: () => {
           console.log('Artiste mis à jour avec succès');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la mise à jour de l\'artiste:', err);
           this.dialogRef.close();
-          this.router.navigate(['/artisteList/' + this.idArtiste]);
+          this.router.navigate(['/artisteList' + `/${this.idArtiste}`]);
         }
       });
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'artiste:', error);
+      console.error('Erreur lors de la mise à jour:', error);
     }
   }
 }
