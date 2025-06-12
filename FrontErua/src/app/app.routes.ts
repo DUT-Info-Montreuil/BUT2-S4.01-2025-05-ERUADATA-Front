@@ -4,9 +4,11 @@ import { AccueilComponent } from './components/accueil/accueil-component';
 import { ArtisteFormComponent } from './components/artiste-form/artiste-form-component';
 import { OeuvreFormComponent } from './components/oeuvre-form/oeuvre-form-component';
 import { OeuvreDetailComponent } from './components/oeuvre-detail/oeuvre-detail-component';
-
+import { OeuvreListComponent } from './components/oeuvre-list/oeuvre-list.component';
 export const routes: Routes = [
-      { path: 'oeuvre/:id', component: OeuvreDetailComponent }, 
+    { path: 'oeuvre/:id', component: OeuvreDetailComponent }, 
+    {path: 'oeuvre-list', component: OeuvreListComponent},
+    {path: 'oeuvreList/:id', component: OeuvreDetailComponent},
     { path: 'oeuvreForm', component: OeuvreFormComponent },
     { path: 'ArtisteForm', component: ArtisteFormComponent },
     // { path: 'artisteDetail', component: ArtisteDetailComponent },

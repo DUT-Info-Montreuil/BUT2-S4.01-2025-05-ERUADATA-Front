@@ -1,0 +1,30 @@
+<div class="oeuvre-list-container">
+  <div class="oeuvre-list-header">
+    <h1>Liste des Œuvres</h1>
+  </div>
+
+
+  <div class="oeuvre-list">
+    <div class="oeuvre-list-cards">
+      <!-- Affichage de chaque œuvre sous forme de carte -->
+      <div *ngFor="let oeuvre of oeuvres">
+        <a [routerLink]="['/oeuvreList', oeuvre.id]" class="oeuvre-link">
+          <div class="oeuvre-card">
+            <img [src]="oeuvre.imageUrl" alt="{{ oeuvre.nom }}" class="oeuvre-image">
+            <div class="oeuvre-info">
+              <h2>{{ oeuvre.nom }}</h2>
+              <p>{{ oeuvre.artiste }}</p>
+              <p>{{ oeuvre.date_creation }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Message si aucune œuvre n'est trouvée -->
+      <div *ngIf="oeuvres.length === 0">
+        <p>Aucune œuvre trouvée.</p>
+        <button [routerLink]="['/oeuvreForm']">Ajouter une œuvre</button>
+      </div>
+    </div>
+  </div>
+</div>

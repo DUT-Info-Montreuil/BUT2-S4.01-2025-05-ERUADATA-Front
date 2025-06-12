@@ -1,0 +1,70 @@
+.oeuvre-list-container {
+  padding: 32px;
+  max-width: 900px;
+  margin: 32px auto;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.oeuvre-list-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(58, 0, 106, 0.10);
+}
+
+.oeuvre-list-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.oeuvre-card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 200px;
+  margin: 8px;
+}
+
+.oeuvre-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.oeuvre-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.oeuvre-info {
+  margin-top: 8px;
+}
+
+button {
+  background-color: #8b5cf6;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #6a4bc9;
+}

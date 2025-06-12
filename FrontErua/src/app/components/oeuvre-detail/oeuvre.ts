@@ -9,4 +9,5 @@ export interface Oeuvre {
   mouvement: string;
   influencePar?: string[];
   influenceSur?: string[];
+   imageUrl?: string; 
 }
