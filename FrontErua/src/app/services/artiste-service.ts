@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Artiste, Artistes, ArtisteSing} from "../models/artiste";
 import {HttpClient} from "@angular/common/http";
-import {firstValueFrom, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {Oeuvres} from "../models/oeuvre";
 
 @Injectable({
@@ -14,19 +14,6 @@ export class ArtisteService {
     constructor(private http: HttpClient) {
     }
 
-    // Récupérer tous les artistes avec filtres optionnels
-    async getArtistesFilters(filters?: any): Promise<Artistes> {
-        let url = this.apiUrlArtiste;
-        if (filters && Object.keys(filters).length > 0) {
-            const params = new URLSearchParams();
-            Object.keys(filters).forEach(key => {
-                params.append(key, filters[key]);
-            });
-            url += '?' + params.toString();
-        }
-        return firstValueFrom(this.http.get<Artistes>(url));
-    }
-
     getArtistes(): Observable<Artistes> {
         return this.http.get<Artistes>(this.apiUrlArtiste);
     }
@@ -35,19 +22,11 @@ export class ArtisteService {
         return this.http.get<File>(`${this.apiUrlArtiste}${id}/image`);
     }
 
-    updateArtisteImage(id: number, formData: FormData): Observable<any> {
-        return this.http.put(`${this.apiUrlArtiste}${id}`, formData);
+    updateArtisteImage(id: number, formData: FormData): Observable<void> {
+        return this.http.put<void>(`${this.apiUrlArtiste}${id}`, formData);
     }
 
-    getArtistebyNationalite(nationalite: string): Observable<Artiste[]> {
-        const formattedNationalite = nationalite.charAt(0).toUpperCase() + nationalite.slice(1).toLowerCase();
-        return this.http.get<Artiste[]>(this.apiUrlArtiste + '?nationalite=' + formattedNationalite);
-    }
-
-    getArtisteByName(nom: string): Observable<Artiste> {
-        const formattedNom = nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase();
-        return this.http.get<Artiste>(this.apiUrlArtiste + '?nom=' + formattedNom);
-    }
+ 
 
     getArtisteById(id: number): Observable<ArtisteSing> {
         return this.http.get<ArtisteSing>(this.apiUrlArtiste + id);
@@ -61,11 +40,11 @@ export class ArtisteService {
         return this.http.post<Artiste>(this.apiUrlArtiste, artiste);
     }
 
-    deleteArtiste(id: Number): Observable<Artiste> {
+    deleteArtiste(id: number): Observable<Artiste> {
         return this.http.delete<Artiste>(this.apiUrlArtiste + id);
     }
 
-    updateArtiste(id: Number, artiste: Artiste): Observable<Artiste> {
+    updateArtiste(id: number, artiste: Artiste): Observable<Artiste> {
         return this.http.put<Artiste>(this.apiUrlArtiste + id, artiste);
     }
 

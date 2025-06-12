@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {firstValueFrom} from "rxjs";
-import {InfluenceRelation, CreationRelation} from "../models/oeuvre";
+import { Observable} from "rxjs";
+import {InfluenceRelation, Oeuvre} from "../models/oeuvre";
+import {map} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,55 +16,56 @@ export class RelationService {
     // === RELATIONS A_CREE ===
 
     // Créer une relation A_CREE
-    async createCreationRelation(artisteId: number, oeuvreId: number): Promise<any> {
+    createCreationRelation(artisteId: number, oeuvreId: number): Observable<void> {
         const data = {
             artiste_id: artisteId,
             oeuvre_id: oeuvreId
         };
-        return firstValueFrom(this.http.post(`${this.apiUrl}/a_cree_relation/`, data));
+        return this.http.post<void>(`${this.apiUrl}/a_cree_relation/`, data);
     }
 
     // Supprimer une relation A_CREE
-    async deleteCreationRelation(artisteId: number, oeuvreId: number): Promise<any> {
+    deleteCreationRelation(artisteId: number, oeuvreId: number): Observable<void> {
         const data = {
             artiste_id: artisteId,
             oeuvre_id: oeuvreId
         };
-        return firstValueFrom(this.http.delete(`${this.apiUrl}/a_cree_relation/`, { body: data }));
+        return this.http.delete<void>(`${this.apiUrl}/a_cree_relation/`, { body: data });
     }
 
     // Récupérer les œuvres d'un artiste
-    async getOeuvresByArtiste(artisteId: number): Promise<any> {
-        return firstValueFrom(this.http.get(`${this.apiUrl}/a_cree_relation/${artisteId}`));
+    getOeuvresByArtiste(artisteId: number): Observable<Oeuvre[]> {
+        return this.http.get<Oeuvre[]>(`${this.apiUrl}/a_cree_relation/${artisteId}`);
     }
 
     // === RELATIONS A_INFLUENCE ===
 
     // Créer une relation d'influence
-    async createInfluenceRelation(sourceId: number, cibleId: number): Promise<any> {
+    createInfluenceRelation(sourceId: number, cibleId: number): Observable<void> {
         const data = {
             source_id: sourceId,
             cible_id: cibleId
         };
-        return firstValueFrom(this.http.post(`${this.apiUrl}/influence_relation/`, data));
+        return this.http.post<void>(`${this.apiUrl}/influence_relation/`, data);
     }
 
     // Supprimer une relation d'influence
-    async deleteInfluenceRelation(sourceId: number, cibleId: number): Promise<any> {
+    deleteInfluenceRelation(sourceId: number, cibleId: number): Observable<void> {
         const data = {
             source_id: sourceId,
             cible_id: cibleId
         };
-        return firstValueFrom(this.http.delete(`${this.apiUrl}/influence_relation/`, { body: data }));
+        return this.http.delete<void>(`${this.apiUrl}/influence_relation/`, { body: data });
     }
 
     // Récupérer les influences d'une œuvre
-    async getInfluencesByOeuvre(oeuvreId: number, nodeLimit?: number): Promise<InfluenceRelation[]> {
+    getInfluencesByOeuvre(oeuvreId: number, nodeLimit?: number): Observable<InfluenceRelation[]> {
         let url = `${this.apiUrl}/influence_relation/${oeuvreId}`;
         if (nodeLimit) {
             url += `?node_limit=${nodeLimit}`;
         }
-        const response = await firstValueFrom(this.http.get<{ success: boolean; data: InfluenceRelation[] }>(url));
-        return response.data;
+        return this.http.get<{ success: boolean; data: InfluenceRelation[] }>(url).pipe(
+            map(response => response.data)
+        );
     }
 } 

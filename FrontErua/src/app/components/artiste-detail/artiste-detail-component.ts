@@ -36,7 +36,6 @@ export class ArtisteDetailComponent implements OnInit {
      */
     ngOnInit() {
         const id = Number(this.route.snapshot.paramMap.get('id'));
-        console.log('Artiste ID from route:', id);
         if (id) {
             this.artiste$ = this.artisteService.getArtisteById(id);
             this.oeuvres$ = this.artisteService.getOeuvresByArtisteId(id);
@@ -45,34 +44,22 @@ export class ArtisteDetailComponent implements OnInit {
                     this.artiste = artiste.data;
                     this.artisteService.getArtisteImage(id).subscribe(blob => {
                         const image = blob as File;
-                        console.log('Image blob:', image);
                         if (image) {
                             const reader = new FileReader();
                             reader.onload = () => {
                                 this.artiste.image = reader.result as string;
                             };
                             reader.readAsDataURL(image);
-                        } else {
-                            console.error('Image data is undefined');
                         }
                     })
-                    console.log('Artiste data:', this.artiste);
-                } else {
-                    console.error('Artiste data is undefined');
                 }
             });
             this.oeuvres$.subscribe(oeuvres => {
                 if (oeuvres.data) {
                     this.oeuvres = oeuvres.data;
-                    console.log('Oeuvres data:', this.oeuvres);
-                } else {
-                    console.error('Oeuvres data is undefined');
                 }
             });
-        } else {
-            console.error('Invalid artiste ID');
         }
-
     }
 
     /**
@@ -90,7 +77,6 @@ export class ArtisteDetailComponent implements OnInit {
     }
 
     deleteArtiste() {
-        console.log('Artiste deleted in ArtisteDetail:', this.artiste$);
         this.artiste$.subscribe(artiste => {
             if (artiste.data.id) {
                 this.artisteService.deleteArtiste(artiste.data.id).subscribe({

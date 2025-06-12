@@ -40,8 +40,6 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
         this.subscription = this.artisteService.getArtistes().subscribe((data) => {
             if (data) {
                 this.artistes = data.data;
-            } else {
-                console.error('Aucun artiste trouvé');
             }
         });
     }
@@ -60,8 +58,6 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
             this.artisteService.getArtistes().subscribe((data) => {
                 if (data) {
                     this.artistes = data.data;
-                } else {
-                    console.error('Aucun artiste trouvé');
                 }
             });
         }
@@ -76,13 +72,8 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
     }
 
     suppArtiste(id: number) {
-        console.log('Suppression de l\'artiste avec ID:', id);
-        console.log('Artistes avant suppression:', this.artistes);
-
         this.artistes = this.artistes.filter(artiste => artiste.id !== id);
         this.artisteService.deleteArtiste(id);
-
-        console.log('Artistes après suppression:', this.artistes);
     }
 
 

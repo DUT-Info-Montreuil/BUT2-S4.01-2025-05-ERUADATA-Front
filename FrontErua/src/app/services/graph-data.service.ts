@@ -27,6 +27,19 @@ interface CreateRelationRequest {
   target_id: number;
 }
 
+interface CreationRelationResponse {
+  artiste: Artiste;
+  oeuvre: Oeuvre;
+  type: string;
+}
+
+interface OeuvreWithArtiste {
+  o?: Oeuvre;
+  id?: number;
+  nom?: string;
+  date_creation?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -55,36 +68,6 @@ export class GraphDataService {
     );
   }
 
-  createArtiste(artisteData: Partial<Artiste>): Observable<Artiste | null> {
-    return this.http.post<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/`, artisteData).pipe(
-      map(response => response.data),
-      catchError(error => {
-        console.error('Erreur lors de la création de l\'artiste:', error);
-        return of(null);
-      })
-    );
-  }
-
-  updateArtiste(id: number, artisteData: Partial<Artiste>): Observable<Artiste | null> {
-    return this.http.put<{ success: boolean; data: Artiste }>(`${this.apiUrl}/artistes/${id}`, artisteData).pipe(
-      map(response => response.data),
-      catchError(error => {
-        console.error('Erreur lors de la mise à jour de l\'artiste:', error);
-        return of(null);
-      })
-    );
-  }
-
-  deleteArtiste(nom: string): Observable<boolean> {
-    return this.http.delete(`${this.apiUrl}/artistes/${nom}`).pipe(
-      map(() => true),
-      catchError(error => {
-        console.error('Erreur lors de la suppression de l\'artiste:', error);
-        return of(false);
-      })
-    );
-  }
-
   // === MÉTHODES POUR LES ŒUVRES ===
   getOeuvres(): Observable<Oeuvres> {
     return this.http.get<Oeuvres>(`${this.apiUrl}/oeuvres/`).pipe(
@@ -105,36 +88,6 @@ export class GraphDataService {
     );
   }
 
-  createOeuvre(oeuvreData: Partial<Oeuvre>): Observable<Oeuvre | null> {
-    return this.http.post<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/`, oeuvreData).pipe(
-      map(response => response.data),
-      catchError(error => {
-        console.error('Erreur lors de la création de l\'œuvre:', error);
-        return of(null);
-      })
-    );
-  }
-
-  updateOeuvre(id: number, oeuvreData: Partial<Oeuvre>): Observable<Oeuvre | null> {
-    return this.http.put<{ success: boolean; data: Oeuvre }>(`${this.apiUrl}/oeuvres/${id}`, oeuvreData).pipe(
-      map(response => response.data),
-      catchError(error => {
-        console.error('Erreur lors de la mise à jour de l\'œuvre:', error);
-        return of(null);
-      })
-    );
-  }
-
-  deleteOeuvre(id: number): Observable<boolean> {
-    return this.http.delete(`${this.apiUrl}/oeuvres/${id}`).pipe(
-      map(() => true),
-      catchError(error => {
-        console.error('Erreur lors de la suppression de l\'œuvre:', error);
-        return of(false);
-      })
-    );
-  }
-
   // === MÉTHODES POUR LES RELATIONS D'INFLUENCE ===
   getInfluencesByOeuvre(id: number, nodeLimit?: number): Observable<InfluenceRelation[]> {
     let url = `${this.apiUrl}/influence_relation/${id}`;
@@ -150,9 +103,9 @@ export class GraphDataService {
     );
   }
 
-  createInfluenceRelation(sourceId: number, cibleId: number): Observable<any> {
+  createInfluenceRelation(sourceId: number, cibleId: number): Observable<CreationRelationResponse | null> {
     const request: CreateRelationRequest = { source_id: sourceId, target_id: cibleId };
-    return this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/influence_relation/`, request).pipe(
+    return this.http.post<{ success: boolean; data: CreationRelationResponse }>(`${this.apiUrl}/influence_relation/`, request).pipe(
       map(response => response.data),
       catchError(error => {
         console.error('Erreur lors de la création de la relation d\'influence:', error);
@@ -173,8 +126,8 @@ export class GraphDataService {
   }
 
   // === MÉTHODES POUR LES RELATIONS DE CRÉATION ===
-  getOeuvresByArtiste(artisteId: number): Observable<any> {
-    return this.http.get<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/${artisteId}`).pipe(
+  getOeuvresByArtiste(artisteId: number): Observable<OeuvreWithArtiste[]> {
+    return this.http.get<{ success: boolean; data: OeuvreWithArtiste[] }>(`${this.apiUrl}/a_cree_relation/${artisteId}`).pipe(
       map(response => response.data),
       catchError(error => {
         console.error('Erreur lors de la récupération des œuvres de l\'artiste:', error);
@@ -183,9 +136,9 @@ export class GraphDataService {
     );
   }
 
-  createCreationRelation(artisteId: number, oeuvreId: number): Observable<any> {
+  createCreationRelation(artisteId: number, oeuvreId: number): Observable<CreationRelationResponse | null> {
     const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
-    return this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/a_cree_relation/`, data).pipe(
+    return this.http.post<{ success: boolean; data: CreationRelationResponse }>(`${this.apiUrl}/a_cree_relation/`, data).pipe(
       map(response => response.data),
       catchError(error => {
         console.error('Erreur lors de la création de la relation de création:', error);
@@ -205,16 +158,16 @@ export class GraphDataService {
     );
   }
 
-  getAllCreationRelations(): Observable<any[]> {
+  getAllCreationRelations(): Observable<CreationRelationResponse[]> {
     return this.getArtistes().pipe(
       switchMap(artistes => {
         const artisteObservables = artistes.data.map(artiste => 
           this.getOeuvresByArtiste(artiste.id).pipe(
             map(oeuvres => {
               if (oeuvres && oeuvres.length > 0) {
-                return oeuvres.map((oeuvre: any) => {
+                return oeuvres.map((oeuvre: OeuvreWithArtiste) => {
                   // Correction : extraire la vraie oeuvre si elle est dans la clé 'o'
-                  const realOeuvre = oeuvre.o ? oeuvre.o : oeuvre;
+                  const realOeuvre = oeuvre.o ? oeuvre.o : oeuvre as Oeuvre;
                   if (realOeuvre && realOeuvre.id && realOeuvre.nom && realOeuvre.date_creation) {
                     return {
                       artiste: artiste,
@@ -223,7 +176,7 @@ export class GraphDataService {
                     };
                   }
                   return null;
-                }).filter((relation: any) => relation !== null);
+                }).filter((relation: CreationRelationResponse | null) => relation !== null) as CreationRelationResponse[];
               }
               return [];
             })

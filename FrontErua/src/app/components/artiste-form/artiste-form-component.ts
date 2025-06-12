@@ -91,9 +91,7 @@ export class ArtisteFormComponent implements OnInit {
      */
     onSubmit(): void {
         if (this.artisteForm.valid) {
-            console.log('Formulaire soumis :', this.artisteForm.value);
             this.artiste = this.artisteForm.value;
-            console.log('Artiste créé :', this.artiste);
             this.artisteService.addArtiste(this.artiste);
             this.router.navigate(['/artisteList']);
         }

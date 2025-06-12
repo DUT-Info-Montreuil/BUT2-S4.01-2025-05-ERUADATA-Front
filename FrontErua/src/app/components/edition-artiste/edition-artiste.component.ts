@@ -69,8 +69,6 @@ export class EditionArtisteComponent implements OnInit {
     this.subscription = this.artisteService.getArtistes().subscribe((data) => {
       if (data) {
         this.filteredArtistes = data.data;
-      } else {
-        console.error('Aucun artiste trouvé');
       }
     });
   }
@@ -87,7 +85,6 @@ export class EditionArtisteComponent implements OnInit {
         image: value.image || '',
       });
         this.idArtiste = value.id;
-        console.log('Artiste id sélectionné:', this.idArtiste);
     } else {
       this.artisteSearchCtrl.setValue('');
       this.editForm.reset();
@@ -125,16 +122,17 @@ export class EditionArtisteComponent implements OnInit {
       // D'abord mettre à jour les informations de l'artiste
       this.artisteService.updateArtiste(this.idArtiste, updatedArtiste).subscribe({
         next: () => {
-          console.log('Artiste mis à jour avec succès');
+          this.dialogRef.close();
+          this.router.navigate(['/artisteList' + `/${this.idArtiste}`]);
         },
         error: (err) => {
-          console.error('Erreur lors de la mise à jour de l\'artiste:', err);
           this.dialogRef.close();
           this.router.navigate(['/artisteList' + `/${this.idArtiste}`]);
         }
       });
     } catch (error) {
-      console.error('Erreur lors de la mise à jour:', error);
+      this.dialogRef.close();
+      this.router.navigate(['/artisteList' + `/${this.idArtiste}`]);
     }
   }
 }

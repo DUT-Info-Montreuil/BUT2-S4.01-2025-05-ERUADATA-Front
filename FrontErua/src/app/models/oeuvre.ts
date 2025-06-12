@@ -31,7 +31,7 @@ export interface Oeuvres {
  */
 export interface InfluenceRelation {
     direction: string;
-    path: any[];
+    path: Oeuvre[];
 }
 
 /**
