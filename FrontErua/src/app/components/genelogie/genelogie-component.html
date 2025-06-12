@@ -1,1 +1,13 @@
-<p>genelogie-component works!</p>
+<div class="graph-container">
+  <!-- Conteneur pour Sigma  -->
+  <div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
+
+  <!-- Actions -->
+  <div class="controls" style="margin-top: 1rem;">
+    <button (click)="exportGraph()">📤 Exporter</button>
+    <label style="margin-left: 1rem;">
+      📥 Importer :
+      <input type="file" (change)="importGraph($event)" accept=".json" />
+    </label>
+  </div>
+</div>

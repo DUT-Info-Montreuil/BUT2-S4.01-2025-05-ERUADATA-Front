@@ -1,1 +1,50 @@
-<p>artiste-detail-component works!</p>
+<div id="artiste-detail">
+    <div class="artiste-delete">
+        <button (click)="deleteArtiste()" class="btn btn-danger">Supprimer l'artiste</button>
+    </div>
+    <div class="artiste-info">
+        <div class="photo-container">
+            <img [src]=""
+                 alt="Artiste Photo" class="artiste-photo"/>
+            <div class="nom-prenom">
+                <h2 class="artiste-nom">{{ artiste.nom }}</h2>
+                <h3 class="artiste-prenom">{{ artiste.prenom }}</h3>
+            </div>
+        </div>
+        <div class="artiste-description">
+            <h3>Biographie</h3>
+            <p class="artiste-bio">
+                {{artiste.description ? artiste.description : 'Aucune biographie disponible.'}}
+            </p>
+            <p class="artiste-date-naissance">Année de naissance: {{ artiste.naissance | shortNaissance }}</p>
+            <p class="artiste-nationalite">Nationalité: {{ artiste.nationalite }}</p>
+            <p class="artiste-genre">Genre: {{ artiste.genre }}</p>
+        </div>
+    </div>
+    <div class="oeuvre-mouvement">
+        <div class="mouvement-container">
+            <h3>Mouvements</h3>
+            <ul class="mouvement-list">
+                @for (mouvement of mouvements; track mouvement) {
+                    <li class="mouvement-item">
+                        <a>{{ mouvement }}</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="oeuvres-container">
+            <h3>Oeuvres</h3>
+            <ul class="oeuvre-list">
+                @for (oeuvre of oeuvres; track oeuvre.id) {
+                    <li class="oeuvre-item">
+                        <a>{{ oeuvre.nom }}</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="bouton-redirection">
+        <button (click)="redirectToGenalogie()" class="btn btn-primary">Voir la généalogie</button>
+        <button (click)="redirectToEditerRelation()" class="btn btn-secondary">Editer les relations</button>
+    </div>
+</div>

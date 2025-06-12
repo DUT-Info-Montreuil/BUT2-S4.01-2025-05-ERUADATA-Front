@@ -1,0 +1,8 @@
+<div class="artiste-card">
+    <img [src]="artiste.image ? artiste.image : 'https://demofree.sirv.com/nope-not-here.jpg'"
+         alt="{{ artiste.nom }} {{ artiste.prenom }}" class="artiste-image"/>
+    <div class="artiste-info">
+        <h2 class="artiste-nom">{{ artiste.nom }}</h2>
+        <h3 class="artiste-prenom">{{ artiste.prenom }}</h3>
+    </div>
+</div>

@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { OeuvreDetailComponent } from './oeuvre-detail-component';
+import {OeuvreDetailComponent} from './oeuvre-detail-component';
 
 describe('OeuvreDetailComponent', () => {
-  let component: OeuvreDetailComponent;
-  let fixture: ComponentFixture<OeuvreDetailComponent>;
+    let component: OeuvreDetailComponent;
+    let fixture: ComponentFixture<OeuvreDetailComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [OeuvreDetailComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(OeuvreDetailComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [OeuvreDetailComponent]
+        })
+            .compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(OeuvreDetailComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

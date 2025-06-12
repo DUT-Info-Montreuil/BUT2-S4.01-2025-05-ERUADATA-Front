@@ -1,1 +1,87 @@
-<p>accueil-component works!</p>
+<!--<div class="accueil-container">
+  <div class="header">
+    <img src="assets/logo3.png" alt="ERUA logo" class="logo" />
+    <h1>ERUA - Art Relations</h1>
+    <p class="subtitle">
+      Explorez les influences artistiques et découvrez les connexions profondes <br> entre les œuvres et les artistes à travers l'histoire de l'art.
+    </p>
+  </div>
+
+  <div class="features">
+    <a class="feature-card" [routerLink]="'/edition'">
+      <span class="icon material-icons"> <img src="assets/icon-edition.png" alt=""></span>
+      <div>
+        <h2>Édition</h2>
+        <p>Créez et modifiez les relations d'influence <br> entre les entités</p>
+      </div>
+    </a>
+    <a class="feature-card" [routerLink]="'/genealogie'">
+      <span class="icon material-icons"> <img src="assets/icon-genealogie.png" alt=""></span>
+      <div>
+        <h2>Généalogie</h2>
+        <p>Explorez les généalogies artistiques avec des <br> graphiques interactifs</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="section">
+    <h2>
+      Généalogie Complète - Influences Profondes
+    </h2>
+    <p>
+      Visualisation interactive des relations artistiques et de leurs influences à travers le temps
+    </p>
+
+    <app-genelogie></app-genelogie>
+  </div>
+</div> 
+</div>-->
+
+<div class="accueil-container">
+  <div class="header">
+    <img src="assets/logov2.png" alt="ERUA logo" class="logo" />
+    <h1>ERUA - Art Relations</h1>
+    <p class="subtitle">
+      Explorez les influences artistiques et découvrez les connexions profondes <br> entre les œuvres et les artistes à travers l'histoire de l'art.
+    </p>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="features">
+            <a class="feature-card" [routerLink]="'/edition'">
+      <span class="icon material-icons"> <img src="assets/icon-edition.png" alt=""></span>
+      <div>
+        <h2>Édition</h2>
+        <p>Créez et modifiez les relations d'influence <br> entre les entités</p>
+      </div>
+    </a>
+    <a class="feature-card" [routerLink]="'/genealogie'">
+      <span class="icon material-icons"> <img src="assets/icon-genealogie.png" alt=""></span>
+      <div>
+        <h2>Généalogie</h2>
+        <p>Explorez les généalogies artistiques avec des <br> graphiques interactifs</p>
+      </div>
+    </a>
+  </div>
+    </div>
+
+    <div class="section">
+      <h2>
+        Généalogie Complète - Influences Profondes
+      </h2>
+      <p>
+        Visualisation interactive des relations artistiques et de leurs influences à travers le temps
+      </p>
+      <app-genelogie></app-genelogie>
+       <!-- Légende -->  
+      <div class="legend" style="margin-top: 1rem; font-size: 0.9rem;">
+        <strong>Légende :</strong>
+        <ul>
+          <li><span style="display:inline-block;width:12px;height:12px;background:#60a5fa;border-radius:50%;margin-right:6px;"></span> Artiste</li>
+          <li><span style="display:inline-block;width:12px;height:12px;background:#8b5cf6;border-radius:50%;margin-right:6px;"></span> Œuvre</li>
+          <li><span style="display:inline-block;width:20px;height:3px;background:#22c55e;margin-right:6px;"></span> a créé</li>
+          <li><span style="display:inline-block;width:20px;height:3px;background:#f87171;margin-right:6px;"></span> influence</li>
+        </ul>
+      </div>
+    </div>
+  </div>
