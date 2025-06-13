@@ -1,17 +1,16 @@
-<div class="main-container">
+<div class="container-fluid main-container row g-3">
   <!-- Conteneur principal avec le graphe -->
-  <div class="graph-container">
+  <div class="col-12 col-lg-8 graph-container mb-3 mb-lg-0">
     <!-- Conteneur pour Sigma -->
-    <div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
-
+    <div #container class="sigma-canvas" style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
     <!-- Actions -->
-    <div class="controls">
-      <button type="button" (click)="exportGraph()" class="action-button">
-        <span>📤</span>
+    <div class="controls d-flex flex-wrap gap-2 justify-content-end mt-2">
+      <button type="button" (click)="exportGraph()" class="btn btn-primary d-flex align-items-center gap-1">
+        <span aria-hidden="true">📤</span>
         <span>Exporter</span>
       </button>
-      <button type="button" (click)="editGraph()" class="action-button">
-        <span>✏️</span>
+      <button type="button" (click)="editGraph()" class="btn btn-secondary d-flex align-items-center gap-1">
+        <span aria-hidden="true">✏️</span>
         <span>Editer</span>
       </button>
     </div>
@@ -19,9 +18,9 @@
 
   <!-- Panneau d'informations latéral -->
   @if (showCrudPanel) {
-    <div class="crud-panel">
-      <div class="panel-header">
-        <h3>
+    <div class="col-12 col-lg-4 crud-panel">
+      <div class="panel-header d-flex justify-content-between align-items-center">
+        <h3 class="h5 mb-0">
           @if (selectedElementType === 'oeuvre') {
             Détails de l'œuvre
           } @else if (selectedElementType === 'artiste') {
@@ -30,88 +29,55 @@
             Détails de la relation
           }
         </h3>
-        <button class="close-btn" (click)="clearSelection()">×</button>
+        <button class="close-btn ms-2" (click)="clearSelection()" aria-label="Fermer le panneau">×</button>
       </div>
-
       <div class="panel-content">
         <!-- Affichage des détails de l'élément sélectionné -->
         @if (selectedElement) {
           <div class="element-details">
             @if (selectedElementType === 'oeuvre' && selectedOeuvre) {
-              <div class="detail-item">
-                <strong>Nom:</strong> {{ selectedOeuvre.nom }}
-              </div>
-              <div class="detail-item">
-                <strong>Date de création:</strong> {{ selectedOeuvre.date_creation }}
-              </div>
+              <div class="detail-item"><strong>Nom:</strong> {{ selectedOeuvre.nom }}</div>
+              <div class="detail-item"><strong>Date de création:</strong> {{ selectedOeuvre.date_creation }}</div>
               @if (selectedOeuvre.type) {
-                <div class="detail-item">
-                  <strong>Type:</strong> {{ selectedOeuvre.type }}
-                </div>
+                <div class="detail-item"><strong>Type:</strong> {{ selectedOeuvre.type }}</div>
               }
               @if (selectedOeuvre.genre) {
-                <div class="detail-item">
-                  <strong>Genre:</strong> {{ selectedOeuvre.genre }}
-                </div>
+                <div class="detail-item"><strong>Genre:</strong> {{ selectedOeuvre.genre }}</div>
               }
               @if (selectedOeuvre.mouvement) {
-                <div class="detail-item">
-                  <strong>Mouvement:</strong> {{ selectedOeuvre.mouvement }}
-                </div>
+                <div class="detail-item"><strong>Mouvement:</strong> {{ selectedOeuvre.mouvement }}</div>
               }
               @if (selectedOeuvre.dimensions) {
-                <div class="detail-item">
-                  <strong>Dimensions:</strong> {{ selectedOeuvre.dimensions }}
-                </div>
+                <div class="detail-item"><strong>Dimensions:</strong> {{ selectedOeuvre.dimensions }}</div>
               }
               @if (selectedOeuvre.description) {
-                <div class="detail-item">
-                  <strong>Description:</strong> {{ selectedOeuvre.description }}
-                </div>
+                <div class="detail-item"><strong>Description:</strong> {{ selectedOeuvre.description }}</div>
               }
             }
-
             @if (selectedElementType === 'artiste' && selectedArtiste) {
-              <div class="detail-item">
-                <strong>Nom:</strong> {{ selectedArtiste.nom }}
-              </div>
+              <div class="detail-item"><strong>Nom:</strong> {{ selectedArtiste.nom }}</div>
               @if (selectedArtiste.prenom) {
-                <div class="detail-item">
-                  <strong>Prénom:</strong> {{ selectedArtiste.prenom }}
-                </div>
+                <div class="detail-item"><strong>Prénom:</strong> {{ selectedArtiste.prenom }}</div>
               }
               @if (selectedArtiste.nationalite) {
-                <div class="detail-item">
-                  <strong>Nationalité:</strong> {{ selectedArtiste.nationalite }}
-                </div>
+                <div class="detail-item"><strong>Nationalité:</strong> {{ selectedArtiste.nationalite }}</div>
               }
               @if (selectedArtiste.description) {
-                <div class="detail-item">
-                  <strong>Description:</strong> {{ selectedArtiste.description }}
-                </div>
+                <div class="detail-item"><strong>Description:</strong> {{ selectedArtiste.description }}</div>
               }
               @if (selectedArtiste.genre) {
-                <div class="detail-item">
-                  <strong>Genre:</strong> {{ selectedArtiste.genre }}
-                </div>
+                <div class="detail-item"><strong>Genre:</strong> {{ selectedArtiste.genre }}</div>
               }
             }
-
             @if (selectedElementType === 'relation' && selectedRelation) {
               @if (selectedRelation.type) {
-                <div class="detail-item">
-                  <strong>Type:</strong> {{ selectedRelation.type }}
-                </div>
+                <div class="detail-item"><strong>Type:</strong> {{ selectedRelation.type }}</div>
               }
               @if (selectedRelation.sourceId) {
-                <div class="detail-item">
-                  <strong>Source ID:</strong> {{ selectedRelation.sourceId }}
-                </div>
+                <div class="detail-item"><strong>Source ID:</strong> {{ selectedRelation.sourceId }}</div>
               }
               @if (selectedRelation.targetId) {
-                <div class="detail-item">
-                  <strong>Target ID:</strong> {{ selectedRelation.targetId }}
-                </div>
+                <div class="detail-item"><strong>Target ID:</strong> {{ selectedRelation.targetId }}</div>
               }
             }
           </div>

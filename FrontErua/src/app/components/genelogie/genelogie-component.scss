@@ -14,6 +14,7 @@
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 }
 
 .graph-container > div:first-child {
@@ -139,12 +140,40 @@
   }
 }
 
-@media (max-width: 768px) {
-  .main-container {
-    gap: 0.5rem;
-  }
-  
+@media (max-width: 992px) {
   .crud-panel {
-    max-height: 300px;
+    max-height: 350px;
+    margin-top: 1rem;
   }
+}
+
+@media (max-width: 576px) {
+  .crud-panel {
+    max-height: 250px;
+    padding: 0.5rem;
+  }
+  .panel-header, .panel-content {
+    padding: 0.5rem;
+  }
+  .controls {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+}
+
+// Correction des boutons pour Bootstrap
+.action-button, .btn {
+  min-width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.sigma-canvas {
+  min-height: 300px;
+  width: 100%;
+  background: #f5f5fa;
+  border-radius: 1rem;
 }
