@@ -28,6 +28,10 @@ automatiquement rechargée si vous modifiez l'un des fichiers sources.
 Le projet est structuré de la manière suivante :
 
 - src/app/: Composants, services et module Angular.
+- src/app/models : Modèles de données utilisés dans l'application.
+- src/app/services : Services Angular pour la logique métier et les appels API.
+- src/app/components : Composants Angular pour l'interface utilisateur.
+- src/app/layouts : Composants de mise en page pour organiser l'interface utilisateur.
 - src/assets/ : Ressources statiques (images, styles, etc.).
 - src/environments/ : Fichiers de configuration pour différents environnements (développement, production).
 
