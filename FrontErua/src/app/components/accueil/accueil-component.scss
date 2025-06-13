@@ -175,7 +175,9 @@
   }
 
   .section {
-    width: 94%;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: auto;
     background: #fff;
     border-radius: 1rem;
     padding: 2rem;
@@ -198,6 +200,12 @@
       color: #7c7c7c;
       font-size: 1.1rem;
       margin-bottom: 1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .section {
+      padding: 0.5rem;
     }
   }
 }
