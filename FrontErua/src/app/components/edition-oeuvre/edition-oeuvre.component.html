@@ -1,0 +1,26 @@
+<div class="edition-container">
+  <h2 class="form-title">Modifier une œuvre</h2>
+
+
+<form [formGroup]="oeuvreForm" (ngSubmit)="onSubmit()">
+  <label>Nom :</label>
+  <input type="text" formControlName="nom" />
+
+  <label>Date de création :</label>
+  <input type="number" formControlName="date_creation" />
+
+  <label>Dimensions :</label>
+  <input type="text" formControlName="dimensions" />
+
+  <label>Description :</label>
+  <textarea formControlName="description"></textarea>
+
+  <label>Type :</label>
+  <input type="text" formControlName="type" />
+
+  <label>Mouvement :</label>
+  <input type="text" formControlName="mouvement" />
+
+  <button type="submit">Enregistrer</button>
+</form>
+</div>

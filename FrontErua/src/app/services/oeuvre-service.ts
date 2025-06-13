@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Oeuvre } from '../components/oeuvre-detail/oeuvre'; // adapte le chemin si besoin
+import { Oeuvre } from '../components/oeuvre-detail/oeuvre'; 
 
 interface OeuvresResponse {
   data: Oeuvre[];
@@ -27,4 +27,8 @@ export class OeuvreService {
       map(oeuvres => oeuvres.find(o => o.id === id))
     );
   }
+  updateOeuvre(id: number, updatedData: Partial<Oeuvre>): Observable<Oeuvre> {
+  return this.http.put<Oeuvre>(`${this.apiUrl}/${id}`, updatedData);
+}
+
 }

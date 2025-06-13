@@ -5,8 +5,10 @@ import { ArtisteFormComponent } from './components/artiste-form/artiste-form-com
 import { OeuvreFormComponent } from './components/oeuvre-form/oeuvre-form-component';
 import { OeuvreDetailComponent } from './components/oeuvre-detail/oeuvre-detail-component';
 import { OeuvreListComponent } from './components/oeuvre-list/oeuvre-list.component';
+import { EditionOeuvreComponent } from './components/edition-oeuvre/edition_oeuvre.component';
 export const routes: Routes = [
     { path: 'oeuvre/:id', component: OeuvreDetailComponent }, 
+     { path: 'oeuvres/edit/:id', component: EditionOeuvreComponent },
     {path: 'oeuvre-list', component: OeuvreListComponent},
     {path: 'oeuvreList/:id', component: OeuvreDetailComponent},
     { path: 'oeuvreForm', component: OeuvreFormComponent },
