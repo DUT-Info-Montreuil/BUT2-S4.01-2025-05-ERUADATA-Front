@@ -9,11 +9,13 @@ import {RelationService} from "../../services/relation-service";
 import {ArtisteService} from "../../services/artiste-service";
 import {OeuvreService} from "../../services/oeuvre-service";
 import {InfluenceRelation} from '../../models/oeuvre';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-edition',
     standalone: true,
-    imports: [FormsModule],
+    imports: [FormsModule, CommonModule],
     templateUrl: './editioncomponent.html',
     styleUrl: './editioncomponent.scss'
 })
@@ -24,6 +26,7 @@ export class EditionComponent implements OnInit {
     private oeuvreService: OeuvreService,
     private graphDataService: GraphDataService,
     private dialog: MatDialog,
+    private router: Router,
   ) {}
 
   showRelationForm = false;
@@ -53,12 +56,45 @@ export class EditionComponent implements OnInit {
   filteredArtistesForOeuvre: Artiste[] = [];
   filteredCibleOeuvres: Oeuvre[] = [];
 
+  artistesShowcase: Artiste[] = [];
+  oeuvresShowcase: Oeuvre[] = [];
+
+  carouselIndex = 0;
+
+  get visibleShowcase() {
+    const all = [...this.artistesShowcase, ...this.oeuvresShowcase];
+    return all.slice(this.carouselIndex, this.carouselIndex + 4);
+  }
+
+  carouselPrev() {
+    if (this.carouselIndex > 0) this.carouselIndex--;
+  }
+
+  carouselNext() {
+    const max = this.artistesShowcase.length + this.oeuvresShowcase.length - 4;
+    if (this.carouselIndex < max) this.carouselIndex++;
+  }
+
+  onShowcaseClick(item: any) {
+    if ('prenom' in item) {
+      this.router.navigate(['/artisteList', item.id]);
+    } else {
+      this.router.navigate(['/oeuvreDetail'], { queryParams: { id: item.id } });
+    }
+  }
+
   ngOnInit() {
     this.artisteService.getArtistes().subscribe(artistesRes => {
-      if (artistesRes) this.artistes = artistesRes.data;
+      if (artistesRes && artistesRes.data) {
+        this.artistes = artistesRes.data;
+        this.artistesShowcase = this.getRandomItems(this.artistes, 4);
+      }
     });
     this.oeuvreService.getOeuvres().subscribe(oeuvresRes => {
-      if (oeuvresRes) this.oeuvres = oeuvresRes.data;
+      if (oeuvresRes && oeuvresRes.data) {
+        this.oeuvres = oeuvresRes.data;
+        this.oeuvresShowcase = this.getRandomItems(this.oeuvres, 4);
+      }
     });
     this.graphDataService.getAllCreationRelations().subscribe(allRelations => {
       if (allRelations) {
@@ -68,6 +104,15 @@ export class EditionComponent implements OnInit {
         }));
       }
     });
+  }
+
+  getRandomItems<T>(array: T[], count: number): T[] {
+    const shuffled = array.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
   }
 
   onArtisteDeleteChange() {

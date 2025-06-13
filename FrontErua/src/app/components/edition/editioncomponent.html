@@ -90,30 +90,36 @@
       }
     </div>
   </div>
-  <div class="influence-section">
-    <div class="influence-header">
-      <h2>Gestion des Relations d'Influence</h2>
-    </div>
-    <p>Créez des connexions entre artistes et œuvres pour tracer les influences artistiques</p>
-    <div class="influence-content">
-      <div class="types-relations">
-        <h3>Types de Relations</h3>
-        <ul>
-          <li><span class="dot blue"></span> Relation Œuvres & Artistes</li>
-          <li><span class="dot red"></span> Influence directe entre œuvres</li>
-        </ul>
+  <div class="showcase-section">
+    <h2>Découvrez des œuvres & artistes</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn left" (click)="carouselPrev()" aria-label="Précédent">&#8592;</button>
+      <div class="carousel-track" *ngIf="visibleShowcase.length > 0">
+        <ng-container *ngFor="let item of visibleShowcase">
+          <ng-container *ngIf="'prenom' in item; else oeuvreBlock">
+            <div class="showcase-card" (click)="onShowcaseClick(item)" style="cursor:pointer;">
+              <div class="showcase-img artiste-img"></div>
+              <div class="showcase-info">
+                <div class="showcase-title">{{ item.nom }}</div>
+                <div class="showcase-meta">Artiste</div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #oeuvreBlock let-oeuvre>
+            <div class="showcase-card" (click)="onShowcaseClick(oeuvre)" style="cursor:pointer;">
+              <div class="showcase-img oeuvre-img"></div>
+              <div class="showcase-info">
+                <div class="showcase-title">{{ oeuvre.nom }}</div>
+                <div class="showcase-meta">Œuvre • {{ oeuvre.date_creation }}</div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
       </div>
-      <div class="formulaire-relation">
-        <h3>Formulaire de Relation</h3>
-        <ul>
-          <li>Sélection entité source</li>
-          <li>Sélection entité cible</li>
-          <li>Type de relation</li>
-        </ul>
+      <div *ngIf="visibleShowcase.length === 0" class="text-center" style="width:100%;padding:2rem;">
+        <em>Chargement des œuvres et artistes...</em>
       </div>
-    </div>
-    <div class="influence-actions">
-      <button class="main-btn" (click)="onGererRelations()">Nouvelle Relation</button>
+      <button class="carousel-btn right" (click)="carouselNext()" aria-label="Suivant">&#8594;</button>
     </div>
   </div>
   @if (showModal) {
