@@ -95,10 +95,8 @@ export class EditionComponent implements OnInit {
   createOeuvreArtisteRelation(artisteId: number, oeuvreId: number) {
     this.relationService.createCreationRelation(artisteId, oeuvreId).subscribe({
       next: () => {
-        // Feedback utilisateur ou rafraîchissement
       },
       error: () => {
-        // Gestion d'erreur
       }
     });
   }
@@ -106,10 +104,8 @@ export class EditionComponent implements OnInit {
   createInfluenceRelation(sourceOeuvreId: number, cibleOeuvreId: number) {
     this.relationService.createInfluenceRelation(sourceOeuvreId, cibleOeuvreId).subscribe({
       next: () => {
-        // Feedback utilisateur ou rafraîchissement
       },
       error: () => {
-        // Gestion d'erreur
       }
     });
   }
@@ -174,7 +170,6 @@ export class EditionComponent implements OnInit {
     const editionRef = this.dialog.open(EditionArtisteComponent, {
       width: '600px',
       data: {
-        // Pass any data you want to the dialog here
       }
     });
 

@@ -21,7 +21,7 @@ export class RelationService {
             artiste_id: artisteId,
             oeuvre_id: oeuvreId
         };
-        return this.http.post<void>(`${this.apiUrl}/a_cree_relation/`, data);
+        return this.http.post<void>(`${this.apiUrl}/artistes/creation`, data);
     }
 
     // Supprimer une relation A_CREE
@@ -30,12 +30,12 @@ export class RelationService {
             artiste_id: artisteId,
             oeuvre_id: oeuvreId
         };
-        return this.http.delete<void>(`${this.apiUrl}/a_cree_relation/`, { body: data });
+        return this.http.delete<void>(`${this.apiUrl}/artistes/creation`, { body: data });
     }
 
     // Récupérer les œuvres d'un artiste
     getOeuvresByArtiste(artisteId: number): Observable<Oeuvre[]> {
-        return this.http.get<Oeuvre[]>(`${this.apiUrl}/a_cree_relation/${artisteId}`);
+        return this.http.get<Oeuvre[]>(`${this.apiUrl}/artistes/${artisteId}/oeuvres`);
     }
 
     // === RELATIONS A_INFLUENCE ===
@@ -46,7 +46,7 @@ export class RelationService {
             source_id: sourceId,
             cible_id: cibleId
         };
-        return this.http.post<void>(`${this.apiUrl}/influence_relation/`, data);
+        return this.http.post<void>(`${this.apiUrl}/oeuvres/influence`, data);
     }
 
     // Supprimer une relation d'influence
@@ -55,12 +55,12 @@ export class RelationService {
             source_id: sourceId,
             cible_id: cibleId
         };
-        return this.http.delete<void>(`${this.apiUrl}/influence_relation/`, { body: data });
+        return this.http.delete<void>(`${this.apiUrl}/oeuvres/influence`, { body: data });
     }
 
     // Récupérer les influences d'une œuvre
     getInfluencesByOeuvre(oeuvreId: number, nodeLimit?: number): Observable<InfluenceRelation[]> {
-        let url = `${this.apiUrl}/influence_relation/${oeuvreId}`;
+        let url = `${this.apiUrl}/oeuvres/influence/${oeuvreId}`;
         if (nodeLimit) {
             url += `?node_limit=${nodeLimit}`;
         }

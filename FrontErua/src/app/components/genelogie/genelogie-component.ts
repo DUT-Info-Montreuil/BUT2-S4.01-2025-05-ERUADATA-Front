@@ -256,7 +256,6 @@ export class GenelogieComponent implements OnInit, OnChanges {
 
   private graph!: Graph;
   private renderer!: Sigma;
-  private selectedNode: string | null = null;
   private draggingNode: string | null = null;
   private filterManager!: FilterManager;
 
@@ -306,7 +305,7 @@ export class GenelogieComponent implements OnInit, OnChanges {
     if (!this.graph) return;
     this.graph.clear();
 
-    forkJoin({
+    forkJoin({ //forkJoin est une fonction qui permet de combiner plusieurs observables en un seul observable
       relations: this.graphService.getInfluencesByOeuvre(1),
       responseArtistes: this.graphService.getArtistes(),
       responseOeuvres: this.graphService.getOeuvres(),

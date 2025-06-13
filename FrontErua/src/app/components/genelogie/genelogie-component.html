@@ -1,14 +1,19 @@
 <div class="main-container">
   <!-- Conteneur principal avec le graphe -->
   <div class="graph-container">
-    <!-- Conteneur pour Sigma  -->
+    <!-- Conteneur pour Sigma -->
     <div #container style="height:400px;width:100%;background:#f5f5fa;border-radius:1rem;"></div>
 
     <!-- Actions -->
-    <div class="controls" style="margin-top: 1rem;">
-      <button (click)="exportGraph()">📤 Exporter</button>
-      <button (click)="editGraph()">✏️ Editer</button>
-      
+    <div class="controls">
+      <button type="button" (click)="exportGraph()" class="action-button">
+        <span>📤</span>
+        <span>Exporter</span>
+      </button>
+      <button type="button" (click)="editGraph()" class="action-button">
+        <span>✏️</span>
+        <span>Editer</span>
+      </button>
     </div>
   </div>
 

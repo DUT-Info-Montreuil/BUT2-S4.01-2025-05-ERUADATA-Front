@@ -90,7 +90,7 @@ export class GraphDataService {
 
   // === MÉTHODES POUR LES RELATIONS D'INFLUENCE ===
   getInfluencesByOeuvre(id: number, nodeLimit?: number): Observable<InfluenceRelation[]> {
-    let url = `${this.apiUrl}/influence_relation/${id}`;
+    let url = `${this.apiUrl}/oeuvres/influence/${id}`;
     if (nodeLimit) {
       url += `?node_limit=${nodeLimit}`;
     }
@@ -105,7 +105,7 @@ export class GraphDataService {
 
   createInfluenceRelation(sourceId: number, cibleId: number): Observable<CreationRelationResponse | null> {
     const request: CreateRelationRequest = { source_id: sourceId, target_id: cibleId };
-    return this.http.post<{ success: boolean; data: CreationRelationResponse }>(`${this.apiUrl}/influence_relation/`, request).pipe(
+    return this.http.post<{ success: boolean; data: CreationRelationResponse }>(`${this.apiUrl}/oeuvres/influence`, request).pipe(
       map(response => response.data),
       catchError(error => {
         console.error('Erreur lors de la création de la relation d\'influence:', error);
@@ -116,7 +116,7 @@ export class GraphDataService {
 
   deleteInfluenceRelation(sourceId: number, cibleId: number): Observable<boolean> {
     const data = { source_id: sourceId, cible_id: cibleId };
-    return this.http.delete(`${this.apiUrl}/influence_relation/`, { body: data }).pipe(
+    return this.http.delete(`${this.apiUrl}/oeuvres/influence`, { body: data }).pipe(
       map(() => true),
       catchError(error => {
         console.error('Erreur lors de la suppression de la relation d\'influence:', error);
@@ -127,7 +127,7 @@ export class GraphDataService {
 
   // === MÉTHODES POUR LES RELATIONS DE CRÉATION ===
   getOeuvresByArtiste(artisteId: number): Observable<OeuvreWithArtiste[]> {
-    return this.http.get<{ success: boolean; data: OeuvreWithArtiste[] }>(`${this.apiUrl}/a_cree_relation/${artisteId}`).pipe(
+    return this.http.get<{ success: boolean; data: OeuvreWithArtiste[] }>(`${this.apiUrl}/artistes/${artisteId}/oeuvres`).pipe(
       map(response => response.data),
       catchError(error => {
         console.error('Erreur lors de la récupération des œuvres de l\'artiste:', error);
@@ -138,7 +138,7 @@ export class GraphDataService {
 
   createCreationRelation(artisteId: number, oeuvreId: number): Observable<CreationRelationResponse | null> {
     const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
-    return this.http.post<{ success: boolean; data: CreationRelationResponse }>(`${this.apiUrl}/a_cree_relation/`, data).pipe(
+    return this.http.post<{ success: boolean; data: CreationRelationResponse }>(`${this.apiUrl}/artistes/creation`, data).pipe(
       map(response => response.data),
       catchError(error => {
         console.error('Erreur lors de la création de la relation de création:', error);
@@ -149,7 +149,7 @@ export class GraphDataService {
 
   deleteCreationRelation(artisteId: number, oeuvreId: number): Observable<boolean> {
     const data = { artiste_id: artisteId, oeuvre_id: oeuvreId };
-    return this.http.delete(`${this.apiUrl}/a_cree_relation/`, { body: data }).pipe(
+    return this.http.delete(`${this.apiUrl}/artistes/creation`, { body: data }).pipe(
       map(() => true),
       catchError(error => {
         console.error('Erreur lors de la suppression de la relation de création:', error);
