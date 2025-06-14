@@ -64,4 +64,10 @@ export class OeuvreService {
             catchError(() => of(false))
         );
     }
+
+    // Récupérer l'image d'une oeuvre par ID
+    getOeuvreImage(id: number): Observable<Blob> {
+        const url = `${this.apiUrl}${id}/image?nocache=${Date.now()}`;
+        return this.http.get(url, {responseType: 'blob'});
+    }
 }
