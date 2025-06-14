@@ -26,11 +26,13 @@
       <div class="icon-box"><img src="assets/icon-genealogie.png" alt="relation" width="100" height="100"></div>
       <h2>Édition de Relations</h2>
       <ul>
-
         <li>Relations œuvre ↔ œuvre</li>
         <li>Relations mixtes</li>
       </ul>
-      <button class="main-btn highlight" (click)="onGererRelations()">Gérer les Relations</button>
+      <div class="relation-buttons">
+        <button class="main-btn highlight" (click)="onGererRelations()">Gérer les Relations</button>
+        <button class="main-btn secondary" (click)="onVoirRelations()">Voir les Relations</button>
+      </div>
       @if (showRelationForm) {
         <div class="relation-form">
           <form (ngSubmit)="onSubmitRelation()" #relationForm="ngForm">

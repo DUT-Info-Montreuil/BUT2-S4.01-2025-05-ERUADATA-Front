@@ -351,3 +351,27 @@
     padding: 0.7rem 0.5rem;
   }
 }
+
+.relation-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.relation-buttons .main-btn {
+  flex: 1;
+  max-width: 200px;
+}
+
+@media (max-width: 900px) {
+  .relation-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .relation-buttons .main-btn {
+    width: 100%;
+    max-width: none;
+  }
+}
