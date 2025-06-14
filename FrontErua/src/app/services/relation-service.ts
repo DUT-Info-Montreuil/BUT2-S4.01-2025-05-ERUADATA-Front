@@ -17,20 +17,16 @@ export class RelationService {
 
     // Créer une relation A_CREE
     createCreationRelation(artisteId: number, oeuvreId: number): Observable<void> {
-        const data = {
-            artiste_id: artisteId,
-            oeuvre_id: oeuvreId
-        };
-        return this.http.post<void>(`${this.apiUrl}/artistes/creation`, data);
+        const formData = new FormData();
+        formData.append('artiste_id', artisteId.toString());
+        formData.append('oeuvre_id', oeuvreId.toString());
+        return this.http.post<void>(`${this.apiUrl}/artistes/creation`, formData);
     }
 
     // Supprimer une relation A_CREE
     deleteCreationRelation(artisteId: number, oeuvreId: number): Observable<void> {
-        const data = {
-            artiste_id: artisteId,
-            oeuvre_id: oeuvreId
-        };
-        return this.http.delete<void>(`${this.apiUrl}/artistes/creation`, { body: data });
+        // Les paramètres doivent être passés en query string
+        return this.http.delete<void>(`${this.apiUrl}/artistes/creation?artiste_id=${artisteId}&oeuvre_id=${oeuvreId}`);
     }
 
     // Récupérer les œuvres d'un artiste
@@ -42,20 +38,16 @@ export class RelationService {
 
     // Créer une relation d'influence
     createInfluenceRelation(sourceId: number, cibleId: number): Observable<void> {
-        const data = {
-            source_id: sourceId,
-            cible_id: cibleId
-        };
-        return this.http.post<void>(`${this.apiUrl}/oeuvres/influence`, data);
+        const formData = new FormData();
+        formData.append('source_id', sourceId.toString());
+        formData.append('cible_id', cibleId.toString());
+        return this.http.post<void>(`${this.apiUrl}/oeuvres/influence`, formData);
     }
 
     // Supprimer une relation d'influence
     deleteInfluenceRelation(sourceId: number, cibleId: number): Observable<void> {
-        const data = {
-            source_id: sourceId,
-            cible_id: cibleId
-        };
-        return this.http.delete<void>(`${this.apiUrl}/oeuvres/influence`, { body: data });
+        // Les paramètres doivent être passés en query string
+        return this.http.delete<void>(`${this.apiUrl}/oeuvres/influence?source_id=${sourceId}&cible_id=${cibleId}`);
     }
 
     // Récupérer les influences d'une œuvre

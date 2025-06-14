@@ -244,6 +244,10 @@ export class EditionComponent implements OnInit {
     this.modalAction = null;
   }
 
+  onVoirRelations() {
+    this.router.navigate(['/genealogie']);
+  }
+
   closeModal() {
     this.showModal = false;
     this.modalAction = null;
