@@ -18,12 +18,6 @@
         <input matInput formControlName="prenom" />
     </mat-form-field>
     <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Date de naissance</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="naissance" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="form-field">
         <mat-label>Genre</mat-label>
         <mat-select formControlName="genre">
             <mat-option value="Homme">Homme</mat-option>

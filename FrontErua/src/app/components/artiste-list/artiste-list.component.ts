@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {ArtisteService} from "../../services/artiste-service";
 import {Subscription} from "rxjs";
 import {Artiste} from "../../models/artiste";
@@ -27,7 +27,7 @@ import {MatInputModule} from "@angular/material/input";
     templateUrl: './artiste-list.component.html',
     styleUrl: './artiste-list.component.scss'
 })
-export class ArtisteListComponent implements OnInit, OnDestroy {
+export class ArtisteListComponent implements OnInit, OnDestroy, OnChanges {
     artistes: Artiste[] = [];
     searchText: string = '';
     private readonly artisteService = inject(ArtisteService);
@@ -44,6 +44,14 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
         });
     }
 
+    ngOnChanges() {
+        this.artisteService.getArtistes().subscribe((data) => {
+            if (data) {
+                this.artistes = data.data;
+            }
+        });
+    }
+
     /**
      * Filtre les artistes en fonction du texte de recherche.
      */
@@ -54,7 +62,6 @@ export class ArtisteListComponent implements OnInit, OnDestroy {
                 artiste.prenom.toLowerCase().includes(this.searchText.toLowerCase())
             );
         } else {
-            // Si le champ de recherche est vide, on recharge tous les artistes
             this.artisteService.getArtistes().subscribe((data) => {
                 if (data) {
                     this.artistes = data.data;

@@ -2,12 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInput, MatInputModule} from "@angular/material/input";
-import {
-    MatDatepicker,
-    MatDatepickerInput,
-    MatDatepickerModule,
-    MatDatepickerToggle
-} from "@angular/material/datepicker";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
@@ -23,9 +18,6 @@ import {MatIcon} from "@angular/material/icon";
         ReactiveFormsModule,
         MatFormField,
         MatInput,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatDatepicker,
         MatButton,
         MatFormFieldModule,
         MatInputModule,
@@ -52,7 +44,6 @@ export class ArtisteFormComponent implements OnInit {
         this.artisteForm = this.fb.group({
             nom: ['', Validators.required],
             prenom: ['', Validators.required],
-            naissance: ['', Validators.required],
             description: [''],
             nationalite: ['', Validators.required],
             genre: ['', Validators.required],
@@ -92,7 +83,7 @@ export class ArtisteFormComponent implements OnInit {
     onSubmit(): void {
         if (this.artisteForm.valid) {
             this.artiste = this.artisteForm.value;
-            this.artisteService.addArtiste(this.artiste);
+            this.artisteService.addArtiste(this.artiste).subscribe();
             this.router.navigate(['/artisteList']);
         }
     }

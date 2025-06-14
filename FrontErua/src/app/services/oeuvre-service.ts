@@ -1,8 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {map, Observable, of} from "rxjs";
 import {Oeuvre, Oeuvres, OeuvreSing} from "../models/oeuvre";
-import {map, catchError} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
+
+interface OeuvresResponse {
+    data: Oeuvre[];
+    success: boolean;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +31,11 @@ export class OeuvreService {
         return this.http.get<Oeuvres>(url);
     }
 
+    getAllOeuvres(): Observable<Oeuvre[]> {
+        return this.http.get<OeuvresResponse>(`${this.apiUrl}`).pipe(
+            map(response => response.data)
+        );
+    }
     // Récupérer une œuvre par ID
     getOeuvreById(id: number): Observable<OeuvreSing> {
         return this.http.get<OeuvreSing>(this.apiUrl + id);
@@ -39,6 +49,12 @@ export class OeuvreService {
     // Mettre à jour une œuvre
     updateOeuvre(id: number, oeuvreData: Partial<Oeuvre>): Observable<OeuvreSing> {
         return this.http.put<OeuvreSing>(this.apiUrl + id, oeuvreData);
+    }
+
+    getOeuvreDetailById(id: number): Observable<Oeuvre | undefined> {
+        return this.getAllOeuvres().pipe(
+            map(oeuvres => oeuvres.find(o => o.id === id))
+        );
     }
 
     // Supprimer une œuvre par ID

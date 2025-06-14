@@ -18,18 +18,23 @@ export class ArtisteService {
         return this.http.get<Artistes>(this.apiUrlArtiste);
     }
 
-    getArtisteImage(id: number): Observable<File> {
-        return this.http.get<File>(`${this.apiUrlArtiste}${id}/image`);
+    getArtisteById(id: number): Observable<ArtisteSing> {
+        return this.http.get<ArtisteSing>(this.apiUrlArtiste + id);
     }
 
     updateArtisteImage(id: number, formData: FormData): Observable<void> {
         return this.http.put<void>(`${this.apiUrlArtiste}${id}`, formData);
     }
 
- 
+    updateArtiste(id: number, artiste: FormData): Observable<Artiste> {
 
-    getArtisteById(id: number): Observable<ArtisteSing> {
-        return this.http.get<ArtisteSing>(this.apiUrlArtiste + id);
+        console.log('Updating artiste with ID:', id, 'and data:', artiste);
+        return this.http.put<Artiste>(this.apiUrlArtiste + id, artiste);
+    }
+
+    getArtisteImage(id: number): Observable<Blob> {
+        const url = `${this.apiUrlArtiste}${id}/image?nocache=${Date.now()}`;
+        return this.http.get(url, {responseType: 'blob'});
     }
 
     getOeuvresByArtisteId(id: number): Observable<Oeuvres> {
@@ -44,8 +49,5 @@ export class ArtisteService {
         return this.http.delete<Artiste>(this.apiUrlArtiste + id);
     }
 
-    updateArtiste(id: number, artiste: Artiste): Observable<Artiste> {
-        return this.http.put<Artiste>(this.apiUrlArtiste + id, artiste);
-    }
 
 }

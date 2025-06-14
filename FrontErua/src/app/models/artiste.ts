@@ -4,7 +4,6 @@ export interface Artiste {
     nom: string,
     prenom: string,
     description?: string,
-    naissance: string,
     genre: string,
     image?: string,
 }
@@ -17,7 +16,6 @@ export interface Artiste {
  */
 export interface ArtisteSing {
     data: Artiste;
-
 }
 
 /**

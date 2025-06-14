@@ -1,7 +1,8 @@
+@if (artiste) {
 <div id="artiste-detail">
     <div class="artiste-info">
         <div class="photo-container">
-            <img [src]=""
+            <img [src]="imageSrc ? imageSrc : 'assets/images/default-artiste.jpg'"
                  alt="Artiste Photo" class="artiste-photo"/>
             <div class="nom-prenom">
                 <h2 class="artiste-nom">{{ artiste.nom }}</h2>
@@ -13,7 +14,6 @@
             <p class="artiste-bio">
                 {{artiste.description ? artiste.description : 'Aucune biographie disponible.'}}
             </p>
-            <p class="artiste-date-naissance">Année de naissance: {{ artiste.naissance | shortNaissance }}</p>
             <p class="artiste-nationalite">Nationalité: {{ artiste.nationalite }}</p>
             <p class="artiste-genre">Genre: {{ artiste.genre }}</p>
         </div>
@@ -42,3 +42,4 @@
     </div>
     
 </div>
+}

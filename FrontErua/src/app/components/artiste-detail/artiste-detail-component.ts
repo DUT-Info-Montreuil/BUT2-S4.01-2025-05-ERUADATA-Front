@@ -2,16 +2,13 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Artiste, ArtisteSing} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ShortNaissancePipe} from "./pipe/shortNaissancePipe";
 import {Oeuvre, Oeuvres} from "../../models/oeuvre";
 import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-artiste-detail',
     standalone: true,
-    imports: [
-        ShortNaissancePipe
-    ],
+    imports: [],
     templateUrl: './artiste-detail-component.html',
     styleUrl: './artiste-detail-component.scss'
 })
@@ -21,6 +18,7 @@ export class ArtisteDetailComponent implements OnInit {
     oeuvres$!: Observable<Oeuvres>;
     oeuvres: Oeuvre[] = [];
     mouvements: String[] = [];
+    imageSrc: string | undefined;
     @Output() suppArtiste = new EventEmitter<number>();
 
 
@@ -43,15 +41,12 @@ export class ArtisteDetailComponent implements OnInit {
                 if (artiste.data) {
                     this.artiste = artiste.data;
                     this.artisteService.getArtisteImage(id).subscribe(blob => {
-                        const image = blob as File;
-                        if (image) {
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                this.artiste.image = reader.result as string;
-                            };
-                            reader.readAsDataURL(image);
-                        }
-                    })
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            this.imageSrc = reader.result as string;
+                        };
+                        reader.readAsDataURL(blob);
+                    });
                 }
             });
             this.oeuvres$.subscribe(oeuvres => {

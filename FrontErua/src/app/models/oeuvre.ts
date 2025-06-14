@@ -1,17 +1,17 @@
 export interface Oeuvre {
     id: number;
     nom: string;
-    date_creation: number;
+    artiste: string;
     genre: string;
+    date_creation: number;
     dimensions: string;
-    mouvement: string;
+    description: string;
     type: string;
 }
 
 /**
  * Interface représentant la réponse d'une requête pour une seule œuvre.
  * - data: l'objet Oeuvre retourné.
- * - success: indique si la requête a réussi.
  */
 export interface OeuvreSing {
     data: Oeuvre;
@@ -20,7 +20,6 @@ export interface OeuvreSing {
 /**
  * Interface représentant la réponse d'une requête pour plusieurs œuvres.
  * - data: un tableau d'objets Oeuvre.
- * - success: indique si la requête a réussi.
  */
 export interface Oeuvres {
     data: Oeuvre[];

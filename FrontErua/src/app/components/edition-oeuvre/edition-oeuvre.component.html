@@ -1,0 +1,85 @@
+<!--
+<div class="edition-container">
+    <h2 class="form-title">Modifier une œuvre</h2>
+
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="oeuvreForm">
+        <label>Nom :</label>
+        <input formControlName="nom" type="text"/>
+
+        <label>Date de création :</label>
+        <input formControlName="date_creation" type="number"/>
+
+        <label>Dimensions :</label>
+        <input formControlName="dimensions" type="text"/>
+
+        <label>Description :</label>
+        <textarea formControlName="description"></textarea>
+
+        <label>Type :</label>
+        <input formControlName="type" type="text"/>
+
+        <label>Mouvement :</label>
+        <input formControlName="mouvement" type="text"/>
+
+        <button type="submit">Enregistrer</button>
+    </form>
+</div>
+-->
+<mat-form-field appearance="fill" class="form-field">
+    <mat-label>Rechercher un oeuvre</mat-label>
+    <input [formControl]="oeuvreSearchCtrl" [matAutocomplete]="auto" matInput type="text"/>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOeuvreSelected($event.option.value)">
+        @for (oeuvre of filteredOeuvre; track oeuvre.id) {
+            <mat-option [value]="oeuvre">{{ oeuvre.nom }}</mat-option>
+        }
+    </mat-autocomplete>
+</mat-form-field>
+<form [formGroup]="editForm" class="edit-artiste-form">
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Nom</mat-label>
+        <input formControlName="nom" matInput/>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Dimension</mat-label>
+        <input formControlName="dimensions" matInput/>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Date de Création</mat-label>
+        <input [matDatepicker]="picker" formControlName="date_creation" matInput/>
+        <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description" matInput></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Type</mat-label>
+        <input formControlName="type" matInput/>
+    </mat-form-field>
+    <!--
+    <div class="image-upload-container">
+        <button (click)="fileInput.click()" mat-stroked-button type="button">
+            <mat-icon>cloud_upload</mat-icon>
+            {{ imagePreview ? 'Modifier' : 'Télécharger' }} une image de l'artiste
+        </button>
+        <input #fileInput (change)="onFileSelected($event)" accept="image/*" hidden type="file">
+        @if (imagePreview) {
+            <div class="image-preview-container">
+                <mat-form-field appearance="fill">
+                    <mat-label>Image sélectionnée</mat-label>
+                    <input matInput [value]="imageName" readonly>
+                </mat-form-field>
+                <div class="image-actions">
+                    <img class="image-preview" [src]="imagePreview" alt="Aperçu de l'image">
+                    <button mat-icon-button color="warn" (click)="removeImage()" type="button">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+    -->
+    <button (click)="onSave()" color="primary" mat-raised-button>Enregistrer</button>
+</form>

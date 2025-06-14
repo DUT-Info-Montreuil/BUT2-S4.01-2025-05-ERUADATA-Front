@@ -1,0 +1,38 @@
+@if (oeuvre) {
+    <div class="container">
+        <h1>{{ oeuvre.nom }}</h1>
+
+        <div class="text-content">
+            <p><strong>Créée par :</strong> {{ oeuvre.artiste }}</p>
+            <p><strong>Année :</strong> {{ oeuvre.date_creation }}</p>
+            <p><strong>Type :</strong> {{ oeuvre.type }}</p>
+            <p><strong>Dimensions :</strong> {{ oeuvre.dimensions }}</p>
+            <p><strong>Description :</strong> {{ oeuvre.description }}</p>
+        </div>
+        <!--
+                @if (oeuvre.influencePar?.length) {
+                    <div>
+                        <h3>Inspirée par :</h3>
+                        <ul>
+                            @for (source of oeuvre.influencePar; track $index) {
+                                <li>{{ source }}</li>
+                            }
+                        </ul>
+                    </div>
+                }
+        -->
+        <!--
+        @if (oeuvre.influenceSur?.length) {
+            <div>
+                <h3>Œuvres influencées :</h3>
+                <ul>
+                    @for (cible of oeuvre.influenceSur; track $index) {
+                        <li>{{ cible }}</li>
+                    }
+                </ul>
+            </div>
+        }
+        -->
+    </div>
+}
+

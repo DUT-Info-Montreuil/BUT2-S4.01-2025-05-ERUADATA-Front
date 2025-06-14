@@ -1,4 +1,3 @@
-
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RouterLink, RouterLinkWithHref} from '@angular/router';
 
@@ -19,6 +18,7 @@ export class Sidebarcomponent {
     { label: 'Édition', path: '/edition' },
     {label: 'Généalogie', path: '/genealogie'},
     {label: 'Liste des artistes', path: '/artisteList'},
+    {label: 'Liste des oeuvres', path: '/oeuvre-list'},
   ];
 
     onLinkClick() {

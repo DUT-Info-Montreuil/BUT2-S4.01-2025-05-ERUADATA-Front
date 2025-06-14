@@ -10,7 +10,7 @@
         <li>Modifier les métadonnées</li>
         <li>Mettre à jour la biographie</li>
       </ul>
-        <button class="main-btn" (click)="onEdit()">Editer Artiste</button>
+        <button (click)="onEditArtiste()" class="main-btn">Editer Artiste</button>
     </div>
     <div class="edit-card">
       <div class="icon-box"><img src="assets/oeuvres.png" alt="oeuvre" width="100" height="100"></div>
@@ -20,7 +20,7 @@
         <li>Corriger les attributions</li>
         <li>Actualiser les informations</li>
       </ul>
-      <button class="main-btn">Rechercher Œuvre</button>
+        <button (click)="onEditOeuvre()" class="main-btn">Rechercher Œuvre</button>
     </div>
     <div class="edit-card highlight">
       <div class="icon-box"><img src="assets/icon-genealogie.png" alt="relation" width="100" height="100"></div>
@@ -94,31 +94,34 @@
     <h2>Découvrez des œuvres & artistes</h2>
     <div class="carousel-wrapper">
       <button class="carousel-btn left" (click)="carouselPrev()" aria-label="Précédent">&#8592;</button>
-      <div class="carousel-track" *ngIf="visibleShowcase.length > 0">
-        <ng-container *ngFor="let item of visibleShowcase">
-          <ng-container *ngIf="'prenom' in item; else oeuvreBlock">
-            <div class="showcase-card" (click)="onShowcaseClick(item)" style="cursor:pointer;">
-              <div class="showcase-img artiste-img"></div>
-              <div class="showcase-info">
-                <div class="showcase-title">{{ item.nom }}</div>
-                <div class="showcase-meta">Artiste</div>
-              </div>
+        @if (visibleShowcase.length > 0) {
+            <div class="carousel-track">
+                @for (item of visibleShowcase; track item.id || $index) {
+                    @if (item.hasOwnProperty('prenom')) {
+                        <div class="showcase-card" (click)="onShowcaseClick(item)" style="cursor:pointer;">
+                            <div class="showcase-img artiste-img"></div>
+                            <div class="showcase-info">
+                                <div class="showcase-title">{{ item.nom }}</div>
+                                <div class="showcase-meta">Artiste</div>
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="showcase-card" (click)="onShowcaseClick(item)" style="cursor:pointer;">
+                            <div class="showcase-img oeuvre-img"></div>
+                            <div class="showcase-info">
+                                <div class="showcase-title">{{ item.nom }}</div>
+                                <div class="showcase-meta">Œuvre</div>
+                            </div>
+                        </div>
+                    }
+                }
             </div>
-          </ng-container>
-          <ng-template #oeuvreBlock let-oeuvre>
-            <div class="showcase-card" (click)="onShowcaseClick(oeuvre)" style="cursor:pointer;">
-              <div class="showcase-img oeuvre-img"></div>
-              <div class="showcase-info">
-                <div class="showcase-title">{{ oeuvre.nom }}</div>
-                <div class="showcase-meta">Œuvre • {{ oeuvre.date_creation }}</div>
-              </div>
+        }
+        @if (visibleShowcase.length === 0) {
+            <div class="text-center" style="width:100%;padding:2rem;">
+                <em>Chargement des œuvres et artistes...</em>
             </div>
-          </ng-template>
-        </ng-container>
-      </div>
-      <div *ngIf="visibleShowcase.length === 0" class="text-center" style="width:100%;padding:2rem;">
-        <em>Chargement des œuvres et artistes...</em>
-      </div>
+        }
       <button class="carousel-btn right" (click)="carouselNext()" aria-label="Suivant">&#8594;</button>
     </div>
   </div>

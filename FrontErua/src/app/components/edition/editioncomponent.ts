@@ -3,19 +3,19 @@ import {MatDialog} from "@angular/material/dialog";
 import {EditionArtisteComponent} from "../edition-artiste/edition-artiste.component";
 import {GraphDataService} from '../../services/graph-data.service';
 import {Artiste} from '../../models/artiste';
-import {Oeuvre} from '../../models/oeuvre';
+import {InfluenceRelation, Oeuvre} from '../../models/oeuvre';
 import {FormsModule} from "@angular/forms";
 import {RelationService} from "../../services/relation-service";
 import {ArtisteService} from "../../services/artiste-service";
 import {OeuvreService} from "../../services/oeuvre-service";
-import {InfluenceRelation} from '../../models/oeuvre';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {EditionOeuvreComponent} from "../edition-oeuvre/edition_oeuvre.component";
 
 @Component({
     selector: 'app-edition',
     standalone: true,
-    imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
     templateUrl: './editioncomponent.html',
     styleUrl: './editioncomponent.scss'
 })
@@ -79,7 +79,7 @@ export class EditionComponent implements OnInit {
     if ('prenom' in item) {
       this.router.navigate(['/artisteList', item.id]);
     } else {
-      this.router.navigate(['/oeuvreDetail'], { queryParams: { id: item.id } });
+      this.router.navigate(['/oeuvreList', item.id], {queryParams: {id: item.id}});
     }
   }
 
@@ -211,7 +211,7 @@ export class EditionComponent implements OnInit {
     }
   }
 
-  onEdit() {
+  onEditArtiste() {
     const editionRef = this.dialog.open(EditionArtisteComponent, {
       width: '600px',
       data: {
@@ -224,6 +224,20 @@ export class EditionComponent implements OnInit {
       }
     });
   }
+
+  onEditOeuvre() {
+    const editionRef = this.dialog.open(EditionOeuvreComponent, {
+      width: '600px',
+      data: {}
+    });
+
+    editionRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Edition dialog closed with result:', result);
+      }
+    });
+  }
+
 
   onGererRelations() {
     this.showModal = true;

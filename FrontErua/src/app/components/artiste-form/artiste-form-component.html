@@ -1,5 +1,3 @@
-
-
 <form [formGroup]="artisteForm" class="artiste-form" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="fill">
     <mat-label>Nom</mat-label>
@@ -18,13 +16,6 @@
               Le prénom est obligatoire
           </mat-error>
       }
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Date de naissance</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="naissance">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
