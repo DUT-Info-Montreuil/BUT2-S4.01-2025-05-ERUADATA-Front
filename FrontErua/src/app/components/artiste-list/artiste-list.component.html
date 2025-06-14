@@ -14,10 +14,7 @@
                     </app-artiste-list-card>
                 </a>
             }
-            @if (artistes.length === 0) {
-                <p class="no-artistes">Aucun artiste trouvé.</p>
-                <button class="btn btn-primary" [routerLink]="['/artisteForm']">Ajouter un artiste</button>
-            }
+            <button [routerLink]="['/artisteForm']" class="btn btn-primary">Ajouter un artiste</button>
         </div>
     </div>
 </div>

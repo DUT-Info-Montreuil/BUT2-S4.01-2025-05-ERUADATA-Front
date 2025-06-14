@@ -19,12 +19,7 @@
                     </div>
                 </a>
             </div>
-
-            <!-- Message si aucune œuvre n'est trouvée -->
-            <div *ngIf="oeuvres.length === 0">
-                <p>Aucune œuvre trouvée.</p>
                 <button [routerLink]="['/oeuvreForm']">Ajouter une œuvre</button>
-            </div>
         </div>
     </div>
 </div>

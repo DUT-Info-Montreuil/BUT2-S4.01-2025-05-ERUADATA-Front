@@ -88,12 +88,19 @@ export class ArtisteFormComponent implements OnInit {
             formData.append('description', this.artisteForm.get('description')?.value);
             formData.append('nationalite', this.artisteForm.get('nationalite')?.value);
             formData.append('genre', this.artisteForm.get('genre')?.value);
-            if (this.artisteForm.get('image')?.value) {
-                formData.append('image', this.artisteForm.get('image')?.value);
+            const imageFile = this.artisteForm.get('image')?.value;
+            if (imageFile) {
+                formData.append('image', imageFile);
             }
+
+            console.log('Form Data:', formData);
             this.artiste = this.artisteForm.value;
-            this.artisteService.addArtiste(formData).subscribe();
-            this.router.navigate(['/artisteList']);
+            this.artisteService.addArtiste(formData).subscribe({
+                complete: () => {
+                    this.router.navigate(['/artisteList']);
+                }
+            });
+
         }
     }
 }
