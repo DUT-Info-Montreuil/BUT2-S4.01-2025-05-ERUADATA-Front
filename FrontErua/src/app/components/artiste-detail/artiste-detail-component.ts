@@ -17,7 +17,6 @@ export class ArtisteDetailComponent implements OnInit {
     artiste!: Artiste;
     oeuvres$!: Observable<Oeuvres>;
     oeuvres: Oeuvre[] = [];
-    mouvements: String[] = [];
     imageSrc: string | undefined;
     @Output() suppArtiste = new EventEmitter<number>();
 

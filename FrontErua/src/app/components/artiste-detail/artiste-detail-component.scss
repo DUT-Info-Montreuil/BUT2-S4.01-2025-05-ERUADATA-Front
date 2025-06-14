@@ -1,48 +1,52 @@
-.photo-container {
-    border: 1px solid #ccc;
-    width: 771px;
-    height: 406px;
-    margin-right: 27px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    .nom-prenom {
-        font-size: 20px;
-        font-weight: bold;
-    }
+.container {
+    padding: 2rem;
+    background: #f9f8fc;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    max-width: 1100px;
+    margin: 2rem auto;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.artiste-detail {
-    width: 100%;
-    height: 100%;
-}
-
-.artiste-info {
-    display: flex;
+.artiste-image img {
+    max-width: 300px;
+    max-height: 300px;
     width: auto;
     height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    object-fit: cover;
 }
 
-.oeuvre-mouvement {
-    display: flex;
-    justify-content: space-around;
+h1 {
+    font-size: 2.5rem;
+    color: #8b5cf6;
+    margin-bottom: 1rem;
 }
 
-.artiste-description {
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 406px;
+h3 {
+    margin-top: 2rem;
+    font-weight: 600;
+    color: #6a4bc9;
 }
 
-
-.mouvement-container {
-    border: 1px solid #ccc;
-    margin-top: 10px;
+p {
+    margin: 0.4rem 0;
+    font-size: 1.1rem;
 }
 
-.oeuvres-container {
-    border: 1px solid #ccc;
-    margin-top: 10px;
+ul {
+    padding-left: 1.5rem;
+    list-style: disc;
+    font-size: 1.05rem;
+}
+
+.art-image {
+    display: block;
+    margin: 1rem auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

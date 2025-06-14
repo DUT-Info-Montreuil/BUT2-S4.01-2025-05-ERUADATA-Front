@@ -1,45 +1,30 @@
 @if (artiste) {
-<div id="artiste-detail">
-    <div class="artiste-info">
-        <div class="photo-container">
-            <img [src]="imageSrc ? imageSrc : 'assets/images/default-artiste.jpg'"
-                 alt="Artiste Photo" class="artiste-photo"/>
-            <div class="nom-prenom">
-                <h2 class="artiste-nom">{{ artiste.nom }}</h2>
-                <h3 class="artiste-prenom">{{ artiste.prenom }}</h3>
+    <div class="container">
+        <h1>{{ artiste.nom }}</h1>
+        <div class="artiste-image">
+            @if (imageSrc) {
+                <img [src]="imageSrc" [alt]="artiste.nom"/>
+            } @else {
+                <img src="assets/images/default-artiste.png" alt="Artiste sans image"/>
+            }
+        </div>
+        <div class="text-content">
+            <p><strong>Nom :</strong> {{ artiste.nom }}</p>
+            <p><strong>Prénom :</strong> {{ artiste.prenom }}</p>
+            <p><strong>Nationalité :</strong> {{ artiste.nationalite }}</p>
+            <p><strong>Description :</strong> {{ artiste.description }}</p>
+        </div>
+        @if (oeuvres.length) {
+            <div>
+                <h3>Œuvres associées :</h3>
+                <ul>
+                    @for (oeuvre of oeuvres; track $index) {
+                        <li>{{ oeuvre.nom }}</li>
+                    }
+                </ul>
             </div>
-        </div>
-        <div class="artiste-description">
-            <h3>Biographie</h3>
-            <p class="artiste-bio">
-                {{artiste.description ? artiste.description : 'Aucune biographie disponible.'}}
-            </p>
-            <p class="artiste-nationalite">Nationalité: {{ artiste.nationalite }}</p>
-            <p class="artiste-genre">Genre: {{ artiste.genre }}</p>
-        </div>
+        }
+
     </div>
-    <div class="oeuvre-mouvement">
-        <div class="mouvement-container">
-            <h3>Mouvements</h3>
-            <ul class="mouvement-list">
-                @for (mouvement of mouvements; track mouvement) {
-                    <li class="mouvement-item">
-                        <a>{{ mouvement }}</a>
-                    </li>
-                }
-            </ul>
-        </div>
-        <div class="oeuvres-container">
-            <h3>Oeuvres</h3>
-            <ul class="oeuvre-list">
-                @for (oeuvre of oeuvres; track oeuvre.id) {
-                    <li class="oeuvre-item">
-                        <a>{{ oeuvre.nom }}</a>
-                    </li>
-                }
-            </ul>
-        </div>
-    </div>
-    
-</div>
 }
+

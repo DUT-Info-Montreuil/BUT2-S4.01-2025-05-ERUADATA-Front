@@ -22,12 +22,7 @@ export class ArtisteService {
         return this.http.get<ArtisteSing>(this.apiUrlArtiste + id);
     }
 
-    updateArtisteImage(id: number, formData: FormData): Observable<void> {
-        return this.http.put<void>(`${this.apiUrlArtiste}${id}`, formData);
-    }
-
     updateArtiste(id: number, artiste: FormData): Observable<Artiste> {
-
         console.log('Updating artiste with ID:', id, 'and data:', artiste);
         return this.http.put<Artiste>(this.apiUrlArtiste + id, artiste);
     }

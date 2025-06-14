@@ -11,4 +11,10 @@ import {Artiste} from "../../../models/artiste";
 export class ArtisteListCardComponent {
     @Input() artiste!: Artiste;
     @Output() suppArtiste = new EventEmitter<number>();
+    @Input() imageSrc!: string | undefined;
+
+
+
+
+
 }

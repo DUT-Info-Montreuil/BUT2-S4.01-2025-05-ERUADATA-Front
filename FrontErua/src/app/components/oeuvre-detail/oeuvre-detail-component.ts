@@ -16,6 +16,7 @@ import {OeuvreService} from "../../services/oeuvre-service";
 export class OeuvreDetailComponent implements OnInit {
   oeuvre$!: Observable<OeuvreSing>;
   oeuvre!: Oeuvre;
+  imageSrc: string | undefined;
 
 
   constructor(private router: Router, private route: ActivatedRoute, private service: OeuvreService) {

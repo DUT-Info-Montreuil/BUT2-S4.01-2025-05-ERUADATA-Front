@@ -30,6 +30,7 @@ import {MatInputModule} from "@angular/material/input";
 export class ArtisteListComponent implements OnInit, OnDestroy, OnChanges {
     artistes: Artiste[] = [];
     searchText: string = '';
+    imageSrc: string | undefined;
     private readonly artisteService = inject(ArtisteService);
     private subscription = new Subscription();
 
@@ -42,6 +43,7 @@ export class ArtisteListComponent implements OnInit, OnDestroy, OnChanges {
                 this.artistes = data.data;
             }
         });
+
     }
 
     ngOnChanges() {
