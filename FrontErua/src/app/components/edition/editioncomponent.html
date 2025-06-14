@@ -22,7 +22,7 @@
       </ul>
       <button class="main-btn">Rechercher Œuvre</button>
     </div>
-    <div class="edit-card highlight">
+    <div class="edit-card">
       <div class="icon-box"><img src="assets/icon-genealogie.png" alt="relation" width="100" height="100"></div>
       <h2>Édition de Relations</h2>
       <ul>
@@ -30,7 +30,7 @@
         <li>Relations mixtes</li>
       </ul>
       <div class="relation-buttons">
-        <button class="main-btn highlight" (click)="onGererRelations()">Gérer les Relations</button>
+        <button class="main-btn" (click)="onGererRelations()">Gérer les Relations</button>
         <button class="main-btn secondary" (click)="onVoirRelations()">Voir les Relations</button>
       </div>
       @if (showRelationForm) {
