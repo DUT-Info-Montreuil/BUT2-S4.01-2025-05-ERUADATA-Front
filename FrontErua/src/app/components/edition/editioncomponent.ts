@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
+import {Overlay} from "@angular/cdk/overlay";
 import {EditionArtisteComponent} from "../edition-artiste/edition-artiste.component";
 import {GraphDataService} from '../../services/graph-data.service';
 import {Artiste} from '../../models/artiste';
@@ -27,6 +28,7 @@ export class EditionComponent implements OnInit {
     private graphDataService: GraphDataService,
     private dialog: MatDialog,
     private router: Router,
+    private overlay: Overlay,
   ) {}
 
   showRelationForm = false;
@@ -214,13 +216,22 @@ export class EditionComponent implements OnInit {
   onEditArtiste() {
     const editionRef = this.dialog.open(EditionArtisteComponent, {
       width: '600px',
-      data: {
-      }
+      height: '80vh',
+      data: {},
+      autoFocus: false,
+      disableClose: false,
+      scrollStrategy: this.overlay.scrollStrategies.block()
     });
 
     editionRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Edition dialog closed with result:', result);
+        // Rafraîchir la liste des artistes après modification
+        this.artisteService.getArtistes().subscribe(artistesRes => {
+          if (artistesRes && artistesRes.data) {
+            this.artistes = artistesRes.data;
+          }
+        });
       }
     });
   }
@@ -228,16 +239,25 @@ export class EditionComponent implements OnInit {
   onEditOeuvre() {
     const editionRef = this.dialog.open(EditionOeuvreComponent, {
       width: '600px',
-      data: {}
+      height: '80vh',
+      data: {},
+      autoFocus: false,
+      disableClose: false,
+      scrollStrategy: this.overlay.scrollStrategies.block()
     });
 
     editionRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Edition dialog closed with result:', result);
+        // Rafraîchir la liste des œuvres après modification
+        this.oeuvreService.getOeuvres().subscribe(oeuvresRes => {
+          if (oeuvresRes && oeuvresRes.data) {
+            this.oeuvres = oeuvresRes.data;
+          }
+        });
       }
     });
   }
-
 
   onGererRelations() {
     this.showModal = true;

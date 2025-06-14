@@ -7,6 +7,7 @@ export interface Oeuvre {
     dimensions: string;
     description: string;
     type: string;
+    image?: string; 
 }
 
 /**

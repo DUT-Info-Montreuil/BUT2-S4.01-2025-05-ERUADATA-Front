@@ -47,8 +47,8 @@ export class OeuvreService {
     }
 
     // Mettre à jour une œuvre
-    updateOeuvre(id: number, oeuvreData: Partial<Oeuvre>): Observable<OeuvreSing> {
-        return this.http.put<OeuvreSing>(this.apiUrl + id, oeuvreData);
+    updateOeuvre(id: number, oeuvreData: FormData): Observable<Oeuvre> {
+        return this.http.put<Oeuvre>(this.apiUrl + id, oeuvreData);
     }
 
     getOeuvreDetailById(id: number): Observable<Oeuvre | undefined> {
@@ -64,4 +64,11 @@ export class OeuvreService {
             catchError(() => of(false))
         );
     }
+
+    // Récupérer l'image d'une œuvre par ID
+    getOeuvreImage(id: number): Observable<Blob> {
+        const url = `${this.apiUrl}${id}/image?nocache=${Date.now()}`;
+        return this.http.get(url, {responseType: 'blob'});
+    }
+
 }

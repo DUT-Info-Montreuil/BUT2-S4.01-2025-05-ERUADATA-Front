@@ -23,7 +23,6 @@ export class ArtisteService {
     }
 
     updateArtiste(id: number, artiste: FormData): Observable<Artiste> {
-        console.log('Updating artiste with ID:', id, 'and data:', artiste);
         return this.http.put<Artiste>(this.apiUrlArtiste + id, artiste);
     }
 
@@ -36,7 +35,7 @@ export class ArtisteService {
         return this.http.get<Oeuvres>(this.apiUrlArtiste + id + '/oeuvres');
     }
 
-    addArtiste(artiste: Artiste): Observable<Artiste> {
+    addArtiste(artiste: FormData): Observable<Artiste> {
         return this.http.post<Artiste>(this.apiUrlArtiste, artiste);
     }
 
