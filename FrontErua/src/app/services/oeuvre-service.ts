@@ -42,7 +42,7 @@ export class OeuvreService {
     }
 
     // Créer une nouvelle œuvre
-    createOeuvre(oeuvreData: Partial<Oeuvre>): Observable<OeuvreSing> {
+    createOeuvre(oeuvreData: FormData): Observable<OeuvreSing> {
         return this.http.post<OeuvreSing>(this.apiUrl, oeuvreData);
     }
 
