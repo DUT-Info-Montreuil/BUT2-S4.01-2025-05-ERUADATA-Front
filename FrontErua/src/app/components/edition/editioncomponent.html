@@ -1,0 +1,241 @@
+<div class="edition-container">
+  <h1 class="main-title">Édition</h1>
+  <p class="subtitle">Modifiez les données existantes et gérez les relations entre artistes et œuvres</p>
+  <div class="cards-row">
+    <div class="edit-card">
+      <div class="icon-box"><img src="assets/artistes.png" alt="artiste" width="100" height="100"></div>
+      <h2>Édition d'Artistes</h2>
+      <ul>
+        <li>Rechercher un artiste</li>
+        <li>Modifier les métadonnées</li>
+        <li>Mettre à jour la biographie</li>
+      </ul>
+        <button (click)="onEditArtiste()" class="main-btn">Editer Artiste</button>
+    </div>
+    <div class="edit-card">
+      <div class="icon-box"><img src="assets/oeuvres.png" alt="oeuvre" width="100" height="100"></div>
+      <h2>Édition d'Œuvres</h2>
+      <ul>
+        <li>Rechercher une œuvre</li>
+        <li>Corriger les attributions</li>
+        <li>Actualiser les informations</li>
+      </ul>
+        <button (click)="onEditOeuvre()" class="main-btn">Rechercher Œuvre</button>
+    </div>
+    <div class="edit-card">
+      <div class="icon-box"><img src="assets/icon-genealogie.png" alt="relation" width="100" height="100"></div>
+      <h2>Édition de Relations</h2>
+      <ul>
+        <li>Relations œuvre ↔ œuvre</li>
+        <li>Relations mixtes</li>
+      </ul>
+      <div class="relation-buttons">
+        <button class="main-btn" (click)="onGererRelations()">Gérer les Relations</button>
+        <button class="main-btn secondary" (click)="onVoirRelations()">Voir les Relations</button>
+      </div>
+      @if (showRelationForm) {
+        <div class="relation-form">
+          <form (ngSubmit)="onSubmitRelation()" #relationForm="ngForm">
+            <label>Type de relation :</label>
+            <select [(ngModel)]="relationType" name="relationType" required>
+              <option value="oeuvreArtiste">Relation Œuvres & Artistes</option>
+              <option value="influenceOeuvre">Influence directe entre œuvres</option>
+            </select>
+            @if (relationType === 'oeuvreArtiste') {
+              <div>
+                <label>Artiste :</label>
+                <select [(ngModel)]="artisteNom" name="artisteNom" required>
+                  @for (artiste of artistes; track artiste.nom) {
+                    <option [value]="artiste.nom">{{ artiste.nom }}</option>
+                  }
+                </select>
+                <label>Œuvre :</label>
+                <select [(ngModel)]="oeuvreNom" name="oeuvreNom" required>
+                  @for (oeuvre of oeuvres; track oeuvre.nom) {
+                    <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                  }
+                </select>
+              </div>
+            }
+            @if (relationType === 'influenceOeuvre') {
+              <div>
+                <label>Œuvre source :</label>
+                <select [(ngModel)]="sourceOeuvreNom" name="sourceOeuvreNom" required>
+                  @for (oeuvre of oeuvres; track oeuvre.nom) {
+                    <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                  }
+                </select>
+                <label>Œuvre cible :</label>
+                <select [(ngModel)]="cibleOeuvreNom" name="cibleOeuvreNom" required>
+                  @for (oeuvre of oeuvres; track oeuvre.nom) {
+                    <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                  }
+                </select>
+              </div>
+            }
+            <button class="main-btn" type="submit">Créer la relation</button>
+            <button class="main-btn secondary" type="button" (click)="onDeleteRelation()">Supprimer la relation</button>
+            @if (relationSuccess) {
+              <span class="success-msg">Relation créée avec succès !</span>
+            }
+            @if (relationError) {
+              <span class="error-msg">Erreur lors de la création.</span>
+            }
+            @if (deleteSuccess) {
+              <span class="success-msg">Relation supprimée avec succès !</span>
+            }
+            @if (deleteError) {
+              <span class="error-msg">Erreur lors de la suppression.</span>
+            }
+          </form>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="showcase-section">
+    <h2>Découvrez des œuvres & artistes</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn left" (click)="carouselPrev()" aria-label="Précédent">&#8592;</button>
+        @if (visibleShowcase.length > 0) {
+            <div class="carousel-track">
+                @for (item of visibleShowcase; track item.id || $index) {
+                    @if (item.hasOwnProperty('prenom')) {
+                        <div class="showcase-card" (click)="onShowcaseClick(item)" style="cursor:pointer;">
+                            <div class="showcase-img artiste-img"></div>
+                            <div class="showcase-info">
+                                <div class="showcase-title">{{ item.nom }}</div>
+                                <div class="showcase-meta">Artiste</div>
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="showcase-card" (click)="onShowcaseClick(item)" style="cursor:pointer;">
+                            <div class="showcase-img oeuvre-img"></div>
+                            <div class="showcase-info">
+                                <div class="showcase-title">{{ item.nom }}</div>
+                                <div class="showcase-meta">Œuvre</div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        @if (visibleShowcase.length === 0) {
+            <div class="text-center" style="width:100%;padding:2rem;">
+                <em>Chargement des œuvres et artistes...</em>
+            </div>
+        }
+      <button class="carousel-btn right" (click)="carouselNext()" aria-label="Suivant">&#8594;</button>
+    </div>
+  </div>
+  @if (showModal) {
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal">
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+      @if (!modalAction) {
+        <h2 class="modal-title">Que souhaitez-vous faire ?</h2>
+        <div class="modal-actions">
+          <button class="main-btn" (click)="chooseAction('create')">Créer une relation</button>
+          <button class="main-btn secondary" (click)="chooseAction('delete')">Supprimer une relation</button>
+        </div>
+      }
+      @if (modalAction === 'create') {
+        <h3>Créer une relation</h3>
+        <form (ngSubmit)="onSubmitRelation()" #relationForm="ngForm">
+          <label>Type de relation :</label>
+          <select [(ngModel)]="relationType" name="relationType" required>
+            <option value="oeuvreArtiste">Relation Œuvres & Artistes</option>
+            <option value="influenceOeuvre">Influence directe entre œuvres</option>
+          </select>
+          @if (relationType === 'oeuvreArtiste') {
+            <div>
+              <label>Artiste :</label>
+              <select [(ngModel)]="artisteNom" name="artisteNom" required>
+                @for (artiste of artistes; track artiste.nom) {
+                  <option [value]="artiste.nom">{{ artiste.nom }}</option>
+                }
+              </select>
+              <label>Œuvre :</label>
+              <select [(ngModel)]="oeuvreNom" name="oeuvreNom" required>
+                @for (oeuvre of oeuvres; track oeuvre.nom) {
+                  <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                }
+              </select>
+            </div>
+          }
+          @if (relationType === 'influenceOeuvre') {
+            <div>
+              <label>Œuvre source :</label>
+              <select [(ngModel)]="sourceOeuvreNom" name="sourceOeuvreNom" required>
+                @for (oeuvre of oeuvres; track oeuvre.nom) {
+                  <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                }
+              </select>
+              <label>Œuvre cible :</label>
+              <select [(ngModel)]="cibleOeuvreNom" name="cibleOeuvreNom" required>
+                @for (oeuvre of oeuvres; track oeuvre.nom) {
+                  <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                }
+              </select>
+            </div>
+          }
+          <button class="main-btn" type="submit">Créer la relation</button>
+          @if (relationSuccess) {
+            <span class="success-msg">Relation créée avec succès !</span>
+          }
+          @if (relationError) {
+            <span class="error-msg">Erreur lors de la création.</span>
+          }
+        </form>
+      }
+      @if (modalAction === 'delete') {
+        <h3>Supprimer une relation</h3>
+        <form (ngSubmit)="onDeleteRelation()" #deleteForm="ngForm">
+          <label>Type de relation :</label>
+          <select [(ngModel)]="relationType" name="relationTypeDelete" required>
+            <option value="oeuvreArtiste">Relation Œuvres & Artistes</option>
+            <option value="influenceOeuvre">Influence directe entre œuvres</option>
+          </select>
+          @if (relationType === 'oeuvreArtiste') {
+            <div>
+              <label>Artiste :</label>
+              <select [(ngModel)]="artisteNom" name="artisteNomDelete" required>
+                @for (artiste of artistes; track artiste.nom) {
+                  <option [value]="artiste.nom">{{ artiste.nom }}</option>
+                }
+              </select>
+              <label>Œuvre :</label>
+              <select [(ngModel)]="oeuvreNom" name="oeuvreNomDelete" required>
+                @for (oeuvre of oeuvres; track oeuvre.nom) {
+                  <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                }
+              </select>
+            </div>
+          }
+          @if (relationType === 'influenceOeuvre') {
+            <div>
+              <label>Œuvre source :</label>
+              <select [(ngModel)]="sourceOeuvreNom" name="sourceOeuvreNomDelete" required>
+                @for (oeuvre of oeuvres; track oeuvre.nom) {
+                  <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                }
+              </select>
+              <label>Œuvre cible :</label>
+              <select [(ngModel)]="cibleOeuvreNom" name="cibleOeuvreNomDelete" required>
+                @for (oeuvre of oeuvres; track oeuvre.nom) {
+                  <option [value]="oeuvre.nom">{{ oeuvre.nom }}</option>
+                }
+              </select>
+            </div>
+          }
+          <button class="main-btn secondary" type="submit">Supprimer la relation</button>
+          @if (deleteSuccess) {
+            <span class="success-msg">Relation supprimée avec succès !</span>
+          }
+          @if (deleteError) {
+            <span class="error-msg">Erreur lors de la suppression.</span>
+          }
+        </form>
+      }
+    </div>
+  }
+</div>

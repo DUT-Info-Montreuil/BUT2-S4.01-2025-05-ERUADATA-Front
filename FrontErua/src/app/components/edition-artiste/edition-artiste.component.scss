@@ -1,0 +1,20 @@
+.year-picker .mat-calendar-period-button {
+    pointer-events: none;
+}
+
+.year-picker .mat-calendar-arrow {
+    display: none;
+}
+
+.image-upload-container {
+    margin-bottom: 20px;
+}
+
+.image-preview {
+    max-width: 250px;
+    max-height: 200px;
+    object-fit: contain;
+    margin: 10px 0;
+    border: 1px solid #c3b2ff;
+    border-radius: 0.5rem;
+}

@@ -1,0 +1,253 @@
+<form [formGroup]="artisteForm" class="artiste-form" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill">
+    <mat-label>Nom</mat-label>
+    <input matInput formControlName="nom" required>
+      @if (artisteForm.get('nom')?.hasError('required')) {
+          <mat-error>
+              Le nom est obligatoire
+          </mat-error>
+      }
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Prénom</mat-label>
+    <input matInput formControlName="prenom" required>
+      @if (artisteForm.get('prenom')?.hasError('required')) {
+          <mat-error>
+              Le prénom est obligatoire
+          </mat-error>
+      }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Genre</mat-label>
+        <mat-select formControlName="genre">
+            <mat-option value="Homme">Homme</mat-option>
+            <mat-option value="Femme">Femme</mat-option>
+            <mat-option value="Autre">Autre</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Nationalité</mat-label>
+      <mat-select formControlName="nationalite">
+          <mat-option value="afghane">Afghane</mat-option>
+          <mat-option value="albanaise">Albanaise</mat-option>
+          <mat-option value="algérienne">Algérienne</mat-option>
+          <mat-option value="allemande">Allemande</mat-option>
+          <mat-option value="américaine">Américaine</mat-option>
+          <mat-option value="andorrane">Andorrane</mat-option>
+          <mat-option value="angolaise">Angolaise</mat-option>
+          <mat-option value="antiguaise-et-barbudienne">Antiguaise-et-Barbudienne</mat-option>
+          <mat-option value="argentine">Argentine</mat-option>
+          <mat-option value="arménienne">Arménienne</mat-option>
+          <mat-option value="australienne">Australienne</mat-option>
+          <mat-option value="autrichienne">Autrichienne</mat-option>
+          <mat-option value="azerbaïdjanaise">Azerbaïdjanaise</mat-option>
+          <mat-option value="bahamienne">Bahamienne</mat-option>
+          <mat-option value="bahreïnienne">Bahreïnienne</mat-option>
+          <mat-option value="bangladeshie">Bangladeshie</mat-option>
+          <mat-option value="barbadienne">Barbadienne</mat-option>
+          <mat-option value="belge">Belge</mat-option>
+          <mat-option value="bélizienne">Bélizienne</mat-option>
+          <mat-option value="béninoise">Béninoise</mat-option>
+          <mat-option value="bhoutanaise">Bhoutanaise</mat-option>
+          <mat-option value="biélorusse">Biélorusse</mat-option>
+          <mat-option value="birmane">Birmane</mat-option>
+          <mat-option value="bolivienne">Bolivienne</mat-option>
+          <mat-option value="bosnienne">Bosnienne</mat-option>
+          <mat-option value="botswanaise">Botswanaise</mat-option>
+          <mat-option value="brésilienne">Brésilienne</mat-option>
+          <mat-option value="britannique">Britannique</mat-option>
+          <mat-option value="brunéienne">Brunéienne</mat-option>
+          <mat-option value="bulgare">Bulgare</mat-option>
+          <mat-option value="burkinabè">Burkinabè</mat-option>
+          <mat-option value="burundaise">Burundaise</mat-option>
+          <mat-option value="cambodgienne">Cambodgienne</mat-option>
+          <mat-option value="camerounaise">Camerounaise</mat-option>
+          <mat-option value="canadienne">Canadienne</mat-option>
+          <mat-option value="cap-verdienne">Cap-Verdienne</mat-option>
+          <mat-option value="centrafricaine">Centrafricaine</mat-option>
+          <mat-option value="chilienne">Chilienne</mat-option>
+          <mat-option value="chinoise">Chinoise</mat-option>
+          <mat-option value="chypriote">Chypriote</mat-option>
+          <mat-option value="colombienne">Colombienne</mat-option>
+          <mat-option value="comorienne">Comorienne</mat-option>
+          <mat-option value="congolaise">Congolaise</mat-option>
+          <mat-option value="costaricaine">Costaricaine</mat-option>
+          <mat-option value="croate">Croate</mat-option>
+          <mat-option value="cubaine">Cubaine</mat-option>
+          <mat-option value="danoise">Danoise</mat-option>
+          <mat-option value="djiboutienne">Djiboutienne</mat-option>
+          <mat-option value="dominicaise">Dominicaise</mat-option>
+          <mat-option value="dominiquaine">Dominiquaine</mat-option>
+          <mat-option value="égyptienne">Égyptienne</mat-option>
+          <mat-option value="émirienne">Émirienne</mat-option>
+          <mat-option value="équatorienne">Équatorienne</mat-option>
+          <mat-option value="équatoguinéenne">Équatoguinéenne</mat-option>
+          <mat-option value="érythréenne">Érythréenne</mat-option>
+          <mat-option value="espagnole">Espagnole</mat-option>
+          <mat-option value="estonienne">Estonienne</mat-option>
+          <mat-option value="eswatinie">Eswatinie</mat-option>
+          <mat-option value="états-unienne">États-unienne</mat-option>
+          <mat-option value="éthiopienne">Éthiopienne</mat-option>
+          <mat-option value="fidjienne">Fidjienne</mat-option>
+          <mat-option value="finlandaise">Finlandaise</mat-option>
+          <mat-option value="française">Française</mat-option>
+          <mat-option value="gabonaise">Gabonaise</mat-option>
+          <mat-option value="gambienne">Gambienne</mat-option>
+          <mat-option value="géorgienne">Géorgienne</mat-option>
+          <mat-option value="ghanéenne">Ghanéenne</mat-option>
+          <mat-option value="grecque">Grecque</mat-option>
+          <mat-option value="grenadienne">Grenadienne</mat-option>
+          <mat-option value="guatémaltèque">Guatémaltèque</mat-option>
+          <mat-option value="guinéenne">Guinéenne</mat-option>
+          <mat-option value="guinéenne-équatoriale">Guinéenne-équatoriale</mat-option>
+          <mat-option value="guinéenne-bissau">Guinéenne-Bissau</mat-option>
+          <mat-option value="guyanaise">Guyanaise</mat-option>
+          <mat-option value="haïtienne">Haïtienne</mat-option>
+          <mat-option value="hondurienne">Hondurienne</mat-option>
+          <mat-option value="hongroise">Hongroise</mat-option>
+          <mat-option value="indienne">Indienne</mat-option>
+          <mat-option value="indonésienne">Indonésienne</mat-option>
+          <mat-option value="irakienne">Irakienne</mat-option>
+          <mat-option value="iranienne">Iranienne</mat-option>
+          <mat-option value="irlandaise">Irlandaise</mat-option>
+          <mat-option value="islandaise">Islandaise</mat-option>
+          <mat-option value="israélienne">Israélienne</mat-option>
+          <mat-option value="italienne">Italienne</mat-option>
+          <mat-option value="ivoirienne">Ivoirienne</mat-option>
+          <mat-option value="jamaïcaine">Jamaïcaine</mat-option>
+          <mat-option value="japonaise">Japonaise</mat-option>
+          <mat-option value="jordanienne">Jordanienne</mat-option>
+          <mat-option value="kazakhe">Kazakhe</mat-option>
+          <mat-option value="kényane">Kényane</mat-option>
+          <mat-option value="kirghize">Kirghize</mat-option>
+          <mat-option value="kiribatienne">Kiribatienne</mat-option>
+          <mat-option value="kosovare">Kosovare</mat-option>
+          <mat-option value="koweïtienne">Koweïtienne</mat-option>
+          <mat-option value="laotienne">Laotienne</mat-option>
+          <mat-option value="lesothane">Lesothane</mat-option>
+          <mat-option value="lettonne">Lettonne</mat-option>
+          <mat-option value="libanaise">Libanaise</mat-option>
+          <mat-option value="libérienne">Libérienne</mat-option>
+          <mat-option value="libyenne">Libyenne</mat-option>
+          <mat-option value="liechtensteinoise">Liechtensteinoise</mat-option>
+          <mat-option value="lituanienne">Lituanienne</mat-option>
+          <mat-option value="luxembourgeoise">Luxembourgeoise</mat-option>
+          <mat-option value="macédonienne">Macédonienne</mat-option>
+          <mat-option value="malaisienne">Malaisienne</mat-option>
+          <mat-option value="malawite">Malawite</mat-option>
+          <mat-option value="maldivienne">Maldivienne</mat-option>
+          <mat-option value="malgache">Malgache</mat-option>
+          <mat-option value="malienne">Malienne</mat-option>
+          <mat-option value="maltaise">Maltaise</mat-option>
+          <mat-option value="marocaine">Marocaine</mat-option>
+          <mat-option value="marshallaise">Marshallaise</mat-option>
+          <mat-option value="mauricienne">Mauricienne</mat-option>
+          <mat-option value="mauritanienne">Mauritanienne</mat-option>
+          <mat-option value="mexicaine">Mexicaine</mat-option>
+          <mat-option value="micronésienne">Micronésienne</mat-option>
+          <mat-option value="moldave">Moldave</mat-option>
+          <mat-option value="monégasque">Monégasque</mat-option>
+          <mat-option value="mongole">Mongole</mat-option>
+          <mat-option value="monténégrine">Monténégrine</mat-option>
+          <mat-option value="mozambicaine">Mozambicaine</mat-option>
+          <mat-option value="namibienne">Namibienne</mat-option>
+          <mat-option value="nauruanne">Nauruanne</mat-option>
+          <mat-option value="népalais">Népalais</mat-option>
+          <mat-option value="nicaraguayenne">Nicaraguayenne</mat-option>
+          <mat-option value="nigériane">Nigériane</mat-option>
+          <mat-option value="nigérienne">Nigérienne</mat-option>
+          <mat-option value="nord-coréenne">Nord-coréenne</mat-option>
+          <mat-option value="norvégienne">Norvégienne</mat-option>
+          <mat-option value="néo-zélandaise">Néo-Zélandaise</mat-option>
+          <mat-option value="omanaise">Omanaise</mat-option>
+          <mat-option value="ougandaise">Ougandaise</mat-option>
+          <mat-option value="ouzbèke">Ouzbèke</mat-option>
+          <mat-option value="pakistanaise">Pakistanaise</mat-option>
+          <mat-option value="palaosienne">Palaosienne</mat-option>
+          <mat-option value="palestinienne">Palestinienne</mat-option>
+          <mat-option value="panaméenne">Panaméenne</mat-option>
+          <mat-option value="papouane-néo-guinéenne">Papouane-Néo-Guinéenne</mat-option>
+          <mat-option value="paraguayenne">Paraguayenne</mat-option>
+          <mat-option value="néerlandaise">Néerlandaise</mat-option>
+          <mat-option value="péruvienne">Péruvienne</mat-option>
+          <mat-option value="philippine">Philippine</mat-option>
+          <mat-option value="polonaise">Polonaise</mat-option>
+          <mat-option value="portugaise">Portugaise</mat-option>
+          <mat-option value="qatarienne">Qatarienne</mat-option>
+          <mat-option value="roumaine">Roumaine</mat-option>
+          <mat-option value="russe">Russe</mat-option>
+          <mat-option value="rwandaise">Rwandaise</mat-option>
+          <mat-option value="saint-lucienne">Saint-Lucienne</mat-option>
+          <mat-option value="saint-marinaise">Saint-Marinaise</mat-option>
+          <mat-option value="saint-vincentaise-et-grenadine">Saint-Vincentaise-et-Grenadine</mat-option>
+          <mat-option value="salomonaise">Salomonaise</mat-option>
+          <mat-option value="salvadorienne">Salvadorienne</mat-option>
+          <mat-option value="samoane">Samoane</mat-option>
+          <mat-option value="santoméenne">Santoméenne</mat-option>
+          <mat-option value="saoudienne">Saoudienne</mat-option>
+          <mat-option value="sénégalaise">Sénégalaise</mat-option>
+          <mat-option value="serbe">Serbe</mat-option>
+          <mat-option value="seychelloise">Seychelloise</mat-option>
+          <mat-option value="sierra-léonaise">Sierra-Léonaise</mat-option>
+          <mat-option value="singapourienne">Singapourienne</mat-option>
+          <mat-option value="slovaque">Slovaque</mat-option>
+          <mat-option value="slovène">Slovène</mat-option>
+          <mat-option value="somalienne">Somalienne</mat-option>
+          <mat-option value="soudanaise">Soudanaise</mat-option>
+          <mat-option value="sud-coréenne">Sud-coréenne</mat-option>
+          <mat-option value="sud-africaine">Sud-Africaine</mat-option>
+          <mat-option value="sri-lankaise">Sri-Lankaise</mat-option>
+          <mat-option value="suédoise">Suédoise</mat-option>
+          <mat-option value="suisse">Suisse</mat-option>
+          <mat-option value="surinamaise">Surinamaise</mat-option>
+          <mat-option value="syrienne">Syrienne</mat-option>
+          <mat-option value="tadjike">Tadjike</mat-option>
+          <mat-option value="tanzanienne">Tanzanienne</mat-option>
+          <mat-option value="tchadienne">Tchadienne</mat-option>
+          <mat-option value="tchèque">Tchèque</mat-option>
+          <mat-option value="thaïlandaise">Thaïlandaise</mat-option>
+          <mat-option value="timoraise">Timoraise</mat-option>
+          <mat-option value="togolaise">Togolaise</mat-option>
+          <mat-option value="tonguienne">Tonguienne</mat-option>
+          <mat-option value="trinidadienne">Trinidadienne</mat-option>
+          <mat-option value="tunisienne">Tunisienne</mat-option>
+          <mat-option value="turkmène">Turkmène</mat-option>
+          <mat-option value="turque">Turque</mat-option>
+          <mat-option value="tuvaluane">Tuvaluane</mat-option>
+          <mat-option value="ukrainienne">Ukrainienne</mat-option>
+          <mat-option value="uruguayenne">Uruguayenne</mat-option>
+          <mat-option value="vanuataise">Vanuataise</mat-option>
+          <mat-option value="vénézuélienne">Vénézuélienne</mat-option>
+          <mat-option value="vietnamienne">Vietnamienne</mat-option>
+          <mat-option value="yéménite">Yéménite</mat-option>
+          <mat-option value="zambienne">Zambienne</mat-option>
+          <mat-option value="zimbabwéenne">Zimbabwéenne</mat-option>
+      </mat-select>
+  </mat-form-field>
+    <div class="image-upload-container">
+        <button (click)="fileInput.click()" mat-stroked-button type="button">
+            <mat-icon>cloud_upload</mat-icon>
+            Télécharger une image de l'artiste
+        </button>
+        <input #fileInput (change)="onFileSelected($event)" accept="image/*" hidden type="file">
+        @if (imagePreview) {
+            <mat-form-field appearance="fill">
+                <mat-label>Image sélectionnée</mat-label>
+                <input matInput [value]="imageName" readonly>
+                <img class="image-preview" [src]="imagePreview" alt="Aperçu de l'image">
+            </mat-form-field>
+        }
+    </div>
+
+    <button [disabled]="artisteForm.invalid" color="accent" mat-raised-button type="submit">
+    Ajouter l'artiste
+  </button>
+</form>
+

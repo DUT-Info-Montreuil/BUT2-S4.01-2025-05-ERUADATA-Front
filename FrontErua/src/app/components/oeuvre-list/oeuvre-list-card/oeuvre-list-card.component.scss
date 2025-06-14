@@ -1,0 +1,104 @@
+.oeuvre-list-container {
+    padding: 32px;
+    max-width: 900px;
+    margin: 32px auto;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.oeuvre-list-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+    border: none;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(58, 0, 106, 0.10);
+}
+
+.oeuvre-list-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+}
+
+.oeuvre-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    max-width: 400px;
+    margin: 24px auto;
+    transition: box-shadow 0.3s;
+    min-height: 120px;
+
+    &:hover {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    }
+}
+
+.oeuvre-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin-right: 24px;
+    border: 3px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.oeuvre-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.oeuvre-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.oeuvre-nom {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #222;
+}
+
+.oeuvre-prenom {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 4px 0 0 0;
+    color: #666;
+}
+
+button {
+    background-color: #8b5cf6;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #6a4bc9;
+}

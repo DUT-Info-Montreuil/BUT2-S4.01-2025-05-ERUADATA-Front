@@ -1,0 +1,22 @@
+<div class="artiste-list-container">
+    <div class="artiste-list-header">
+        <h1 class="artiste-list-title">Liste des artistes</h1>
+        <p class="artiste-list-desc">Retrouvez ici tous les artistes enregistrés dans la base de données. Vous pouvez consulter chaque fiche artiste.</p>
+        <a [routerLink]="['/artisteForm']" class="add-artiste-btn">
+            <button type="button">+ Ajouter un artiste</button>
+        </a>
+    </div>
+
+    <div class="artiste-list">
+        <div class="artiste-list-cards">
+            <!-- Loop through artistes and display each one -->
+            @for (artiste of artistes; track artiste.id) {
+                <a [routerLink]="['/artisteList', artiste.id]" class="artiste-link">
+                    <app-artiste-list-card [artiste]="artiste"
+                                           (suppArtiste)="suppArtiste($event)">
+                    </app-artiste-list-card>
+                </a>
+            }
+        </div>
+    </div>
+</div>

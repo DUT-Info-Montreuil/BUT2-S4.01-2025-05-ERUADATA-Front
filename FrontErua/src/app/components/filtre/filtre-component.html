@@ -1,0 +1,66 @@
+<div class="filtres-container">
+  <div class="filtres-grid">
+    <div>
+      <label>Type d'Entité</label>
+      <select [(ngModel)]="filtre.type" (change)="emitFiltre()">
+        <option value="">Artistes et œuvres</option>
+        <option value="artistes">Artistes seulement</option>
+        <option value="oeuvres">Œuvres seulement</option>
+      </select>
+    </div>
+    <div>
+      <label>Période</label>
+      <select [(ngModel)]="filtre.periode" (change)="emitFiltre()">
+        <option value="">Toutes les périodes</option>
+        <option value="1800&1900">Entre 1800 & 1900</option>
+        <option value="1900&2000">Entre 1900 & 2000</option>
+        <option value="Apres2000">Après 2000</option>
+      </select>
+    </div>
+    <div>
+      <label>Mouvement</label>
+      <select [(ngModel)]="filtre.mouvement" (change)="emitFiltre()">
+        <option value="">Tous les mouvements</option>
+        <option value="expressionnisme">Néo-Expressionnisme</option>
+        <option value="Art social engagé">Art social engagé</option>
+        <option value="Art conceptuel">Art conceptuel</option>
+        <option value="Installation narrative contemporaine">Installation narrative contemporaine</option>
+      </select>
+    </div>
+     <div>
+      <label>Nationalité</label>
+      <select [(ngModel)]="filtre.nationalite" (change)="emitFiltre()">
+        <option value="">Toutes les origines</option>
+        <option value="française">Française</option>
+        <option value="marocaine">Marocaine</option>
+      </select>
+    </div>
+     <div>
+      <label>Genre</label>
+      <select [(ngModel)]="filtre.genre" (change)="emitFiltre()">
+        <option value="">Tout les genres</option>
+        <option value="homme">Homme</option>
+        <option value="femme">Femme</option>
+      </select>
+    </div>
+    <div>
+      <label>Recherche</label>
+      <input type="text" placeholder="Rechercher un artiste ou une œuvre…" [(ngModel)]="filtre.recherche" (input)="emitFiltre()" />
+    </div>
+  </div>
+
+  <div class="legendes">
+    <span 
+      class="tag blue" 
+      [class.active]="filtre.showCreation"
+      (click)="toggleCreation()">
+      Relation Oeuvres & Artistes
+    </span>
+    <span 
+      class="tag purple" 
+      [class.active]="filtre.showRelations"
+      (click)="toggleRelations()">
+      Influence directe entre oeuvres
+    </span>
+  </div>
+</div>
