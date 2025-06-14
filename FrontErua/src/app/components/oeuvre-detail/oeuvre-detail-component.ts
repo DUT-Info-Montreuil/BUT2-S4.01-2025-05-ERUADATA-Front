@@ -28,16 +28,7 @@ export class OeuvreDetailComponent implements OnInit {
     if (idParam) {
       this.oeuvre$ = this.service.getOeuvreById(idParam);
       this.oeuvre$.subscribe(oeuvre => {
-        if (oeuvre.data) {
-          this.oeuvre = oeuvre.data;
-          this.service.getOeuvreImage(idParam).subscribe(blob => {
-            const reader = new FileReader();
-            reader.onload = () => {
-              this.imageSrc = reader.result as string;
-            };
-            reader.readAsDataURL(blob);
-          });
-        }
+        this.oeuvre = oeuvre.data;
       })
     }
   }

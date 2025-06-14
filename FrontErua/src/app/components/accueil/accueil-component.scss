@@ -123,9 +123,9 @@
 
   // Ajoute un wrapper pour features et section
   .content-wrapper {
-    max-width: 900px;
+    max-width: 1400px;
+    width: 95vw;
     margin: 0 auto;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -176,7 +176,7 @@
 
   .section {
     width: 100%;
-    max-width: 100vw;
+    max-width: 1400px;
     overflow-x: auto;
     background: #fff;
     border-radius: 1rem;

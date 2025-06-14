@@ -10,6 +10,7 @@ import {Artiste} from "../../models/artiste";
 import {ArtisteService} from "../../services/artiste-service";
 import {Router} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
+import {MatNativeDateModule} from '@angular/material/core';
 
 @Component({
     selector: 'app-artiste-form',
@@ -22,6 +23,7 @@ import {MatIcon} from "@angular/material/icon";
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule,
+        MatNativeDateModule,
         MatButtonModule,
         MatOption,
         MatSelect,
@@ -47,7 +49,7 @@ export class ArtisteFormComponent implements OnInit {
             description: [''],
             nationalite: ['', Validators.required],
             genre: ['', Validators.required],
-            // Champ pour l'image, si nécessaire
+            image: [null]
         });
     }
 
@@ -64,9 +66,7 @@ export class ArtisteFormComponent implements OnInit {
         const file = (event.target as HTMLInputElement).files?.[0];
         if (file) {
             this.imageName = file.name;
-            // Ajouter le fichier au formulaire
-            this.artisteForm.patchValue({image: file});
-
+            this.artisteForm.patchValue({ image: file });
             // Créer un aperçu de l'image
             const reader = new FileReader();
             reader.onload = () => {
@@ -82,18 +82,22 @@ export class ArtisteFormComponent implements OnInit {
      */
     onSubmit(): void {
         if (this.artisteForm.valid) {
+            const formValue = this.artisteForm.value;
             const formData = new FormData();
-            formData.append('nom', this.artisteForm.get('nom')?.value);
-            formData.append('prenom', this.artisteForm.get('prenom')?.value);
-            formData.append('description', this.artisteForm.get('description')?.value);
-            formData.append('nationalite', this.artisteForm.get('nationalite')?.value);
-            formData.append('genre', this.artisteForm.get('genre')?.value);
+            formData.append('nom', formValue.nom);
+            formData.append('prenom', formValue.prenom);
+            formData.append('description', formValue.description || '');
+            formData.append('genre', formValue.genre);
+            formData.append('nationalite', formValue.nationalite);
             if (this.artisteForm.get('image')?.value) {
                 formData.append('image', this.artisteForm.get('image')?.value);
             }
-            this.artiste = this.artisteForm.value;
-            this.artisteService.addArtiste(formData).subscribe();
-            this.router.navigate(['/artisteList']);
+            this.artisteService.addArtiste(formData).subscribe({
+                next: () => this.router.navigate(['/artisteList']),
+                error: (err) => {
+                    console.error('Erreur lors de l\'ajout de l\'artiste', err);
+                }
+            });
         }
     }
 }

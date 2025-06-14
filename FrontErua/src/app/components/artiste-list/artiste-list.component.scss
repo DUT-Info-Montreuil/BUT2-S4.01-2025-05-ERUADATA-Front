@@ -91,3 +91,28 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.add-artiste-btn {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: -2.5rem;
+    margin-bottom: 1.5rem;
+
+    button {
+        background: #8b5cf6;
+        color: #fff;
+        border: none;
+        border-radius: 16px;
+        padding: 0.7rem 1.5rem;
+        font-size: 1.08rem;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.10);
+        transition: background 0.2s, transform 0.2s;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #6a4bc9;
+        transform: translateY(-2px) scale(1.04);
+    }
+}
