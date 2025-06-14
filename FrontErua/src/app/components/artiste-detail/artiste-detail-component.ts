@@ -56,6 +56,8 @@ export class ArtisteDetailComponent implements OnInit {
         }
     }
 
+    
+
 
     deleteArtiste() {
         this.artiste$.subscribe(artiste => {

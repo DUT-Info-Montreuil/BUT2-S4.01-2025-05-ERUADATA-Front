@@ -41,7 +41,7 @@ export class OeuvreService {
     }
 
     // Créer une nouvelle œuvre
-    createOeuvre(oeuvreData: Partial<Oeuvre>): Observable<OeuvreSing> {
+    createOeuvre(oeuvreData: FormData): Observable<OeuvreSing> {
         return this.http.post<OeuvreSing>(this.apiUrl, oeuvreData);
     }
 
@@ -66,4 +66,9 @@ export class OeuvreService {
         const url = `${this.apiUrl}${id}/image?nocache=${Date.now()}`;
         return this.http.get(url, {responseType: 'blob'});
     }
+
+    updateOeuvreImage(id: number, formData: FormData) {
+        return this.http.put(`${this.apiUrl}/oeuvres/${id}/image`, formData);
+      }
+      
 }

@@ -85,7 +85,7 @@ export class EditionArtisteComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: Event) {
+ onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
@@ -108,6 +108,7 @@ export class EditionArtisteComponent implements OnInit {
     this.imageName = '';
     this.editForm.patchValue({image: ''});
   }
+    
 
   onSave() {
     const updatedArtiste = this.editForm.value;

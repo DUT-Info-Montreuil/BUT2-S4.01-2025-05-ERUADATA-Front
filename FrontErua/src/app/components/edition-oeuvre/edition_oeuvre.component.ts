@@ -29,7 +29,6 @@ export class EditionOeuvreComponent implements OnInit {
         dimensions: new FormControl('', Validators.required),
         description: new FormControl(''),
         type: new FormControl('', Validators.required),
-        mouvement: new FormControl('', Validators.required),
         image: new FormControl('')
     });
     filteredOeuvre: Oeuvre[] = [];
@@ -102,7 +101,6 @@ export class EditionOeuvreComponent implements OnInit {
         formaData.append('dimensions', updatedOeuvre.dimensions);
         formaData.append('description', updatedOeuvre.description);
         formaData.append('type', updatedOeuvre.type);
-        formaData.append('mouvement', updatedOeuvre.mouvement);
         if (updatedOeuvre.image) {
             formaData.append('image', updatedOeuvre.image);
         }
@@ -119,4 +117,5 @@ export class EditionOeuvreComponent implements OnInit {
         this.router.navigate(['/oeuvreList' + `/${this.idOeuvre}`]);
 
     }
+          
 }
