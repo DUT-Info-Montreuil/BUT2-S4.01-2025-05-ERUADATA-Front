@@ -1,10 +1,9 @@
-<div class=".artiste-list-container">
+<div class="artiste-list-container">
     <div class="artiste-list-header">
-        <h1>Liste des Artistes</h1>
+        <h1 class="artiste-list-title">Liste des artistes</h1>
+        <p class="artiste-list-desc">Retrouvez ici tous les artistes enregistrés dans la base de données. Vous pouvez consulter chaque fiche artiste.</p>
     </div>
 
-    <input (ngModelChange)="search()" [(ngModel)]="searchText" class="search-bar" placeholder="Rechercher un artiste..."
-           type="text">
     <div class="artiste-list">
         <div class="artiste-list-cards">
             <!-- Loop through artistes and display each one -->
