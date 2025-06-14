@@ -56,19 +56,6 @@ export class ArtisteDetailComponent implements OnInit {
         }
     }
 
-    /**
-     * Redirige vers la page de généalogie de l'artiste.
-     */
-    redirectToGenalogie() {
-
-    }
-
-    /**
-     * Redirige vers la page d'édition de l'artiste.
-     */
-    redirectToEditerRelation() {
-
-    }
 
     deleteArtiste() {
         this.artiste$.subscribe(artiste => {

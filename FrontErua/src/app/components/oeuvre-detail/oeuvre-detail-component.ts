@@ -41,4 +41,16 @@ export class OeuvreDetailComponent implements OnInit {
       })
     }
   }
+
+  deleteOeuvre() {
+    this.oeuvre$.subscribe(oeuvre => {
+      if (oeuvre.data.id) {
+        this.service.deleteOeuvre(oeuvre.data.id).subscribe({
+          complete: () => {
+            this.router.navigate(['/oeuvre-list']);
+          }
+        });
+      }
+    });
+  }
 }

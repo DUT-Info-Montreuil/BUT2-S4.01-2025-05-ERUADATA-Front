@@ -1,4 +1,7 @@
 @if (oeuvre) {
+    <div class="actions">
+        <button class="btn btn-danger" (click)="deleteOeuvre()">Supprimer l'oeuvre</button>
+    </div>
     <div class="container">
         <h1>{{ oeuvre.nom }}</h1>
         <div class="artiste-image">

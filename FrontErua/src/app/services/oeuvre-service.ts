@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {map, Observable, of} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Oeuvre, Oeuvres, OeuvreSing} from "../models/oeuvre";
-import {catchError} from 'rxjs/operators';
 
 interface OeuvresResponse {
     data: Oeuvre[];
@@ -58,11 +57,8 @@ export class OeuvreService {
     }
 
     // Supprimer une œuvre par ID
-    deleteOeuvre(id: number): Observable<boolean> {
-        return this.http.delete(this.apiUrl + id).pipe(
-            map(() => true),
-            catchError(() => of(false))
-        );
+    deleteOeuvre(id: number): Observable<Oeuvre> {
+        return this.http.delete<Oeuvre>(this.apiUrl + id);
     }
 
     // Récupérer l'image d'une œuvre par ID
