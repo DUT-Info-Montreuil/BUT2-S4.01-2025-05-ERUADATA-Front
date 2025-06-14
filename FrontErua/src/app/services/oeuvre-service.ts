@@ -46,7 +46,7 @@ export class OeuvreService {
     }
 
     // Mettre à jour une œuvre
-    updateOeuvre(id: number, oeuvreData: Partial<Oeuvre>): Observable<OeuvreSing> {
+    updateOeuvre(id: number, oeuvreData: FormData): Observable<OeuvreSing> {
         return this.http.put<OeuvreSing>(this.apiUrl + id, oeuvreData);
     }
 
