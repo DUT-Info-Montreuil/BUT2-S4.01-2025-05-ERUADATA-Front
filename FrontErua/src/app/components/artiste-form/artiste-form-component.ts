@@ -82,8 +82,17 @@ export class ArtisteFormComponent implements OnInit {
      */
     onSubmit(): void {
         if (this.artisteForm.valid) {
+            const formData = new FormData();
+            formData.append('nom', this.artisteForm.get('nom')?.value);
+            formData.append('prenom', this.artisteForm.get('prenom')?.value);
+            formData.append('description', this.artisteForm.get('description')?.value);
+            formData.append('nationalite', this.artisteForm.get('nationalite')?.value);
+            formData.append('genre', this.artisteForm.get('genre')?.value);
+            if (this.artisteForm.get('image')?.value) {
+                formData.append('image', this.artisteForm.get('image')?.value);
+            }
             this.artiste = this.artisteForm.value;
-            this.artisteService.addArtiste(this.artiste).subscribe();
+            this.artisteService.addArtiste(formData).subscribe();
             this.router.navigate(['/artisteList']);
         }
     }

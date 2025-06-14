@@ -1,31 +1,3 @@
-<!--
-<div class="edition-container">
-    <h2 class="form-title">Modifier une œuvre</h2>
-
-
-    <form (ngSubmit)="onSubmit()" [formGroup]="oeuvreForm">
-        <label>Nom :</label>
-        <input formControlName="nom" type="text"/>
-
-        <label>Date de création :</label>
-        <input formControlName="date_creation" type="number"/>
-
-        <label>Dimensions :</label>
-        <input formControlName="dimensions" type="text"/>
-
-        <label>Description :</label>
-        <textarea formControlName="description"></textarea>
-
-        <label>Type :</label>
-        <input formControlName="type" type="text"/>
-
-        <label>Mouvement :</label>
-        <input formControlName="mouvement" type="text"/>
-
-        <button type="submit">Enregistrer</button>
-    </form>
-</div>
--->
 <mat-form-field appearance="fill" class="form-field">
     <mat-label>Rechercher un oeuvre</mat-label>
     <input [formControl]="oeuvreSearchCtrl" [matAutocomplete]="auto" matInput type="text"/>
@@ -44,12 +16,18 @@
         <mat-label>Dimension</mat-label>
         <input formControlName="dimensions" matInput/>
     </mat-form-field>
+
     <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Date de Création</mat-label>
-        <input [matDatepicker]="picker" formControlName="date_creation" matInput/>
-        <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-label>Année de Création</mat-label>
+        <input formControlName="date_creation" matInput max="9999" min="1" placeholder="AAAA" type="number"/>
+        @if (editForm.get('date_creation')?.errors) {
+            <mat-error>L'année de création est requise</mat-error>
+        }
+        @if (editForm.get('date_creation')?.errors?.['pattern']) {
+            <mat-error>Veuillez saisir une année valide (4 chiffres)</mat-error>
+        }
     </mat-form-field>
+
     <mat-form-field appearance="fill" class="form-field">
         <mat-label>Description</mat-label>
         <textarea formControlName="description" matInput></textarea>
@@ -58,7 +36,6 @@
         <mat-label>Type</mat-label>
         <input formControlName="type" matInput/>
     </mat-form-field>
-    <!--
     <div class="image-upload-container">
         <button (click)="fileInput.click()" mat-stroked-button type="button">
             <mat-icon>cloud_upload</mat-icon>
@@ -80,6 +57,5 @@
             </div>
         }
     </div>
-    -->
     <button (click)="onSave()" color="primary" mat-raised-button>Enregistrer</button>
 </form>
