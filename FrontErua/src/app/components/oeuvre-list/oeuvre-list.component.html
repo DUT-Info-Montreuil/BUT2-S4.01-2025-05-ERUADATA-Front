@@ -3,7 +3,9 @@
         <h1>Liste des Œuvres</h1>
     </div>
 
-
+    <a [routerLink]="['/oeuvreForm']" class="add-artiste-btn">
+        <button type="button">+ Ajouter un oeuvre</button>
+    </a>
     <div class="oeuvre-list">
         <div class="oeuvre-list-cards">
             <!-- Affichage de chaque œuvre sous forme de carte -->
@@ -19,7 +21,6 @@
                     </div>
                 </a>
             </div>
-                <button [routerLink]="['/oeuvreForm']">Ajouter une œuvre</button>
         </div>
     </div>
 </div>

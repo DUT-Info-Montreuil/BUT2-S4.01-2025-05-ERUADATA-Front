@@ -12,6 +12,7 @@ import {Oeuvre} from "../../models/oeuvre";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 
+
 @Component({
     selector: 'app-edition-oeuvre',
     standalone: true,
@@ -107,7 +108,7 @@ export class EditionOeuvreComponent implements OnInit {
         }
 
         this.oeuvreService.updateOeuvre(this.idOeuvre, formaData).subscribe({
-            next: () => {
+            complete: () => {
                 this.dialogRef.close();
                 console.log('Modification:', formaData);
                 this.router.navigate(['/oeuvreList' + `/${this.idOeuvre}`]);

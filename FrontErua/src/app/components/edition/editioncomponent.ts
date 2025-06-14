@@ -243,7 +243,8 @@ export class EditionComponent implements OnInit {
       data: {},
       autoFocus: false,
       disableClose: false,
-      scrollStrategy: this.overlay.scrollStrategies.block()
+      scrollStrategy: this.overlay.scrollStrategies.block(),
+      panelClass: 'custom-dialog-container' // Ajout d'une classe pour s'assurer que le dialog est bien visible
     });
 
     editionRef.afterClosed().subscribe(result => {
@@ -253,6 +254,8 @@ export class EditionComponent implements OnInit {
         this.oeuvreService.getOeuvres().subscribe(oeuvresRes => {
           if (oeuvresRes && oeuvresRes.data) {
             this.oeuvres = oeuvresRes.data;
+            // Mettre à jour également les œuvres dans la vitrine
+            this.oeuvresShowcase = this.getRandomItems(this.oeuvres, 4);
           }
         });
       }

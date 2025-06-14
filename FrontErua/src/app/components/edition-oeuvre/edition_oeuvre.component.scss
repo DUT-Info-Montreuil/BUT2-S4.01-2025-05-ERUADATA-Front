@@ -146,5 +146,19 @@ button:hover {
   .main-btn:hover, button[type='submit']:hover, button[mat-raised-button]:hover {
     background: #6a4bc9;
   }
+
+    .image-preview {
+        max-width: 250px;
+        max-height: 200px;
+        object-fit: contain;
+        margin: 10px 0;
+        border: 1px solid #c3b2ff;
+        border-radius: 0.5rem;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
