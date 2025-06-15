@@ -117,5 +117,5 @@ export class EditionOeuvreComponent implements OnInit {
         this.router.navigate(['/oeuvreList' + `/${this.idOeuvre}`]);
 
     }
-          
+
 }
